@@ -1,7 +1,6 @@
 package com.mjuteam2.TeamOne.message;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -10,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
-@Entity @Getter @Setter
+@Entity @Getter
 public class Message {
 
     @Id @GeneratedValue

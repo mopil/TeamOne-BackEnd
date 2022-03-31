@@ -18,8 +18,6 @@ public class InitDummyData {
                 .userName("배성흥")
                 .email("mopil1102@naver.com")
                 .memberType(MemberType.USER)
-                .introduce("안냥세요")
-                .score(0)
                 .nickname("모필")
                 .build();
         log.info("더미데이터 세팅 완료 {}", member);

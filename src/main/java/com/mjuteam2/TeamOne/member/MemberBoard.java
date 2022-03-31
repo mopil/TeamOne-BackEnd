@@ -1,13 +1,12 @@
 package com.mjuteam2.TeamOne.member;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity @Getter @Setter
+@Entity @Getter
 public class MemberBoard {
 
     @Id @GeneratedValue

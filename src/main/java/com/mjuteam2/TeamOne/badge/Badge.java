@@ -2,11 +2,10 @@ package com.mjuteam2.TeamOne.badge;
 
 import com.mjuteam2.TeamOne.rating.Rating;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity @Getter @Setter
+@Entity @Getter
 public class Badge {
 
     @Id @GeneratedValue

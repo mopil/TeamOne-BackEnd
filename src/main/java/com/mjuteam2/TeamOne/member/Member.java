@@ -4,25 +4,33 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity @Data @Builder
-@AllArgsConstructor
+@Entity
 public class Member {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
-    @NonNull private String userId;
-    @NonNull private String password;
-    @NonNull private String email;
-    @NonNull private String userName;
-    @NonNull private String nickname;
-    @NonNull private Integer score;
-    @NonNull private String introduce;
+    private String userId;
+    private String password;
+    private String email;
+    private String userName;
+    private String nickname;
+    private Integer score;
+    private String introduce;
 
     @Enumerated(EnumType.STRING)
-    @NonNull
     private MemberType memberType;
+
+    @Builder
+    public Member(String userId, String password, String email, String userName, String nickname, MemberType memberType) {
+        this.userId = userId;
+        this.password = password;
+        this.email = email;
+        this.userName = userName;
+        this.nickname = nickname;
+        this.memberType = memberType;
+    }
 
     public Member() {
 
