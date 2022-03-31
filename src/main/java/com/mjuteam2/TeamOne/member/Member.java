@@ -22,7 +22,7 @@ public class Member {
     private String email;
     private String userName;
     private String nickname;
-    private Integer score;
+    private int score;
     private String introduce;
 
     @Enumerated(EnumType.STRING)
@@ -50,7 +50,7 @@ public class Member {
         this.memberType = memberType;
     }
 
-    public Member() {
+    protected Member() {
 
     }
 
