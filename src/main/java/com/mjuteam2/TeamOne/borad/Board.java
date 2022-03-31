@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +31,10 @@ public class Board {
     private int memberCount;
     private String classTitle;
     private String classDate;
-    private LocalDate deadline;
+    private LocalDateTime deadline;
 
     @CreationTimestamp
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
