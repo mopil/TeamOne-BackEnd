@@ -6,7 +6,8 @@ import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Entity
 @Getter
@@ -19,7 +20,7 @@ public class Comment {
     private String content;
 
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")

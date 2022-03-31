@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,15 +26,15 @@ public class Board {
 
     private String title;
     private String content;
-    private int viewCount;
+    private Integer viewCount;
 
     private int memberCount;
     private String classTitle;
     private String classDate;
-    private Date deadline;
+    private LocalDate deadline;
 
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
