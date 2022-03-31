@@ -1,5 +1,6 @@
 package com.mjuteam2.TeamOne.member;
 
+import com.mjuteam2.TeamOne.borad.Board;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,4 +20,8 @@ public class MemberBoard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 }
