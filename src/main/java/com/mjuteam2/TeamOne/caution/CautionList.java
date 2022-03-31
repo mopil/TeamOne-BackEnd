@@ -1,17 +1,19 @@
-package com.mjuteam2.TeamOne.member;
+package com.mjuteam2.TeamOne.caution;
 
-import com.mjuteam2.TeamOne.borad.Board;
+import com.mjuteam2.TeamOne.member.Member;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity @Getter
-public class MemberBoard {
+
+@Entity
+@Getter
+public class CautionList {
 
     @Id @GeneratedValue
-    @Column(name = "member_board_id")
+    @Column(name = "caution_id")
     private Long id;
 
     @CreationTimestamp
@@ -20,8 +22,4 @@ public class MemberBoard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
 }
