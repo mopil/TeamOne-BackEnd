@@ -26,7 +26,7 @@ public class Board {
 
     private String title;
     private String content;
-    private Integer viewCount;
+    private int viewCount;
 
     private int memberCount;
     private String classTitle;
