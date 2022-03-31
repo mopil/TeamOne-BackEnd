@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-teamone.c6gbqjfko6b6.ap-northeast-2.rds.amazonaws.com:3306/teamone
     username: admin
-    password: asdf1234
+    password:
   jpa:
     hibernate:
       ddl-auto: create
