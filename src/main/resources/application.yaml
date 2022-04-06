@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-teamone.c6gbqjfko6b6.ap-northeast-2.rds.amazonaws.com:3306/teamone
-    username: admin
-    password:
   jpa:
     hibernate:
       ddl-auto: create
@@ -13,6 +8,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  profiles:
+    active: aws
 
 logging:
   level:
