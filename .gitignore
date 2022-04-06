@@ -27,6 +27,7 @@ out/
 !**/src/test/**/out/
 
 ### NetBeans ###
+application-aws.yaml
 /nbproject/private/
 /nbbuild/
 /dist/
