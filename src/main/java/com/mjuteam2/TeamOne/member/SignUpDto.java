@@ -1,12 +1,14 @@
 package com.mjuteam2.TeamOne.member;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Data
+@Data @AllArgsConstructor @Builder
 public class SignUpDto {
     
     @NotEmpty
@@ -17,6 +19,9 @@ public class SignUpDto {
 
     @NotEmpty
     private int schoolId;
+
+    @NotEmpty
+    private String phoneNumber;
     
     @NotEmpty
     @Size(min = 2, max = 10, message = "닉네임은 2~10글자 사이로 설정해주세요")
@@ -47,9 +52,11 @@ public class SignUpDto {
     public Member toMember() {
         return Member.builder()
                 .userId(this.id)
+                .userName(this.name)
                 .password(this.password)
                 .email(this.email)
                 .nickname(this.nickname)
+                .phoneNumber(this.phoneNumber)
                 .department(this.department)
                 .schoolId(this.schoolId)
                 .signUpToken(this.signUpToken)
