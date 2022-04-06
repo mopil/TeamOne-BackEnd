@@ -6,13 +6,14 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data @AllArgsConstructor @Builder
 public class SignUpDto {
     
     @NotEmpty
-    private String name;
+    private String userName;
 
     @NotEmpty
     private String department;
@@ -21,6 +22,7 @@ public class SignUpDto {
     private int schoolId;
 
     @NotEmpty
+    @Pattern(regexp = "/^\\d{2,3}-\\d{3,4}-\\d{4}$/")
     private String phoneNumber;
     
     @NotEmpty
@@ -52,7 +54,7 @@ public class SignUpDto {
     public Member toMember() {
         return Member.builder()
                 .userId(this.id)
-                .userName(this.name)
+                .userName(this.userName)
                 .password(this.password)
                 .email(this.email)
                 .nickname(this.nickname)
@@ -60,6 +62,7 @@ public class SignUpDto {
                 .department(this.department)
                 .schoolId(this.schoolId)
                 .signUpToken(this.signUpToken)
+                .memberType(MemberType.USER)
                 .build();
     }
 

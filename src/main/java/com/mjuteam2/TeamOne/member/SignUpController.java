@@ -28,7 +28,7 @@ public class SignUpController {
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpForm, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             log.info("Errors = {}", bindingResult.getFieldErrors());
-            ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
+            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
         Member newMember = signUpService.signUp(signUpForm);
         return ResponseEntity.ok().body(newMember);
