@@ -17,13 +17,22 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    private String userId;
+    private String userId; 
     private String password;
     private String email;
-    private String userName;
+
+    private String userName; // 이름
+    private String department; // 학과
+    private int schoolId; // 학번
+    private String phoneNumber;
+
     private String nickname;
-    private int score;
-    private String introduce;
+    private double stars; // 기여도 평점 (감소되는것)
+    private int points; // RPG 점수 (계속 쌓는것)
+    private String introduce; // 간략 자기소개
+
+    @Column(name = "token")
+    private String signUpToken;
 
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
@@ -40,14 +49,18 @@ public class Member {
     @JsonIgnore
     private List<CautionList> cautionLists = new ArrayList<>();
 
+
     @Builder
-    public Member(String userId, String password, String email, String userName, String nickname, MemberType memberType) {
+    public Member(String userId, String password, String email, String userName, String department, int schoolId, String phoneNumber, String nickname, String signUpToken) {
         this.userId = userId;
         this.password = password;
         this.email = email;
         this.userName = userName;
+        this.department = department;
+        this.schoolId = schoolId;
+        this.phoneNumber = phoneNumber;
         this.nickname = nickname;
-        this.memberType = memberType;
+        this.signUpToken = signUpToken;
     }
 
     protected Member() {
