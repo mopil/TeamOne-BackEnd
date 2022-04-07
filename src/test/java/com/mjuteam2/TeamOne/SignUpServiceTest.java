@@ -1,9 +1,9 @@
 package com.mjuteam2.TeamOne;
 
-import com.mjuteam2.TeamOne.member.Member;
-import com.mjuteam2.TeamOne.member.MemberRepository;
-import com.mjuteam2.TeamOne.member.SignUpDto;
-import com.mjuteam2.TeamOne.member.SignUpService;
+import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.repository.MemberRepository;
+import com.mjuteam2.TeamOne.member.dto.SignUpDto;
+import com.mjuteam2.TeamOne.member.service.SignUpService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +101,16 @@ public class SignUpServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () -> {
             Member newMember1 = signUpService.signUp(form);
         });
+    }
+
+    @Test
+    void authTokenCheck() {
+        // given
+        String testEmail = "test@mju.ac.kr";
+
+        String generatedToken = signUpService.setAuthToken(testEmail);
+        boolean result = signUpService.authTokenCheck(testEmail, generatedToken);
+        Assertions.assertThat(result).isEqualTo(true);
+
     }
 }

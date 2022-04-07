@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.member;
+package com.mjuteam2.TeamOne.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mjuteam2.TeamOne.bookmark.BookMark;

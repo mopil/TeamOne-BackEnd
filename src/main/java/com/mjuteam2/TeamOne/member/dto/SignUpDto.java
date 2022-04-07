@@ -1,15 +1,18 @@
-package com.mjuteam2.TeamOne.member;
+package com.mjuteam2.TeamOne.member.dto;
 
+import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.domain.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data @AllArgsConstructor @Builder
+@Getter
+@AllArgsConstructor @Builder
 public class SignUpDto {
     
     @NotEmpty

@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.caution;
 
-import com.mjuteam2.TeamOne.member.Member;
+import com.mjuteam2.TeamOne.member.domain.Member;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
