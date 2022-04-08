@@ -1,9 +1,10 @@
 package com.mjuteam2.TeamOne.member.service;
 
 
+import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
-import com.mjuteam2.TeamOne.member.dto.SignUpDto;
+import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,12 @@ public class SignUpService {
     private final MemberRepository memberRepository;
     private Map<String, String> authTokenStorage = new ConcurrentHashMap<>();
 
-    public Member signUp(SignUpDto form) throws Exception {
+    public Member signUp(SignUpForm form) throws Exception {
         if (memberRepository.existsByEmail(form.getEmail())) {
-            throw new Exception("이미 가입한 이메일입니다.");
+            throw new SignUpException("이미 가입한 이메일입니다.");
         }
         if (!form.passwordCheck()) {
-            throw new Exception("비밀번호를 다시 확인해주세요.");
+            throw new SignUpException("비밀번호를 다시 확인해주세요.");
         }
         Member newMember = form.toMember();
         memberRepository.save(newMember);

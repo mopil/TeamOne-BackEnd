@@ -1,5 +1,6 @@
 package com.mjuteam2.TeamOne.member.service;
 
+import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class EmailService {
             emailSender.send(createMessage(totalAddress, authToken));
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new SignUpException("인증 메일 전송 오류");
         }
     }
 }

@@ -14,8 +14,12 @@ public class ApiResponse<T> {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
-    public static <T> ResponseEntity<T> fail(T body) {
+    public static <T> ResponseEntity<T> notFound(T body) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    public static <T> ResponseEntity<T> badRequest(T body) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     public static <T> ResponseEntity<T> forbidden(T body) {

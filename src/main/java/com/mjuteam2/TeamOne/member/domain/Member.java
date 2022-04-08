@@ -23,7 +23,7 @@ public class Member {
 
     private String userName; // 이름
     private String department; // 학과
-    private int schoolId; // 학번
+    private String schoolId; // 학번
     private String phoneNumber;
 
     private String nickname;
@@ -51,7 +51,7 @@ public class Member {
 
 
     @Builder
-    public Member(String userId, String password, String email, String userName, String department, int schoolId, String phoneNumber, String nickname, String signUpToken, MemberType memberType) {
+    public Member(String userId, String password, String email, String userName, String department, String schoolId, String phoneNumber, String nickname, String signUpToken, MemberType memberType) {
         this.userId = userId;
         this.password = password;
         this.email = email;

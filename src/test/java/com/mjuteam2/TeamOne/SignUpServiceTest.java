@@ -2,7 +2,7 @@ package com.mjuteam2.TeamOne;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
-import com.mjuteam2.TeamOne.member.dto.SignUpDto;
+import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class SignUpServiceTest {
     @Rollback(value = false)
     void success() throws Exception {
         // given
-        SignUpDto form = SignUpDto.builder()
+        SignUpForm form = SignUpForm.builder()
                 .nickname("미오")
                 .department("컴퓨터공학과")
                 .email("mopil1102@naver.com")
@@ -46,10 +46,10 @@ public class SignUpServiceTest {
     }
 
     @Test
-    @Rollback
+    @Rollback(value = false)
     void fail_duplicatedEmail() throws Exception {
         // given
-        SignUpDto form1 = SignUpDto.builder()
+        SignUpForm form1 = SignUpForm.builder()
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1102@naver.com")
@@ -61,7 +61,7 @@ public class SignUpServiceTest {
                 .signUpToken("ASDFASDF")
                 .schoolId(60171442)
                 .build();
-        SignUpDto form2 = SignUpDto.builder()
+        SignUpForm form2 = SignUpForm.builder()
                 .nickname("테스터2")
                 .department("컴퓨터공학과")
                 .email("mopil1102@naver.com")
@@ -84,7 +84,7 @@ public class SignUpServiceTest {
     @Test
     @Rollback
     void fail_password_mismatch() {
-        SignUpDto form = SignUpDto.builder()
+        SignUpForm form = SignUpForm.builder()
                 .nickname("테스터2")
                 .department("컴퓨터공학과")
                 .email("mopil1102@naver.com")

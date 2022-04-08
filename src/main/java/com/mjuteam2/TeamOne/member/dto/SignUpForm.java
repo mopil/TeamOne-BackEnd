@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor @Builder
-public class SignUpDto {
+public class SignUpForm {
     
     @NotEmpty
     private String userName;
@@ -22,10 +22,9 @@ public class SignUpDto {
     private String department;
 
     @NotEmpty
-    private int schoolId;
+    private String schoolId;
 
     @NotEmpty
-    @Pattern(regexp = "/^\\d{2,3}-\\d{3,4}-\\d{4}$/")
     private String phoneNumber;
     
     @NotEmpty

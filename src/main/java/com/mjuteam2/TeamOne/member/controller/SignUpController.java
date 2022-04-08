@@ -1,10 +1,10 @@
 package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.common.dto.ApiResponse;
-import com.mjuteam2.TeamOne.common.dto.BooleanDto;
+import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.dto.EmailDto;
-import com.mjuteam2.TeamOne.member.dto.SignUpDto;
+import com.mjuteam2.TeamOne.member.dto.EmailResponse;
+import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.service.EmailService;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +32,10 @@ public class SignUpController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpForm, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             log.info("Errors = {}", bindingResult.getFieldErrors());
-            return ApiResponse.fail(bindingResult.getFieldErrors());
+            return ApiResponse.badRequest(bindingResult.getFieldErrors());
         }
 
         Member newMember = signUpService.signUp(signUpForm);
@@ -47,7 +47,7 @@ public class SignUpController {
      */
     @GetMapping("/nickname-check/{nickname}")
     public ResponseEntity<?> nicknameCheck(@PathVariable String nickname) {
-        return ApiResponse.success(new BooleanDto(signUpService.nicknameCheck(nickname)));
+        return ApiResponse.success(new BooleanResponse(signUpService.nicknameCheck(nickname)));
     }
 
 
@@ -56,7 +56,7 @@ public class SignUpController {
      */
     @GetMapping("/id-check/{id}")
     public ResponseEntity<?> idCheck(@PathVariable String id) {
-        return ApiResponse.success(new BooleanDto(signUpService.idCheck(id)));
+        return ApiResponse.success(new BooleanResponse(signUpService.idCheck(id)));
     }
 
     /**
@@ -69,7 +69,7 @@ public class SignUpController {
         emailService.sendMail(userEmail, authToken);
         log.info("Success : email send # address = {}, token = {}", userEmail+"@mju.ac.kr", authToken);
         // 메일이 안보내졌을때 예외를 던지는데 예외처리를 해줘야함
-        return ApiResponse.success(new EmailDto(userEmail, authToken, EmailDto.EmailProcessResult.SUCCESS, "auth mail sent"));
+        return ApiResponse.success(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.SUCCESS, "auth mail sent"));
     }
 
     /**
@@ -81,9 +81,9 @@ public class SignUpController {
         log.info("authTokenList : {}", signUpService.getAuthTokenStorage());
         if (!signUpService.authTokenCheck(userEmail, authToken)) {
             log.info("Error : authToken mismatched");
-            return ApiResponse.fail(new EmailDto(userEmail, authToken, EmailDto.EmailProcessResult.FAIL, "authToken mismatched"));
+            return ApiResponse.badRequest(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.FAIL, "authToken mismatched"));
         }
         log.info("Success : authToken matched");
-        return ApiResponse.success(new EmailDto(userEmail, authToken, EmailDto.EmailProcessResult.SUCCESS, "authToken matched"));
+        return ApiResponse.success(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.SUCCESS, "authToken matched"));
     }
 }
