@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.aws.dto;
+package com.mjuteam2.TeamOne.common.dto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,12 @@ public class ApiResponse<T> {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
-    public static <T> ResponseEntity<T> fail(T body) {
+    public static <T> ResponseEntity<T> notFound(T body) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    public static <T> ResponseEntity<T> badRequest(T body) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     public static <T> ResponseEntity<T> forbidden(T body) {

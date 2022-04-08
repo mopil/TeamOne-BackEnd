@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.rating;
 
-import com.mjuteam2.TeamOne.member.MemberBoard;
+import com.mjuteam2.TeamOne.member.domain.MemberBoard;
 import lombok.Getter;
 import lombok.Setter;
 

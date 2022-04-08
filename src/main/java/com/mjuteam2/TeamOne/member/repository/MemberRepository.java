@@ -1,5 +1,6 @@
-package com.mjuteam2.TeamOne.member;
+package com.mjuteam2.TeamOne.member.repository;
 
+import com.mjuteam2.TeamOne.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

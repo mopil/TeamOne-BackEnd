@@ -1,16 +1,19 @@
-package com.mjuteam2.TeamOne.member;
+package com.mjuteam2.TeamOne.member.dto;
 
+import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.domain.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data @AllArgsConstructor @Builder
-public class SignUpDto {
+@Getter
+@AllArgsConstructor @Builder
+public class SignUpForm {
     
     @NotEmpty
     private String userName;
@@ -19,10 +22,9 @@ public class SignUpDto {
     private String department;
 
     @NotEmpty
-    private int schoolId;
+    private String schoolId;
 
     @NotEmpty
-    @Pattern(regexp = "/^\\d{2,3}-\\d{3,4}-\\d{4}$/")
     private String phoneNumber;
     
     @NotEmpty

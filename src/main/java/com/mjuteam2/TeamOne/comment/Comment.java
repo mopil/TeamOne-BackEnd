@@ -1,7 +1,7 @@
 package com.mjuteam2.TeamOne.comment;
 
 import com.mjuteam2.TeamOne.borad.Board;
-import com.mjuteam2.TeamOne.member.Member;
+import com.mjuteam2.TeamOne.member.domain.Member;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 

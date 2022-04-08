@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.aws.controller;
 
-import com.mjuteam2.TeamOne.aws.dto.ApiResponse;
+import com.mjuteam2.TeamOne.common.dto.ApiResponse;
 import com.mjuteam2.TeamOne.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/s3")
-public class AmazonS3Controller {
+public class AwsS3Controller {
 
     private final AwsS3Service awsS3Service;
 
