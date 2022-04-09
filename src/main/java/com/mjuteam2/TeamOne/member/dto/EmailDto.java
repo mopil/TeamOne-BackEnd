@@ -4,12 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter @AllArgsConstructor
-public class EmailResponse {
-    public enum EmailProcessResult {
-        SUCCESS, FAIL
-    }
+public class EmailDto {
     String userEmail;
     String authToken;
-    EmailProcessResult emailProcessResult;
-    String message;
 }

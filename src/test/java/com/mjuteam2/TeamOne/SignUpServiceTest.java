@@ -34,8 +34,8 @@ public class SignUpServiceTest {
                 .password("tester1234")
                 .passwordCheck("tester1234")
                 .phoneNumber("010-1234-1234")
-                .signUpToken("ASDFASDF")
-                .schoolId(60171442)
+                .authToken("ASDFASDF")
+                .schoolId("60171442")
                 .build();
 
         // when
@@ -58,8 +58,8 @@ public class SignUpServiceTest {
                 .password("tester1234")
                 .passwordCheck("tester1234")
                 .phoneNumber("010-1234-1234")
-                .signUpToken("ASDFASDF")
-                .schoolId(60171442)
+                .authToken("ASDFASDF")
+                .schoolId("60171442")
                 .build();
         SignUpForm form2 = SignUpForm.builder()
                 .nickname("테스터2")
@@ -70,8 +70,8 @@ public class SignUpServiceTest {
                 .password("tester1234")
                 .passwordCheck("tester1234")
                 .phoneNumber("010-1234-1234")
-                .signUpToken("ASDFASDF")
-                .schoolId(60171442)
+                .authToken("ASDFASDF")
+                .schoolId("60171442")
                 .build();
 
         // 중복 이메일이면 예외가 발생함 (발생해야지 테스트 성공)
@@ -93,8 +93,8 @@ public class SignUpServiceTest {
                 .password("tester1234")
                 .passwordCheck("1111")
                 .phoneNumber("010-1234-1234")
-                .signUpToken("ASDFASDF")
-                .schoolId(60171442)
+                .authToken("ASDFASDF")
+                .schoolId("60171442")
                 .build();
 
         // 비밀번호 확인이 다르기 때문에 예외가 발생해야함

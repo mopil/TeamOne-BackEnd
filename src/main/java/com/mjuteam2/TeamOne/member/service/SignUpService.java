@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.member.service;
 
 
+import com.mjuteam2.TeamOne.common.EncryptManager;
 import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
@@ -23,14 +24,14 @@ public class SignUpService {
     private final MemberRepository memberRepository;
     private Map<String, String> authTokenStorage = new ConcurrentHashMap<>();
 
-    public Member signUp(SignUpForm form) throws Exception {
+    public Member signUp(SignUpForm form) {
         if (memberRepository.existsByEmail(form.getEmail())) {
             throw new SignUpException("이미 가입한 이메일입니다.");
         }
         if (!form.passwordCheck()) {
             throw new SignUpException("비밀번호를 다시 확인해주세요.");
         }
-        Member newMember = form.toMember();
+        Member newMember = form.toMember(EncryptManager.hash(form.getPassword()));
         memberRepository.save(newMember);
         log.info("new member signed up = {}", newMember);
         return newMember;

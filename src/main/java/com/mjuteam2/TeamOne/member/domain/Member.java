@@ -32,7 +32,7 @@ public class Member {
     private String introduce; // 간략 자기소개
 
     @Column(name = "token")
-    private String signUpToken;
+    private String authToken;
 
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
@@ -51,7 +51,7 @@ public class Member {
 
 
     @Builder
-    public Member(String userId, String password, String email, String userName, String department, String schoolId, String phoneNumber, String nickname, String signUpToken, MemberType memberType) {
+    public Member(String userId, String password, String email, String userName, String department, String schoolId, String phoneNumber, String nickname, String authToken, MemberType memberType) {
         this.userId = userId;
         this.password = password;
         this.email = email;
@@ -60,7 +60,7 @@ public class Member {
         this.schoolId = schoolId;
         this.phoneNumber = phoneNumber;
         this.nickname = nickname;
-        this.signUpToken = signUpToken;
+        this.authToken = authToken;
         this.memberType = memberType;
     }
 

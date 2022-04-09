@@ -2,13 +2,17 @@ package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.common.dto.ApiResponse;
 import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
+import com.mjuteam2.TeamOne.common.error.ErrorCode;
+import com.mjuteam2.TeamOne.common.error.ErrorDto;
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.dto.EmailResponse;
+import com.mjuteam2.TeamOne.member.dto.EmailDto;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
+import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import com.mjuteam2.TeamOne.member.service.EmailService;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +36,10 @@ public class SignUpController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.info("Errors = {}", bindingResult.getFieldErrors());
-            return ApiResponse.badRequest(bindingResult.getFieldErrors());
+            log.error("Errors = {}", bindingResult.getFieldErrors());
+            return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
 
         Member newMember = signUpService.signUp(signUpForm);
@@ -68,8 +72,7 @@ public class SignUpController {
         String authToken = signUpService.setAuthToken(userEmail);
         emailService.sendMail(userEmail, authToken);
         log.info("Success : email send # address = {}, token = {}", userEmail+"@mju.ac.kr", authToken);
-        // 메일이 안보내졌을때 예외를 던지는데 예외처리를 해줘야함
-        return ApiResponse.success(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.SUCCESS, "auth mail sent"));
+        return ApiResponse.success(new EmailDto(userEmail, authToken));
     }
 
     /**
@@ -80,10 +83,31 @@ public class SignUpController {
         log.info("email = {}, authToken = {}", userEmail, authToken);
         log.info("authTokenList : {}", signUpService.getAuthTokenStorage());
         if (!signUpService.authTokenCheck(userEmail, authToken)) {
-            log.info("Error : authToken mismatched");
-            return ApiResponse.badRequest(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.FAIL, "authToken mismatched"));
+            log.error("Error : authToken mismatched");
+            return ApiResponse.badRequest(new ErrorDto(ErrorCode.AUTH_TOKEN_ERROR, "authToken mismatched"));
         }
         log.info("Success : authToken matched");
-        return ApiResponse.success(new EmailResponse(userEmail, authToken, EmailResponse.EmailProcessResult.SUCCESS, "authToken matched"));
+        return ApiResponse.success(new EmailDto(userEmail, authToken));
     }
+
+
+    /**
+     *  예외 처리
+     */
+    // 비밀번호 불일치, 중복 이메일
+    @ExceptionHandler(SignUpException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> signUpExHandle(SignUpException e) {
+        log.error("[exceptionHandle] ex", e);
+        return ApiResponse.badRequest(new ErrorDto(ErrorCode.SIGN_UP_ERROR, e.getMessage()));
+    }
+
+    // 기타 예외 처리
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> otherExHandle(Exception e) {
+        log.error("[exceptionHandle] ex", e);
+        return ApiResponse.badRequest(new ErrorDto(ErrorCode.COMMON_ERROR, e.getMessage()));
+    }
+
 }
