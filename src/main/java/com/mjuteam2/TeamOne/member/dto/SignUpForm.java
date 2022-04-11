@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -47,23 +46,23 @@ public class SignUpForm {
     private String email;
 
     @NotEmpty
-    private String signUpToken;
+    private String authToken;
 
     public boolean passwordCheck() {
         return password.equals(passwordCheck);
     }
 
-    public Member toMember() {
+    public Member toMember(String encryptedPassword) {
         return Member.builder()
                 .userId(this.id)
                 .userName(this.userName)
-                .password(this.password)
+                .password(encryptedPassword)
                 .email(this.email)
                 .nickname(this.nickname)
                 .phoneNumber(this.phoneNumber)
                 .department(this.department)
                 .schoolId(this.schoolId)
-                .signUpToken(this.signUpToken)
+                .authToken(this.authToken)
                 .memberType(MemberType.USER)
                 .build();
     }
