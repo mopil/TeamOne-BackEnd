@@ -38,7 +38,7 @@ public class SignUpController {
     @PostMapping("/new")
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.error("Errors = {}", bindingResult.getFieldErrors());
+            log.error("SignUp Errors = {}", bindingResult.getFieldErrors());
             return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
 
