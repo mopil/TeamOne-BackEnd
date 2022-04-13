@@ -28,6 +28,11 @@ public class SignUpService {
         if (memberRepository.existsByEmail(form.getEmail())) {
             throw new SignUpException("이미 가입한 이메일입니다.");
         }
+
+        if (memberRepository.existsByUserId(form.getId())) {
+            throw new SignUpException("이미 가입된 아이디입니다.");
+        }
+
         if (!form.passwordCheck()) {
             throw new SignUpException("비밀번호를 다시 확인해주세요.");
         }
