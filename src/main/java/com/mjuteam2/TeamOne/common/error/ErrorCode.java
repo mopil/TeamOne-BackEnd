@@ -14,4 +14,15 @@ public class ErrorCode {
     public static final String AUTH_TOKEN_ERROR = "authToken";
     public static final String VALIDATION_ERROR = "validation";
 
+    /**
+     *  로그인 오류
+     */
+    public static final String LOGIN_ERROR = "login";
+
+
+    /**
+     * 게시글 오류
+     */
+    public static final String BOARD_ERROR = "board";
+
 }

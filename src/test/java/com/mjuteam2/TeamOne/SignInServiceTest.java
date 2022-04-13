@@ -53,9 +53,9 @@ class SignInServiceTest {
                 .password("123123123")
                 .build();
 
-        signInService.Login(loginForm1);
+//        signInService.login(loginForm1);
 
-        Assertions.assertEquals(true, check(loginForm1.getPassword(), member1.getPassword()));
+        Assertions.assertTrue(check(loginForm1.getPassword(), member1.getPassword()));
     }
 
 
@@ -114,7 +114,7 @@ class SignInServiceTest {
 
         //signInService.Login(loginForm1);
 
-        Assertions.assertEquals(false, check(loginForm1.getPassword(), member1.getPassword()));
+        Assertions.assertFalse(check(loginForm1.getPassword(), member1.getPassword()));
     }
 
     @Test
@@ -142,7 +142,7 @@ class SignInServiceTest {
                 .schoolId("60171442")
                 .build();
 
-        Member findMember = signInService.FindByUserId(findForm1);
+        Member findMember = signInService.findByUserId(findForm1);
         Assertions.assertEquals(findMember.getUserId(), member1.getUserId());
     }
 
