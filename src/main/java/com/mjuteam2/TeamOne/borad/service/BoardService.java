@@ -29,7 +29,7 @@ public class BoardService {
      */
     @Transactional
     public Board save(String userId, BoardForm form, BoardType boardType) {
-        Member writer = memberRepository.findByUserId(userId);
+        Member writer = memberRepository.findByUserId(userId).orElse(null);
         Board board = form.toBoard(writer, boardType);
         boardRepository.save(board);
         return board;

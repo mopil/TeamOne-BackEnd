@@ -1,15 +1,15 @@
 package com.mjuteam2.TeamOne.member.controller;
 
+import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.service.EmailService;
+import com.mjuteam2.TeamOne.member.service.SignUpService;
 import com.mjuteam2.TeamOne.common.dto.ApiResponse;
 import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
 import com.mjuteam2.TeamOne.common.error.ErrorCode;
 import com.mjuteam2.TeamOne.common.error.ErrorDto;
-import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.EmailDto;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.exception.SignUpException;
-import com.mjuteam2.TeamOne.member.service.EmailService;
-import com.mjuteam2.TeamOne.member.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -102,12 +102,5 @@ public class SignUpController {
         return ApiResponse.badRequest(new ErrorDto(ErrorCode.SIGN_UP_ERROR, e.getMessage()));
     }
 
-    // 기타 예외 처리
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> otherExHandle(Exception e) {
-        log.error("[exceptionHandle] ex", e);
-        return ApiResponse.badRequest(new ErrorDto(ErrorCode.COMMON_ERROR, e.getMessage()));
-    }
 
 }

@@ -81,11 +81,4 @@ public class BoardController {
         return ApiResponse.badRequest(new ErrorDto(ErrorCode.BOARD_ERROR, e.getMessage()));
     }
 
-    // 기타 예외 처리
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> otherExHandle(Exception e) {
-        log.error("[exceptionHandle] ex", e);
-        return ApiResponse.badRequest(new ErrorDto(ErrorCode.COMMON_ERROR, e.getMessage()));
-    }
 }
