@@ -2,6 +2,8 @@ package com.mjuteam2.TeamOne.member.repository;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,5 +16,33 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByEmail(String email);
     Optional<Member> findByUserId(String userId);
     Optional<Member> findByEmail(String email);
+    Optional<Member> findById(Long id);
+
+    // 이 어노테이션을 달아줘야 영속성 컨텍스트가 쿼리 실행 후 초기화되어서 새로 업데이트된 객체를 잘 반환해줌
+    // 초기화 안하면 기존 영속성 컨텍스트에 있던 객체를 그대로 돌려줘서 업데이트가 반영이 안된 것 처럼 보임(DB에는 들어감)
+    // 닉네임 변경
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.nickname = :newNickname WHERE m.id = :id")
+    void updateNickname(Long id, String newNickname);
+
+    // 스타 변경
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.star = :newStar WHERE m.id = :id")
+    void updateStar(Long id, double newStar);
+
+    // 포인트 변경
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.point = :newPoint WHERE m.id = :id")
+    void updatePoint(Long id, int newPoint);
+
+    // 자기소개 변경
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.introduce = :newIntroduce WHERE m.id = :id")
+    void updateIntroduce(Long id, String newIntroduce);
+
+    // 비밀번호 변경
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.password = :newEncryptedPassword WHERE m.id = :id")
+    void updatePassword(Long id, String newEncryptedPassword);
 
 }

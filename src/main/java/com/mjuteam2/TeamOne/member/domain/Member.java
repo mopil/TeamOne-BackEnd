@@ -27,8 +27,8 @@ public class Member {
     private String phoneNumber;
 
     private String nickname;
-    private double stars; // 기여도 평점 (감소되는것)
-    private int points; // RPG 점수 (계속 쌓는것)
+    private double star; // 기여도 평점 (감소되는것)
+    private int point; // RPG 점수 (계속 쌓는것)
     private String introduce; // 간략 자기소개
 
     @Column(name = "token")

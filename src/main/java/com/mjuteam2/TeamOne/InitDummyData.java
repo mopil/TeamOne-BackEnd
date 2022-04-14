@@ -43,7 +43,7 @@ public class InitDummyData {
 
     @PostConstruct
     public void boardDummyData() {
-        Member tester = memberRepository.findByUserId("test1234");
+        Member tester = memberRepository.findByUserId("test1234").orElse(null);
         ArrayList<Board> boardList = new ArrayList<>();
         for (int i = 0 ; i<10; i++) {
             Board board = Board.builder()
