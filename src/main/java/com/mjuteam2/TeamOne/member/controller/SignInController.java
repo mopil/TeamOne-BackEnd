@@ -1,6 +1,8 @@
 package com.mjuteam2.TeamOne.member.controller;
 
+import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.login.SessionConst;
 import com.mjuteam2.TeamOne.member.service.SignInService;
 import com.mjuteam2.TeamOne.common.dto.ApiResponse;
 import com.mjuteam2.TeamOne.common.error.ErrorCode;
@@ -40,6 +42,7 @@ public class SignInController {
             return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = signInService.login(loginForm, request);
+        log.info("member login = {}", loginMember);
         return ApiResponse.success(loginMember);
     }
 
@@ -49,8 +52,9 @@ public class SignInController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
+        log.info("member logout = {}", request.getAttribute(SessionConst.LOGIN_MEMBER));
         signInService.logout(request);
-        return ApiResponse.success("logout");
+        return ApiResponse.success(new BooleanResponse(true));
     }
 
     /**

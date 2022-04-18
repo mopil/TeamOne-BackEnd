@@ -28,8 +28,8 @@ public class BoardController {
     /**
      * 게시글 생성 /boards/new?boardType=free
      */
-    @PostMapping("/{userId}/new")
-    public ResponseEntity<?> createBoard(@PathVariable String userId,
+    @PostMapping("/{id}/new")
+    public ResponseEntity<?> createBoard(@PathVariable Long id,
                                          @RequestParam BoardType boardType,
                                          @Valid @RequestBody BoardForm form,
                                          BindingResult bindingResult) {
@@ -37,10 +37,7 @@ public class BoardController {
             log.error("Board Errors = {}", bindingResult.getFieldErrors());
             return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
-        Board savedBoard = boardService.save(userId, form, boardType);
-        if (savedBoard == null) throw new BoardException("게시글 저장 오류");
-
-        return ApiResponse.success(savedBoard);
+        return ApiResponse.success(boardService.save(id, form, boardType));
     }
 
 
@@ -49,9 +46,7 @@ public class BoardController {
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findByBoardId(@PathVariable Long boardId) {
-        Board foundedBoard = boardService.findByBoardId(boardId);
-        if (foundedBoard == null) throw new BoardException("존재하지 않는 게시글 ID 입니다");
-        return ApiResponse.success(foundedBoard);
+        return ApiResponse.success(boardService.findByBoardId(boardId));
     }
 
     /**
@@ -65,6 +60,7 @@ public class BoardController {
     /**
      * 게시글 수정
      */
+    @PutMapping("/{id}/")
 
     /**
      * 게시글 삭제

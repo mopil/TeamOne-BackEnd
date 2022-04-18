@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Service
 @Slf4j
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final SignInService signInService;
 
     /**
      * 회원 하나 조회
@@ -67,8 +70,9 @@ public class MemberService {
     /**
      * 회원 탈퇴
      */
-    public boolean deleteMember(Long id) {
+    public boolean deleteMember(Long id, HttpServletRequest request) {
         memberRepository.deleteById(id);
+        signInService.logout(request);
         return true;
     }
 }
