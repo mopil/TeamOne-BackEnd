@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.aws.controller;
 
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.dto.ApiResponse;
 import com.mjuteam2.TeamOne.aws.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

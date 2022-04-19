@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.common;
+package com.mjuteam2.TeamOne.member.config;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

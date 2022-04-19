@@ -1,6 +1,6 @@
-package com.mjuteam2.TeamOne.common;
+package com.mjuteam2.TeamOne.member.config;
 
-import com.mjuteam2.TeamOne.member.login.LoginArgumentResolver;
+import com.mjuteam2.TeamOne.member.config.LoginArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-public class Config implements WebMvcConfigurer {
+public class LoginConfig implements WebMvcConfigurer {
 
     // 커스텀 로그인 어노테이션을 처리할 로그인 아규먼트 리졸버를 스프링에 등록
     @Override

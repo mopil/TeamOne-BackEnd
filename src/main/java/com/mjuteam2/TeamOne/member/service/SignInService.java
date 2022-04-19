@@ -1,7 +1,8 @@
 package com.mjuteam2.TeamOne.member.service;
 
-import com.mjuteam2.TeamOne.member.login.SessionConst;
+import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.mjuteam2.TeamOne.common.EncryptManager.check;
+import static com.mjuteam2.TeamOne.member.config.EncryptManager.check;
 
 @Service
 @Slf4j
@@ -27,7 +28,7 @@ public class SignInService {
 
     private final MemberRepository memberRepository;
 
-    public Member login(SignInForm form, HttpServletRequest request) throws LoginException {
+    public MemberResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
         Optional<Member> loginMember = memberRepository.findByUserId(form.getUserId());
 
         if (loginMember.isEmpty()) {
@@ -41,11 +42,13 @@ public class SignInService {
         // 로그인 성공시
         // 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
         HttpSession session = request.getSession();
+        System.out.println("session = " + session);
+        System.out.println("session = " + session.getId());
 
         // 세선에 로그인 회원정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.get());
 
-        return loginMember.get();
+        return new MemberResponse(loginMember.get(), session.getId());
     }
 
     public void logout(HttpServletRequest request) {

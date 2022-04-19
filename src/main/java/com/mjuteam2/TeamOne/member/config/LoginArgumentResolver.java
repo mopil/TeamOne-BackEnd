@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.member.login;
+package com.mjuteam2.TeamOne.member.config;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import org.springframework.core.MethodParameter;
