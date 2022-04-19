@@ -2,13 +2,15 @@ package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import com.mjuteam2.TeamOne.util.dto.BooleanResponse;
-import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.service.SignInService;
-import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.dto.RestResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
 import com.mjuteam2.TeamOne.util.exception.ErrorDto;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,28 +36,38 @@ public class SignInController {
      * @param bindingResult 검증 관련
      * @return 성공시 로그인 맴버 객체 JSON으로 반환
      */
+    @ApiOperation(value="로그인")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그인 성공, 회원정보와 세션 ID 리턴"),
+            @ApiResponse(code = 400, message = "로그인 실패")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody SignInForm loginForm,
                                    BindingResult bindingResult,
                                    HttpServletRequest request) throws LoginException {
         if (bindingResult.hasErrors()) {
             log.error("SignIn Errors = {}", bindingResult.getFieldErrors());
-            return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
+            return RestResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
         MemberResponse memberResponse = signInService.login(loginForm, request);
         log.info("member login = {}", memberResponse);
-        return ApiResponse.success(memberResponse);
+        return RestResponse.success(memberResponse);
     }
 
     /**
      * 로그아웃
      * 세션 삭제해서 로그아웃 진행
      */
+    @ApiOperation(value="로그아웃")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그아웃 성공"),
+            @ApiResponse(code = 400, message = "로그아웃 실패")
+    })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         log.info("member logout = {}", request.getAttribute(SessionConst.LOGIN_MEMBER));
         signInService.logout(request);
-        return ApiResponse.success(new BooleanResponse(true));
+        return RestResponse.success(new BooleanResponse(true));
     }
 
     /**
@@ -66,6 +78,6 @@ public class SignInController {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> loginExHandle(LoginException e) {
         log.error("[exceptionHandle] ex", e);
-        return ApiResponse.badRequest(new ErrorDto(ErrorCode.LOGIN_ERROR, e.getMessage()));
+        return RestResponse.badRequest(new ErrorDto(ErrorCode.LOGIN_ERROR, e.getMessage()));
     }
 }

@@ -48,7 +48,7 @@ public class SignInService {
         // 세선에 로그인 회원정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.get());
 
-        return new MemberResponse(loginMember.get(), session.getId());
+        return new MemberResponse(loginMember.get().getId(), session.getId());
     }
 
     public void logout(HttpServletRequest request) {

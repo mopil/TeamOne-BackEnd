@@ -4,7 +4,7 @@ import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.BoardForm;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
-import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.dto.RestResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
 import com.mjuteam2.TeamOne.util.exception.ErrorDto;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +34,9 @@ public class BoardController {
                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.error("Board Errors = {}", bindingResult.getFieldErrors());
-            return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
+            return RestResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
-        return ApiResponse.success(boardService.save(id, form, boardType));
+        return RestResponse.success(boardService.save(id, form, boardType));
     }
 
 
@@ -45,7 +45,7 @@ public class BoardController {
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findByBoardId(@PathVariable Long boardId) {
-        return ApiResponse.success(boardService.findByBoardId(boardId));
+        return RestResponse.success(boardService.findByBoardId(boardId));
     }
 
     /**
@@ -53,7 +53,7 @@ public class BoardController {
      */
     @GetMapping("")
     public ResponseEntity<?> findAllBoards() {
-        return ApiResponse.success(boardService.findAllBoards());
+        return RestResponse.success(boardService.findAllBoards());
     }
 
     /**
@@ -73,7 +73,7 @@ public class BoardController {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> signUpExHandle(BoardException e) {
         log.error("[exceptionHandle] ex", e);
-        return ApiResponse.badRequest(new ErrorDto(ErrorCode.BOARD_ERROR, e.getMessage()));
+        return RestResponse.badRequest(new ErrorDto(ErrorCode.BOARD_ERROR, e.getMessage()));
     }
 
 }
