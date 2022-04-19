@@ -5,6 +5,7 @@ import com.mjuteam2.TeamOne.bookmark.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.CautionList;
 import lombok.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -70,5 +71,7 @@ public class Member {
 
 
     //profile 사진 해야함
+    @Column(name = "profile")
+    private String profileUrl;
 
 }

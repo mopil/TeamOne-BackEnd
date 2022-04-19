@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.util.exception;
 
-import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.dto.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class CommonExceptionHandler {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> otherExHandle(Exception e) {
         log.error("[exceptionHandle] ex", e);
-        return ApiResponse.badRequest(new ErrorDto(ErrorCode.COMMON_ERROR, e.getMessage()));
+        return RestResponse.badRequest(new ErrorDto(ErrorCode.COMMON_ERROR, e.getMessage()));
     }
 
 }

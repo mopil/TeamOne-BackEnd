@@ -13,7 +13,7 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 public class MemberResponse {
 
-    private Member member;
+    private Long id; // 멤버 PK 아이디
     private String sessionId;
 
 }
