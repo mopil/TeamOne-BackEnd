@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne;
 
-import com.mjuteam2.TeamOne.common.EncryptManager;
+import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

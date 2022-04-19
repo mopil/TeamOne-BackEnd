@@ -1,8 +1,6 @@
-package com.mjuteam2.TeamOne.common;
+package com.mjuteam2.TeamOne.util.exception;
 
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
-import com.mjuteam2.TeamOne.common.error.ErrorCode;
-import com.mjuteam2.TeamOne.common.error.ErrorDto;
+import com.mjuteam2.TeamOne.util.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

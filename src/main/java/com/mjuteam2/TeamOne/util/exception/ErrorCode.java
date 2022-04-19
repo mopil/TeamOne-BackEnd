@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.common.error;
+package com.mjuteam2.TeamOne.util.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

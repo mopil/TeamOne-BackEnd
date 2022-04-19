@@ -1,7 +1,7 @@
 package com.mjuteam2.TeamOne.member.service;
 
 
-import com.mjuteam2.TeamOne.common.EncryptManager;
+import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;

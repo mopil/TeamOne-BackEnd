@@ -1,12 +1,13 @@
 package com.mjuteam2.TeamOne.member.controller;
 
-import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
+import com.mjuteam2.TeamOne.util.dto.BooleanResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.login.SessionConst;
+import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.service.SignInService;
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
-import com.mjuteam2.TeamOne.common.error.ErrorCode;
-import com.mjuteam2.TeamOne.common.error.ErrorDto;
+import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.exception.ErrorCode;
+import com.mjuteam2.TeamOne.util.exception.ErrorDto;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,9 @@ public class SignInController {
             log.error("SignIn Errors = {}", bindingResult.getFieldErrors());
             return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
-        Member loginMember = signInService.login(loginForm, request);
-        log.info("member login = {}", loginMember);
-        return ApiResponse.success(loginMember);
+        MemberResponse memberResponse = signInService.login(loginForm, request);
+        log.info("member login = {}", memberResponse);
+        return ApiResponse.success(memberResponse);
     }
 
     /**

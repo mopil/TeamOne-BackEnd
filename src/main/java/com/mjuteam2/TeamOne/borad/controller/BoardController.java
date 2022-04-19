@@ -1,13 +1,12 @@
 package com.mjuteam2.TeamOne.borad.controller;
 
-import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.BoardForm;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
-import com.mjuteam2.TeamOne.common.error.ErrorCode;
-import com.mjuteam2.TeamOne.common.error.ErrorDto;
+import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.exception.ErrorCode;
+import com.mjuteam2.TeamOne.util.exception.ErrorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

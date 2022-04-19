@@ -9,6 +9,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   profiles:
     active: aws, email
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
   error:

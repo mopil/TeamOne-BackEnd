@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.common.dto;
+package com.mjuteam2.TeamOne.util.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

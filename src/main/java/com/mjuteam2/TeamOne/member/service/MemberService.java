@@ -1,16 +1,13 @@
 package com.mjuteam2.TeamOne.member.service;
 
-import com.mjuteam2.TeamOne.common.EncryptManager;
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
+import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 

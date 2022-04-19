@@ -1,12 +1,12 @@
 package com.mjuteam2.TeamOne.member.controller;
 
-import com.mjuteam2.TeamOne.common.dto.ApiResponse;
-import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
-import com.mjuteam2.TeamOne.common.error.ErrorCode;
-import com.mjuteam2.TeamOne.common.error.ErrorDto;
+import com.mjuteam2.TeamOne.util.dto.ApiResponse;
+import com.mjuteam2.TeamOne.util.dto.BooleanResponse;
+import com.mjuteam2.TeamOne.util.exception.ErrorCode;
+import com.mjuteam2.TeamOne.util.exception.ErrorDto;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.PasswordUpdateForm;
-import com.mjuteam2.TeamOne.member.login.Login;
+import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.member.service.SignInService;
 import lombok.RequiredArgsConstructor;
