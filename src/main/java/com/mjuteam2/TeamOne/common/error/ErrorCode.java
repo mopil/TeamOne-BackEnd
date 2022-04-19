@@ -25,4 +25,9 @@ public class ErrorCode {
      */
     public static final String BOARD_ERROR = "board";
 
+
+    /**
+     * 회원 CRUD 오류
+     */
+    public static final String MEMBER_CRUD_ERROR = "memberCrud";
 }

@@ -43,6 +43,7 @@ public class SignUpController {
         }
 
         Member newMember = signUpService.signUp(signUpForm);
+        log.info("New member is signed up = {}", newMember.getUserId());
         return ApiResponse.success(newMember);
     }
 
@@ -51,6 +52,7 @@ public class SignUpController {
      */
     @GetMapping("/nickname-check/{nickname}")
     public ResponseEntity<?> nicknameCheck(@PathVariable String nickname) {
+        log.info("nickname-check is called");
         return ApiResponse.success(new BooleanResponse(signUpService.nicknameCheck(nickname)));
     }
 
@@ -60,6 +62,7 @@ public class SignUpController {
      */
     @GetMapping("/id-check/{id}")
     public ResponseEntity<?> idCheck(@PathVariable String id) {
+        log.info("id-check is called");
         return ApiResponse.success(new BooleanResponse(signUpService.idCheck(id)));
     }
 

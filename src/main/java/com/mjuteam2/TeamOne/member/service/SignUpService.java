@@ -29,7 +29,7 @@ public class SignUpService {
             throw new SignUpException("이미 가입한 이메일입니다.");
         }
 
-        if (memberRepository.existsByUserId(form.getId())) {
+        if (memberRepository.existsByUserId(form.getUserId())) {
             throw new SignUpException("이미 가입된 아이디입니다.");
         }
 
@@ -66,7 +66,7 @@ public class SignUpService {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
-        for (int i = 0; i < 8; i++) { // 인증코드 8자리
+        for (int i = 0; i < 8; i++) { // 인증코드 8자리ㅁ
             int index = rnd.nextInt(3); // 0~2 까지 랜덤
 
             switch (index) {

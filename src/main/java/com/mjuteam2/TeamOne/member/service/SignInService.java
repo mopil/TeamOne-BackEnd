@@ -1,5 +1,6 @@
 package com.mjuteam2.TeamOne.member.service;
 
+import com.mjuteam2.TeamOne.member.login.SessionConst;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
@@ -27,7 +28,7 @@ public class SignInService {
     private final MemberRepository memberRepository;
 
     public Member login(SignInForm form, HttpServletRequest request) throws LoginException {
-        Optional<Member> loginMember = memberRepository.findByUserId(form.getId());
+        Optional<Member> loginMember = memberRepository.findByUserId(form.getUserId());
 
         if (loginMember.isEmpty()) {
             throw new LoginException("계정이 존재하지 않습니다.");
@@ -42,7 +43,7 @@ public class SignInService {
         HttpSession session = request.getSession();
 
         // 세선에 로그인 회원정보 보관
-        session.setAttribute("member_info", loginMember);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.get());
 
         return loginMember.get();
     }
@@ -67,5 +68,10 @@ public class SignInService {
         }
 
         return FindMember.get();
+    }
+
+    public boolean loginCheck(Member loginMember) throws LoginException {
+        if (loginMember == null) throw new LoginException("로그인 안 됨.");
+        return true;
     }
 }

@@ -1,16 +1,23 @@
 package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.common.dto.ApiResponse;
+import com.mjuteam2.TeamOne.common.dto.BooleanResponse;
+import com.mjuteam2.TeamOne.common.error.ErrorCode;
 import com.mjuteam2.TeamOne.common.error.ErrorDto;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.PasswordUpdateForm;
+import com.mjuteam2.TeamOne.member.login.Login;
 import com.mjuteam2.TeamOne.member.service.MemberService;
+import com.mjuteam2.TeamOne.member.service.SignInService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -20,6 +27,7 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
+    private final SignInService signInService;
 
     /**
      * 회원 하나 조회 id = PK, userId = 진짜 유저 아이디
@@ -35,48 +43,66 @@ public class MemberController {
      * 회원 정보 수정
      */
     // 닉네임 변경
-    @PutMapping("/{id}/nickname/{newNickname}")
-    public ResponseEntity<?> updateNickname(@PathVariable Long id, @PathVariable String newNickname) {
-        return ApiResponse.success(memberService.updateNickname(id, newNickname));
+    @PutMapping("/nickname/{newNickname}")
+    public ResponseEntity<?> updateNickname(@Login Member loginMember, @PathVariable String newNickname) throws LoginException {
+        signInService.loginCheck(loginMember);
+        return ApiResponse.success(memberService.updateNickname(loginMember.getId(), newNickname));
     }
 
     // 비밀번호 변경
-    @PutMapping("/{id}/password")
-    public ResponseEntity<?> updatePassword(@PathVariable Long id,
+    @PutMapping("/password")
+    public ResponseEntity<?> updatePassword(@Login Member loginMember,
                                             @Valid @RequestBody PasswordUpdateForm form,
-                                            BindingResult bindingResult) {
+                                            BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             log.error("Password Update Error = {}", bindingResult.getFieldErrors());
             return ApiResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
         }
-        return ApiResponse.success(memberService.updatePassword(id, form.getNewPassword()));
+        signInService.loginCheck(loginMember);
+        return ApiResponse.success(memberService.updatePassword(loginMember.getId(), form.getNewPassword()));
     }
 
     // 평점(star) 변경
-    @PutMapping("/{id}/star/{newStar}")
-    public ResponseEntity<?> updateStar(@PathVariable Long id, @PathVariable Double newStar) {
-        return ApiResponse.success(memberService.updateStar(id, newStar));
+    @PutMapping("/star/{newStar}")
+    public ResponseEntity<?> updateStar(@Login Member loginMember, @PathVariable Double newStar) throws LoginException {
+        signInService.loginCheck(loginMember);
+        return ApiResponse.success(memberService.updateStar(loginMember.getId(), newStar));
     }
 
     // 포인트 변경 (랭킹 포인트)
-    @PutMapping("/{id}/point/{newPoint}")
-    public ResponseEntity<?> updatePoint(@PathVariable Long id, @PathVariable Integer newPoint) {
-        return ApiResponse.success(memberService.updatePoint(id, newPoint));
+    @PutMapping("/point/{newPoint}")
+    public ResponseEntity<?> updatePoint(@Login Member loginMember, @PathVariable Integer newPoint) throws LoginException {
+        signInService.loginCheck(loginMember);
+        return ApiResponse.success(memberService.updatePoint(loginMember.getId(), newPoint));
     }
 
     // 자기소개 변경
-    @PutMapping("/{id}/introduce/{newIntroduce}")
-    public ResponseEntity<?> updateIntroduce(@PathVariable Long id, @PathVariable String newIntroduce) {
-        return ApiResponse.success(memberService.updateIntroduce(id, newIntroduce));
+    @PutMapping("/introduce/{newIntroduce}")
+    public ResponseEntity<?> updateIntroduce(@Login Member loginMember, @PathVariable String newIntroduce) throws LoginException {
+        signInService.loginCheck(loginMember);
+        return ApiResponse.success(memberService.updateIntroduce(loginMember.getId(), newIntroduce));
     }
 
 
-//    /**
-//     * 회원 탈퇴
-//     */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-//        memberService.deleteMember(id);
-//        return ApiResponse.success(true);
-//    }
+    /**
+     * 회원 탈퇴
+     */
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteUser(@Login Member loginMember, HttpServletRequest request) throws LoginException {
+        signInService.loginCheck(loginMember);
+        memberService.deleteMember(loginMember.getId(), request);
+        return ApiResponse.success(new BooleanResponse(true));
+    }
+
+
+    /**
+     * 예외 처리
+     */
+    // 로그인 관련 예외
+    @ExceptionHandler(LoginException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> loginExHandle(LoginException e) {
+        log.error("[exceptionHandle] ex", e);
+        return ApiResponse.badRequest(new ErrorDto(ErrorCode.LOGIN_ERROR, "인증 거부 : 로그인 안 됨."));
+    }
 }

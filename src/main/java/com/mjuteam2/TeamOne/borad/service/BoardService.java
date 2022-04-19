@@ -3,6 +3,7 @@ package com.mjuteam2.TeamOne.borad.service;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.BoardForm;
+import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
@@ -28,8 +29,9 @@ public class BoardService {
      * 게시글 생성
      */
     @Transactional
-    public Board save(String userId, BoardForm form, BoardType boardType) {
-        Member writer = memberRepository.findByUserId(userId).orElse(null);
+    public Board save(Long id, BoardForm form, BoardType boardType) {
+        Member writer = memberRepository.findById(id)
+                .orElseThrow(() -> new BoardException("게시글 생성 오류."));
         Board board = form.toBoard(writer, boardType);
         boardRepository.save(board);
         return board;
@@ -40,7 +42,8 @@ public class BoardService {
      * 게시글 하나 조회
      */
     public Board findByBoardId(Long boardId) {
-        return boardRepository.findById(boardId).orElse(null);
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardException("게시글 조회 오류."));
     }
 
     /**
@@ -53,6 +56,9 @@ public class BoardService {
     /**
      * 게시글 수정
      */
+//    public Board update(Long boardId, BoardForm form) {
+//        Board foundBoard = findByBoardId(boardId);
+//    }
 
     /**
      * 게시글 삭제

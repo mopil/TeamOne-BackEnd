@@ -37,7 +37,7 @@ class SignInServiceTest {
                 .nickname("12341234124")
                 .department("컴퓨터공학과")
                 .email("login@naver.com")
-                .id("userid1")
+                .userId("userid1")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")
@@ -49,7 +49,7 @@ class SignInServiceTest {
         Member member1 = signUpService.signUp(signUpForm1);
 
         SignInForm loginForm1 = SignInForm.builder()
-                .id("userid1")
+                .userId("userid1")
                 .password("123123123")
                 .build();
 
@@ -67,7 +67,7 @@ class SignInServiceTest {
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1103@naver.com")
-                .id("userid2")
+                .userId("userid2")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")
@@ -79,13 +79,13 @@ class SignInServiceTest {
         Member member1 = signUpService.signUp(signUpForm1);
 
         SignInForm loginForm1 = SignInForm.builder()
-                .id("userid123")
+                .userId("userid123")
                 .password("123123123")
                 .build();
 
         //signInService.Login(loginForm1);
 
-        Assertions.assertNotEquals(loginForm1.getId(), member1.getUserId());
+        Assertions.assertNotEquals(loginForm1.getUserId(), member1.getUserId());
     }
 
     @Test
@@ -96,7 +96,7 @@ class SignInServiceTest {
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1104@naver.com")
-                .id("userid3")
+                .userId("userid3")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")
@@ -108,7 +108,7 @@ class SignInServiceTest {
         Member member1 = signUpService.signUp(signUpForm1);
 
         SignInForm loginForm1 = SignInForm.builder()
-                .id("userid1")
+                .userId("userid1")
                 .password("12312312333")
                 .build();
 
@@ -125,7 +125,7 @@ class SignInServiceTest {
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1105@naver.com")
-                .id("userid4")
+                .userId("userid4")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")
@@ -154,7 +154,7 @@ class SignInServiceTest {
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1106@naver.com")
-                .id("userid5")
+                .userId("userid5")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")
@@ -183,7 +183,7 @@ class SignInServiceTest {
                 .nickname("테스터1")
                 .department("컴퓨터공학과")
                 .email("mopil1107@naver.com")
-                .id("userid6")
+                .userId("userid6")
                 .userName("테스터1")
                 .password("123123123")
                 .passwordCheck("123123123")

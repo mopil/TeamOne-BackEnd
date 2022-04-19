@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 public class SignInForm {
 
     @NotEmpty
-    private String id;
+    private String userId;
 
     @NotEmpty
     private String password;
