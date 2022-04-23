@@ -91,7 +91,7 @@ public class SignInController {
             @ApiResponse(code = 200, message = "재설정 성공"),
             @ApiResponse(code = 400, message = "재설정 실패")
     })
-    @PostMapping("/reset")
+    @PostMapping("/password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordForm resetPasswordForm) {
 
         signInService.resetPassword(resetPasswordForm);

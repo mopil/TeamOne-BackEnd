@@ -98,17 +98,11 @@ public class SignInService {
 
         // 학번 정보가 일치할 경우 비밀번호 재설정
         if(findmember.getSchoolId().equals(form.getSchoolId())){
-            try {
-                // 조회한 맴버의 이메일 주소로 임시 비밀번호 메일 전송
-                String tempPassword = emailService.sendMailResetPassword(findmember.getEmail());
+            // 조회한 맴버의 이메일 주소로 임시 비밀번호 메일 전송
+            String tempPassword = emailService.sendMail(findmember.getEmail());
 
-                // 해당 임시 비밀번호로 해당 맴버의 비밀번호를 암호화해서 디비에 업데이트
-                memberRepository.updatePassword(findmember.getId(), EncryptManager.hash(tempPassword));
-
-            } catch (MessagingException | UnsupportedEncodingException e) {
-                e.printStackTrace();
-                throw new SignUpException("인증 메일 전송 오류");
-            }
+            // 해당 임시 비밀번호로 해당 맴버의 비밀번호를 암호화해서 디비에 업데이트
+            memberRepository.updatePassword(findmember.getId(), EncryptManager.hash(tempPassword));
         } else {
             new MemberException("학번이 일치하지 않음");
         }
