@@ -45,7 +45,7 @@ public class InitDummyData {
     public void boardDummyData() {
         Member tester = memberRepository.findByUserId("test1234").orElse(null);
         ArrayList<Board> boardList = new ArrayList<>();
-        for (int i = 0 ; i<10; i++) {
+        for (int i = 0 ; i<5; i++) {
             Board board = Board.builder()
                     .title("게시물 테스트"+i)
                     .content("테스트입니다")
@@ -54,6 +54,18 @@ public class InitDummyData {
                     .boardStatus(BoardStatus.DEFAULT)
                     .classTitle("자료구조")
                     .classDate("월요일")
+                    .build();
+            boardList.add(board);
+        }
+        for (int i = 5 ; i<10; i++) {
+            Board board = Board.builder()
+                    .title("게시물 테스트"+i)
+                    .content("이것또한테스트")
+                    .boardType(BoardType.FREE)
+                    .writer(tester)
+                    .boardStatus(BoardStatus.DEFAULT)
+                    .classTitle("팀프")
+                    .classDate("화요일")
                     .build();
             boardList.add(board);
         }
