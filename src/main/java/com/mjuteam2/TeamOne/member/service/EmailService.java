@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +42,46 @@ public class EmailService {
             e.printStackTrace();
             throw new SignUpException("인증 메일 전송 오류");
         }
+    }
+
+    public String sendMailResetPassword(String email) throws MessagingException, UnsupportedEncodingException  {
+
+        String memberKey = tempPassword(6,false);
+
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(Message.RecipientType.TO, email);
+        message.setSubject("TeamOne 임시 비밀번호 입니다.");
+        String text="";
+        text+= "<div style='margin:100px;'>";
+        text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        text+= "<h3 style='color:blue;'>임시비밀번호 발급</h3>";
+        text+= "<div style='font-size:130%'>";
+        text+= "<br/>임시비밀번호 :   <h2>"+memberKey+"</h2>";
+        text+= "<br/>로그인 후 비밀번호 변경을 해주세요.";
+        text+= "</div>";
+        message.setText(text, "utf-8", "html");
+        message.setFrom(new InternetAddress("teamoneauth@gmail.com","TeamOne"));
+        emailSender.send(message);
+        return memberKey;
+
+    }
+
+    // 임시 비밀번호 생성
+    private String tempPassword(int size, boolean lowerCheck) {
+        Random ran = new Random();
+        StringBuffer sb = new StringBuffer();
+        int num  = 0;
+        do {
+            num = ran.nextInt(75) + 48;
+            if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char) num);
+            } else {
+                continue;
+            }
+        } while (sb.length() < size);
+        if (lowerCheck) {
+            return sb.toString().toLowerCase();
+        }
+        return sb.toString();
     }
 }
