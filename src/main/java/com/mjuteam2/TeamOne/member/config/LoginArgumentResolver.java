@@ -7,6 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -32,7 +33,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         HttpSession session = request.getSession(false);
         if (session == null) {
             // 세션이 없으면 그냥 Member 에 null 이 들어감
-            return null;
+            throw new LoginException("로그인 되어 있지 않음.");
         }
 
         // 세션 정보가 있으면 로그인된 회원을 날린다
