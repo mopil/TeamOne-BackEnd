@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
+import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
@@ -202,5 +203,97 @@ class SignInServiceTest {
 
 //        signInService.FindByUserId(findForm1);
         Assertions.assertNotEquals(findForm1.getSchoolId(), member1.getSchoolId());
+    }
+
+    @Test
+    @Rollback
+    void resetPassword_success() throws Exception {
+
+        SignUpForm signUpForm1 = SignUpForm.builder()
+                .nickname("테스터1")
+                .department("컴퓨터공학과")
+                .email("sectionr0@gmail.com")
+                .userId("test100")
+                .userName("테스터1")
+                .password("123123123")
+                .passwordCheck("123123123")
+                .phoneNumber("010-1234-1234")
+                .authToken("ASDFASDF")
+                .schoolId("60172197")
+                .build();
+
+        Member member1 = signUpService.signUp(signUpForm1);
+
+        ResetPasswordForm form = ResetPasswordForm.builder()
+                .email("sectionr0@gmail.com")
+                .schoolId("60172197")
+                .build();
+
+        Member findMember = signInService.resetPassword(form);
+        Assertions.assertEquals(findMember.getUserId(), member1.getUserId());
+    }
+
+    @Test
+    @Rollback
+    void resetPassword_fail_email() throws Exception {
+
+        SignUpForm signUpForm1 = SignUpForm.builder()
+                .nickname("테스터1")
+                .department("컴퓨터공학과")
+                .email("sectionr011@gmail.com")
+                .userId("test90")
+                .userName("테스터1")
+                .password("123123123")
+                .passwordCheck("123123123")
+                .phoneNumber("010-1234-1234")
+                .authToken("ASDFASDF")
+                .schoolId("60172197")
+                .build();
+
+        Member member1 = signUpService.signUp(signUpForm1);
+
+        ResetPasswordForm form = ResetPasswordForm.builder()
+                .email("sectionr00@gmail.com")
+                .schoolId("60172197")
+                .build();
+
+        try{
+            Member findMember = signInService.resetPassword(form);
+        }
+        catch(Exception e){
+            Assertions.assertEquals(e.getMessage(), "회원을 찾을 수 없음");
+        }
+    }
+
+    @Test
+    @Rollback
+    void resetPassword_fail_schoolId() throws Exception {
+
+        SignUpForm signUpForm1 = SignUpForm.builder()
+                .nickname("테스터1")
+                .department("컴퓨터공학과")
+                .email("sectionr0@gmail.com")
+                .userId("test990")
+                .userName("테스터1")
+                .password("123123123")
+                .passwordCheck("123123123")
+                .phoneNumber("010-1234-1234")
+                .authToken("ASDFASDF")
+                .schoolId("60172197")
+                .build();
+
+        Member member1 = signUpService.signUp(signUpForm1);
+
+        ResetPasswordForm form = ResetPasswordForm.builder()
+                .email("sectionr0@gmail.com")
+                .schoolId("601721970")
+                .build();
+
+        try{
+            Member findMember = signInService.resetPassword(form);
+        }
+        catch(Exception e){
+            Assertions.assertEquals(e.getMessage(), "학번이 일치하지 않음");
+        }
     }
 }
