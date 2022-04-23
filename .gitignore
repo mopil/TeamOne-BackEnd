@@ -40,3 +40,4 @@ application-aws.yaml
 
 ### my ignore ###
 src/main/resources/application.yaml
+src/main/resources/application-email.yaml
