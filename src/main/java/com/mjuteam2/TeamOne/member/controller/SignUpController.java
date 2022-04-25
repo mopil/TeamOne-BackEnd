@@ -1,15 +1,14 @@
 package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.service.EmailService;
-import com.mjuteam2.TeamOne.member.service.SignUpService;
-import com.mjuteam2.TeamOne.util.dto.RestResponse;
-import com.mjuteam2.TeamOne.util.dto.BooleanResponse;
-import com.mjuteam2.TeamOne.util.exception.ErrorCode;
-import com.mjuteam2.TeamOne.util.exception.ErrorDto;
-import com.mjuteam2.TeamOne.member.dto.EmailDto;
+import com.mjuteam2.TeamOne.member.dto.EmailResponse;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.exception.SignUpException;
+import com.mjuteam2.TeamOne.member.service.EmailService;
+import com.mjuteam2.TeamOne.member.service.SignUpService;
+import com.mjuteam2.TeamOne.util.dto.BoolResponse;
+import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
+import com.mjuteam2.TeamOne.util.exception.ErrorCode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.mjuteam2.TeamOne.util.dto.RestResponse.badRequest;
+import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -33,9 +35,6 @@ public class SignUpController {
 
     /**
      * 회원 가입
-     * @param signUpForm 클라이언트에서 받아온 회원가입 폼 DTO
-     * @param bindingResult 에러 발생시 다 잡아주는 녀석
-     * @return 성공시 새로운 멤버 객체 JSON으로 반환, 실패시 오류(검증 실패한 부분)을 반환
      */
     @ApiOperation(value="회원 가입")
     @ApiResponses({
@@ -46,12 +45,12 @@ public class SignUpController {
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpForm signUpForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.error("SignUp Errors = {}", bindingResult.getFieldErrors());
-            return RestResponse.badRequest(ErrorDto.convertJson(bindingResult.getFieldErrors()));
+            return badRequest(ErrorResponse.convertJson(bindingResult.getFieldErrors()));
         }
 
         Member newMember = signUpService.signUp(signUpForm);
         log.info("New member is signed up = {}", newMember.getUserId());
-        return RestResponse.success(newMember);
+        return success(newMember);
     }
 
     /**
@@ -64,8 +63,7 @@ public class SignUpController {
     })
     @GetMapping("/nickname-check/{nickname}")
     public ResponseEntity<?> nicknameCheck(@PathVariable String nickname) {
-        log.info("nickname-check is called");
-        return RestResponse.success(new BooleanResponse(signUpService.nicknameCheck(nickname)));
+        return success(new BoolResponse(signUpService.nicknameCheck(nickname)));
     }
 
 
@@ -79,13 +77,12 @@ public class SignUpController {
     })
     @GetMapping("/id-check/{id}")
     public ResponseEntity<?> idCheck(@PathVariable String id) {
-        log.info("id-check is called");
-        return RestResponse.success(new BooleanResponse(signUpService.idCheck(id)));
+        return success(new BoolResponse(signUpService.idCheck(id)));
     }
 
     /**
      * 인증번호 보내기
-     * @mju.ac.kr 앞 아이디만 받아와서 메일 생성
+     * 이메일은 @mju.ac.kr 다 받아 올 것
      */
     @ApiOperation(value="회원 가입 검증 : 인증 메일 전송")
     @ApiResponses({
@@ -96,8 +93,8 @@ public class SignUpController {
     public ResponseEntity<?> authMailSend(@PathVariable String userEmail) {
         String authToken = signUpService.setAuthToken(userEmail);
         emailService.sendMail(userEmail, authToken);
-        log.info("Success : email send # address = {}, token = {}", userEmail+"@mju.ac.kr", authToken);
-        return RestResponse.success(new EmailDto(userEmail, authToken));
+        log.info("Success : email send # address = {}, token = {}", userEmail, authToken);
+        return success(new EmailResponse(userEmail, authToken));
     }
 
     /**
@@ -114,10 +111,10 @@ public class SignUpController {
         log.info("authTokenList : {}", signUpService.getAuthTokenStorage());
         if (!signUpService.authTokenCheck(userEmail, authToken)) {
             log.error("Error : authToken mismatched");
-            return RestResponse.badRequest(new ErrorDto(ErrorCode.AUTH_TOKEN_ERROR, "authToken mismatched"));
+            return badRequest(new ErrorResponse(ErrorCode.AUTH_TOKEN_ERROR, "authToken mismatched"));
         }
         log.info("Success : authToken matched");
-        return RestResponse.success(new EmailDto(userEmail, authToken));
+        return success(new EmailResponse(userEmail, authToken));
     }
 
 
@@ -129,7 +126,7 @@ public class SignUpController {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> signUpExHandle(SignUpException e) {
         log.error("[exceptionHandle] ex", e);
-        return RestResponse.badRequest(new ErrorDto(ErrorCode.SIGN_UP_ERROR, e.getMessage()));
+        return badRequest(new ErrorResponse(ErrorCode.SIGN_UP_ERROR, e.getMessage()));
     }
 
 

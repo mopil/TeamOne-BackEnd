@@ -10,7 +10,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
 
 import static com.mjuteam2.TeamOne.member.config.TempPassword.tempPassword;
 
@@ -37,9 +36,8 @@ public class EmailService {
     }
 
     public void sendMail(String email, String authToken) {
-        String totalAddress = email + "@mju.ac.kr";
         try {
-            emailSender.send(createMessage(totalAddress, authToken));
+            emailSender.send(createMessage(email, authToken));
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
             throw new SignUpException("인증 메일 전송 오류");

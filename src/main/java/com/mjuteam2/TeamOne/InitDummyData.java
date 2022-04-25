@@ -10,12 +10,14 @@ import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class InitDummyData {
 
     private final SignUpService signUpService;
@@ -45,15 +47,42 @@ public class InitDummyData {
     public void boardDummyData() {
         Member tester = memberRepository.findByUserId("test1234").orElse(null);
         ArrayList<Board> boardList = new ArrayList<>();
-        for (int i = 0 ; i<10; i++) {
+        for (int i = 0 ; i<5; i++) {
             Board board = Board.builder()
                     .title("게시물 테스트"+i)
                     .content("테스트입니다")
                     .boardType(BoardType.WANTED)
                     .writer(tester)
+                    .memberCount(i)
                     .boardStatus(BoardStatus.DEFAULT)
                     .classTitle("자료구조")
                     .classDate("월요일")
+                    .build();
+            boardList.add(board);
+        }
+        for (int i = 5 ; i<10; i++) {
+            Board board = Board.builder()
+                    .title("게시물 테스트"+i)
+                    .content("이것또한테스트")
+                    .boardType(BoardType.FREE)
+                    .writer(tester)
+                    .memberCount(i)
+                    .boardStatus(BoardStatus.DEFAULT)
+                    .classTitle("팀프")
+                    .classDate("화요일")
+                    .build();
+            boardList.add(board);
+        }
+        for (int i = 10 ; i<13; i++) {
+            Board board = Board.builder()
+                    .title("게시물 테스트"+i)
+                    .content("배고프다")
+                    .boardType(BoardType.APPEAL)
+                    .writer(tester)
+                    .memberCount(i+100)
+                    .boardStatus(BoardStatus.DEFAULT)
+                    .classTitle("상커의 요리교실")
+                    .classDate("일요일")
                     .build();
             boardList.add(board);
         }

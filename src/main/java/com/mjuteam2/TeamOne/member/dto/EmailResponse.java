@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter @AllArgsConstructor
-public class EmailDto {
+public class EmailResponse {
     String userEmail;
     String authToken;
 }

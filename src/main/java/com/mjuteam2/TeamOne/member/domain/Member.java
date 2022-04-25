@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mjuteam2.TeamOne.bookmark.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.CautionList;
-import lombok.*;
-import springfox.documentation.annotations.ApiIgnore;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity @Getter @ToString
 public class Member {
@@ -69,9 +71,26 @@ public class Member {
 
     }
 
-
     //profile 사진 해야함
     @Column(name = "profile")
     private String profileUrl;
+
+    /**
+     * 비즈니스 로직
+     */
+    // 새로운 게시글을 작성하면 추가
+    public void addBoard(Board board) {
+        boards.add(board);
+    }
+
+    // 내가 쓴 글 boardId로 찾기
+    public Long findBoard(Long boardId) {
+        for (Board b : boards) {
+            if (Objects.equals(b.getId(), boardId)) {
+                return b.getMember().getId();
+            }
+        }
+        return null;
+    }
 
 }
