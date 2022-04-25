@@ -5,13 +5,16 @@ spring:
       use-new-id-generator-mappings: true
     properties:
       hibernate:
-        format_sql: true
+#        format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   profiles:
     active: aws, email
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 server:
   error:
