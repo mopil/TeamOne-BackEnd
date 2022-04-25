@@ -2,12 +2,14 @@ package com.mjuteam2.TeamOne.borad.controller;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.dto.AppealBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
 import com.mjuteam2.TeamOne.borad.dto.FreeBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.WantedBoardForm;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +68,7 @@ public class BoardController {
         return success(savedBoard);
     }
 
-    // 자유게시판
+    // 자유게시글
     @PostMapping("/new/free")
     public ResponseEntity<?> createFreeBoard(@Login Member loginMember,
                                          @Valid @RequestBody FreeBoardForm form,
@@ -81,33 +83,51 @@ public class BoardController {
 
 
     /**
-     * 게시글 조회
+     * 게시글 조회 페이징 처리 X
      */
     // 게시글 id로 하나만 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findByBoardId(@PathVariable Long boardId) {
-        return success(boardService.findByBoardId(boardId));
+        return success(boardService.findByBoardId(boardId).toResponse());
     }
 
     // 타입 상관없이 전체 게시글 조회
     @GetMapping("/all")
     public ResponseEntity<?> findAllBoards() {
-        return success(boardService.findAllBoards());
+        return success(boardService.findAll());
     }
     
     // 게시글 타입별로 전체 조회
     @GetMapping("/all/{boardType}")
     public ResponseEntity<?> findAllByType(@PathVariable String boardType) {
-        return success(boardService.findAllWanted(boardType));
+        return success(boardService.findAllByType(boardType));
     }
 
     /**
      * 게시글 수정
      */
+    @PutMapping("/{boardId}/wanted")
+    public ResponseEntity<?> updateWantedBoard(@Login Member loginMember,
+                                               @PathVariable Long boardId,
+                                               @Valid @RequestBody WantedBoardForm form,
+                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            logError(bindingResult.getFieldErrors());
+            return badRequest(convertJson(bindingResult.getFieldErrors()));
+        }
+        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard);
+
+    }
+
 
     /**
      * 게시글 삭제
      */
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
+        return success(new BoolResponse(boardService.deleteBoard(boardId)));
+    }
 
     /**
      *  예외 처리
@@ -116,7 +136,7 @@ public class BoardController {
     @ExceptionHandler(BoardException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> boardExHandle(BoardException e) {
-        log.error("[exceptionHandle] ex", e);
+        log.error("게시판 예외 발생 : 핸들러 작동");
         return badRequest(new ErrorResponse(ErrorCode.BOARD_ERROR, e.getMessage()));
     }
 

@@ -9,13 +9,14 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class FreeBoardForm extends BoardForm {
+public class FreeBoardForm implements BoardForm {
     @NotEmpty
     private String title;
 
     @NotEmpty
     private String content;
 
+    @Override
     public Board toBoard(Member writer, BoardType boardType) {
         return Board.builder()
                 .writer(writer)

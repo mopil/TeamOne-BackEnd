@@ -9,7 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class AppealBoardForm extends BoardForm {
+public class AppealBoardForm implements BoardForm {
     @NotEmpty
     private String title;
 
@@ -22,6 +22,7 @@ public class AppealBoardForm extends BoardForm {
     @NotEmpty
     private String content;
 
+    @Override
     public Board toBoard(Member writer, BoardType boardType) {
         return Board.builder()
                 .writer(writer)
@@ -33,4 +34,5 @@ public class AppealBoardForm extends BoardForm {
                 .classDate(this.classDate)
                 .build();
     }
+
 }

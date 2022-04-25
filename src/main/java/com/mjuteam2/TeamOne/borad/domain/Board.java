@@ -3,6 +3,7 @@ package com.mjuteam2.TeamOne.borad.domain;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mjuteam2.TeamOne.bookmark.BookMark;
+import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
 import com.mjuteam2.TeamOne.comment.Comment;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
@@ -38,7 +39,6 @@ public class Board {
     private int memberCount;
     private String classTitle;
     private String classDate;
-    private LocalDateTime deadline;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -50,18 +50,18 @@ public class Board {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MemberBoard> memberBoardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<BookMark> bookMarkList = new ArrayList<>();
 
     @Builder
-    public Board(Member writer, String title, String content, BoardType boardType, int memberCount, String classTitle, String classDate, LocalDateTime deadline, BoardStatus boardStatus) {
+    public Board(Member writer, String title, String content, BoardType boardType, int memberCount, String classTitle, String classDate, BoardStatus boardStatus) {
         this.member = writer;
         this.title = title;
         this.content = content;
@@ -69,7 +69,52 @@ public class Board {
         this.memberCount = memberCount;
         this.classTitle = classTitle;
         this.classDate = classDate;
-        this.deadline = deadline;
         this.boardStatus = boardStatus;
+    }
+
+    public BoardResponse toResponse() {
+        return BoardResponse.builder()
+                .boardId(id)
+                .title(title)
+                .content(content)
+                .viewCount(viewCount)
+                .boardType(boardType)
+                .memberCount(memberCount)
+                .classTitle(classTitle)
+                .classDate(classDate)
+                .createdAt(createdAt)
+                .boardStatus(boardStatus)
+                .build();
+    }
+
+    /**
+     * 게시글 수정 메소드
+     */
+    // 어필해요
+    public void updateAppeal(String newTitle, String newClassTitle, String newClassDate, String newContent) {
+        this.title = newTitle;
+        this.classTitle = newClassTitle;
+        this.classDate = newClassDate;
+        this.content = newContent;
+    }
+
+    // 팀원구해요
+    public void updateWanted(String newTitle, int newMemberCount, String newClassTitle, String newClassDate, String newContent) {
+        this.title = newTitle;
+        this.memberCount = newMemberCount;
+        this.classTitle = newClassTitle;
+        this.classDate = newClassDate;
+        this.content = newContent;
+    }
+
+    // 자유
+    public void updateFree(String newTitle, String newContent) {
+        this.title = newTitle;
+        this.content = newContent;
+    }
+
+    // 조회수 증가
+    public void addViewCount() {
+        this.viewCount += 1;
     }
 }
