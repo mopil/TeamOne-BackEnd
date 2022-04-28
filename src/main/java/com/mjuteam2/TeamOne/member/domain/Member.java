@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mjuteam2.TeamOne.badge.domain.Badge;
 import com.mjuteam2.TeamOne.bookmark.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.CautionList;
@@ -28,10 +29,7 @@ public class Member {
     private String department; // 학과
     private String schoolId; // 학번
     private String phoneNumber;
-
     private String nickname;
-    private double star; // 기여도 평점 (감소되는것)
-    private int point; // RPG 점수 (계속 쌓는것)
     private String introduce; // 간략 자기소개
 
     @Column(name = "token")
@@ -39,6 +37,10 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
+
+    @OneToOne
+    @JoinColumn(name = "member_value_id")
+    private MemberValue memberValue;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -51,6 +53,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<CautionList> cautionLists = new ArrayList<>();
+
 
 
     @Builder
@@ -76,7 +79,7 @@ public class Member {
     private String profileUrl;
 
     /**
-     * 비즈니스 로직
+     * 게시글 비즈니스 로직
      */
     // 새로운 게시글을 작성하면 추가
     public void addBoard(Board board) {
@@ -91,6 +94,36 @@ public class Member {
             }
         }
         return null;
+    }
+
+
+    /**
+     * 뱃지 비즈니스 로직
+     */
+    // 뱃지 추가
+    public void addBadge(Badge badge) {memberValue.getBadges().add(badge);}
+
+    // 레이팅 : 평점과 뱃지 추가
+    public void addRating(double star, Badge badge) {
+        memberValue.addRating(star, badge);
+    }
+
+    /**
+     *  회원 수정
+     */
+    public void addPoint(int amount) {
+        this.memberValue.addPoint(amount);
+    }
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public void updatePassword(String encryptedPassword) {
+        this.password = encryptedPassword;
     }
 
 }

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,7 @@ public class SignInService {
     /**
      * 비밀번호 재설정
      */
+    @Transactional
     public Member resetPassword(ResetPasswordForm form) {
 
         // 폼에 적힌 이메일로 디비에서 멤버 조회
@@ -102,7 +104,7 @@ public class SignInService {
             String tempPassword = emailService.sendMail(findMember.getEmail());
 
             // 해당 임시 비밀번호로 해당 맴버의 비밀번호를 암호화해서 디비에 업데이트
-            memberRepository.updatePassword(findMember.getId(), EncryptManager.hash(tempPassword));
+            findMember.updatePassword(EncryptManager.hash(tempPassword));
         } else {
             throw new MemberException("학번이 일치하지 않음.");
         }

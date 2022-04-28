@@ -5,7 +5,6 @@ import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.PasswordUpdateForm;
 import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ public class MemberController {
     /**
      * 회원 하나 조회 id = PK, userId = 진짜 유저 아이디
      */
-    @ApiOperation(value="Id로 회원 조회")
     @GetMapping("/{id}")
     public ResponseEntity<?> findByUserId(@PathVariable Long id) {
         Member findMember = memberService.findByUserId(id);
@@ -40,12 +38,13 @@ public class MemberController {
 
     /**
      * 회원 정보 수정
+     * 평점(star) 변경은 rating 도메인에
      */
     // 닉네임 변경
     @PutMapping("/nickname/{newNickname}")
     public ResponseEntity<?> updateNickname(@Login Member loginMember, @PathVariable String newNickname) {
-        Member updatedMember = memberService.updateNickname(loginMember.getId(), newNickname);
-        return success(updatedMember);
+        memberService.updateNickname(loginMember, newNickname);
+        return success(loginMember);
     }
 
     // 비밀번호 변경
@@ -57,29 +56,22 @@ public class MemberController {
             log.error("Password Update Error = {}", bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
-        Member updatedMember = memberService.updatePassword(loginMember.getId(), form.getNewPassword());
-        return success(updatedMember);
-    }
-
-    // 평점(star) 변경
-    @PutMapping("/star/{newStar}")
-    public ResponseEntity<?> updateStar(@Login Member loginMember, @PathVariable Double newStar) {
-        Member updatedMember = memberService.updateStar(loginMember.getId(), newStar);
-        return success(updatedMember);
+        memberService.updatePassword(loginMember, form.getNewPassword());
+        return success(loginMember);
     }
 
     // 포인트 변경 (랭킹 포인트)
-    @PutMapping("/point/{newPoint}")
-    public ResponseEntity<?> updatePoint(@Login Member loginMember, @PathVariable Integer newPoint){
-        Member updatedMember = memberService.updatePoint(loginMember.getId(), newPoint);
-        return success(updatedMember);
+    @PutMapping("/point/{amount}")
+    public ResponseEntity<?> updatePoint(@Login Member loginMember, @PathVariable Integer amount){
+        memberService.addPoint(loginMember, amount);
+        return success(loginMember);
     }
 
     // 자기소개 변경
     @PutMapping("/introduce/{newIntroduce}")
     public ResponseEntity<?> updateIntroduce(@Login Member loginMember, @PathVariable String newIntroduce){
-        Member updatedMember = memberService.updateIntroduce(loginMember.getId(), newIntroduce);
-        return success(updatedMember);
+        memberService.updateIntroduce(loginMember, newIntroduce);
+        return success(loginMember);
     }
 
     /**
