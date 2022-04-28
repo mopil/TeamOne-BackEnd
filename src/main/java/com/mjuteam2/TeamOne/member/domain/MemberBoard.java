@@ -29,4 +29,8 @@ public class MemberBoard {
         this.member = member;
         this.board = board;
     }
+
+    protected MemberBoard() {
+
+    }
 }

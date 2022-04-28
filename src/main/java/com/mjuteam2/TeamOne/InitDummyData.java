@@ -1,5 +1,8 @@
 package com.mjuteam2.TeamOne;
 
+import com.mjuteam2.TeamOne.badge.domain.Badge;
+import com.mjuteam2.TeamOne.badge.domain.BadgeList;
+import com.mjuteam2.TeamOne.badge.service.BadgeService;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
@@ -10,19 +13,18 @@ import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class InitDummyData {
 
     private final SignUpService signUpService;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final BadgeService badgeService;
 
     @PostConstruct
     public void userDummyData() {
@@ -40,8 +42,17 @@ public class InitDummyData {
                 .build();
 
         signUpService.signUp(form);
+    }
+
+    @PostConstruct
+    public void userBadgeDummyData() {
+        Member member = memberRepository.findByUserId("test1234").get();
+        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.HARD_CARRY));
+        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.GOOD_AT_PRESENTATION));
+        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.FAST_RESPONSE));
 
     }
+
 
     @PostConstruct
     public void boardDummyData() {

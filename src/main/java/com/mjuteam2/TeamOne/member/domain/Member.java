@@ -44,6 +44,10 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<Badge> badges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -101,7 +105,7 @@ public class Member {
      * 뱃지 비즈니스 로직
      */
     // 뱃지 추가
-    public void addBadge(Badge badge) {memberValue.getBadges().add(badge);}
+    public void addBadge(Badge badge) {badges.add(badge);}
 
     // 레이팅 : 평점과 뱃지 추가
     public void addRating(double star, Badge badge) {
