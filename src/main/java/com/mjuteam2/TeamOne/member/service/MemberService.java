@@ -34,35 +34,24 @@ public class MemberService {
      * 회원 정보 수정
      */
     // 닉네임 변경
-    public Member updateNickname(Long id, String newNickname) {
-        memberRepository.updateNickname(id, newNickname);
-        return findByUserId(id);
+    public void updateNickname(Member loginMember, String newNickname) {
+        loginMember.updateNickname(newNickname);
     }
 
     // 비밀번호 변경
-    public Member updatePassword(Long id, String newPassword) {
-        memberRepository.updatePassword(id, EncryptManager.hash(newPassword));
-        return findByUserId(id);
-    }
-
-    // 평점(star) 변경
-    public Member updateStar(Long id, double newStar) {
-        memberRepository.updateStar(id, newStar);
-        return findByUserId(id);
-    }
-
-    // 포인트 변경 (랭킹 포인트)
-    public Member updatePoint(Long id, int newPoint) {
-        memberRepository.updatePoint(id, newPoint);
-        return findByUserId(id);
+    public void updatePassword(Member loginMember, String newPassword) {
+        loginMember.updatePassword(EncryptManager.hash(newPassword));
     }
 
     // 자기소개 변경
-    public Member updateIntroduce(Long id, String newIntroduce) {
-        memberRepository.updateIntroduce(id, newIntroduce);
-        return findByUserId(id);
+    public void updateIntroduce(Member loginMember, String newIntroduce) {
+        loginMember.updateIntroduce(newIntroduce);
     }
 
+    // 포인트 변경
+    public void addPoint(Member loginMember, int amount) {
+        loginMember.addPoint(amount);
+    }
 
     /**
      * 회원 탈퇴
