@@ -2,7 +2,7 @@ package com.mjuteam2.TeamOne.borad.dto;
 
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
-import com.mjuteam2.TeamOne.comment.Comment;
+import com.mjuteam2.TeamOne.comment.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
