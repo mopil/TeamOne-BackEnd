@@ -1,10 +1,10 @@
 package com.mjuteam2.TeamOne.borad.domain;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mjuteam2.TeamOne.bookmark.BookMark;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
-import com.mjuteam2.TeamOne.comment.Comment;
+import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
 import lombok.AccessLevel;
@@ -21,7 +21,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Board {
 
     @Id @GeneratedValue
@@ -51,6 +50,7 @@ public class Board {
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
@@ -84,6 +84,7 @@ public class Board {
                 .classDate(classDate)
                 .createdAt(createdAt)
                 .boardStatus(boardStatus)
+                .comments(comments)
                 .build();
     }
 
