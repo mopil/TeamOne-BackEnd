@@ -1,7 +1,7 @@
 package com.mjuteam2.TeamOne.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mjuteam2.TeamOne.bookmark.BookMark;
+import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.CautionList;
 import lombok.Builder;
