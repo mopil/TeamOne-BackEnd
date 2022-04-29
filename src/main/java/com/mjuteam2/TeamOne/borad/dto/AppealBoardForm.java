@@ -1,8 +1,8 @@
 package com.mjuteam2.TeamOne.borad.dto;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
+import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import lombok.Data;
 

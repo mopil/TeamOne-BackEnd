@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.member.domain;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
+import com.mjuteam2.TeamOne.rating.domain.Rating;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,9 @@ public class MemberBoard {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "memberBoard")
+    private Rating rating;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
