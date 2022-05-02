@@ -1,7 +1,5 @@
 package com.mjuteam2.TeamOne;
 
-import com.mjuteam2.TeamOne.badge.domain.Badge;
-import com.mjuteam2.TeamOne.badge.domain.BadgeList;
 import com.mjuteam2.TeamOne.badge.service.BadgeService;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
@@ -40,18 +38,20 @@ public class InitDummyData {
                 .authToken("ASDFASDF")
                 .schoolId("60171442")
                 .build();
-
         signUpService.signUp(form);
     }
 
-    @PostConstruct
-    public void userBadgeDummyData() {
-        Member member = memberRepository.findByUserId("test1234").get();
-        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.HARD_CARRY));
-        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.GOOD_AT_PRESENTATION));
-        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.FAST_RESPONSE));
-
-    }
+//    @PostConstruct
+//    public void userBadgeDummyData() {
+//        if (memberRepository.findByUserId("test1234").isEmpty()) {
+//            return;
+//        }
+//        Member member = memberRepository.findByUserId("test1234").get();
+//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.HARD_CARRY));
+//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.GOOD_AT_PRESENTATION));
+//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.FAST_RESPONSE));
+//
+//    }
 
 
     @PostConstruct

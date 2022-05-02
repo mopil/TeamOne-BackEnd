@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne.member.dto;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberType;
+import com.mjuteam2.TeamOne.member.domain.MemberValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,6 +65,7 @@ public class SignUpForm {
                 .schoolId(this.schoolId)
                 .authToken(this.authToken)
                 .memberType(MemberType.USER)
+                .memberValue(new MemberValue())
                 .build();
     }
 

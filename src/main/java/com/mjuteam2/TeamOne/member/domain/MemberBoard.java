@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity @Getter
 public class MemberBoard {
@@ -19,7 +20,7 @@ public class MemberBoard {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "memberBoard")
-    private Rating rating;
+    private List<Rating> ratings;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

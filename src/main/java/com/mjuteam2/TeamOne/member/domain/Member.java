@@ -1,9 +1,8 @@
 package com.mjuteam2.TeamOne.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.mjuteam2.TeamOne.badge.domain.Badge;
-import com.mjuteam2.TeamOne.bookmark.BookMark;
+import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.CautionList;
 import lombok.Builder;
@@ -39,8 +38,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    @OneToOne
-    @JoinColumn(name = "member_value_id")
+    @Embedded
     private MemberValue memberValue;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -62,7 +60,7 @@ public class Member {
 
 
     @Builder
-    public Member(String userId, String password, String email, String userName, String department, String schoolId, String phoneNumber, String nickname, String authToken, MemberType memberType) {
+    public Member(String userId, String password, String email, String userName, String department, String schoolId, String phoneNumber, String nickname, String authToken, MemberType memberType, MemberValue memberValue) {
         this.userId = userId;
         this.password = password;
         this.email = email;
@@ -73,6 +71,7 @@ public class Member {
         this.nickname = nickname;
         this.authToken = authToken;
         this.memberType = memberType;
+        this.memberValue = memberValue;
     }
 
     protected Member() {
@@ -105,12 +104,17 @@ public class Member {
     /**
      * 뱃지 비즈니스 로직
      */
-    // 뱃지 추가
-    public void addBadge(Badge badge) {badges.add(badge);}
+    // 뱃지 추가 및 포인트 증가
+    public void addBadge(Badge badge) {
+        badges.add(badge);
+        memberValue.addPoint(badge.getPoint());
+    }
 
     // 레이팅 : 평점과 뱃지 추가
+    // 평점, 뱃지 추가
     public void addRating(double star, Badge badge) {
-        memberValue.addRating(star, badge);
+        this.badges.add(badge);
+        this.memberValue.addRating(star);
     }
 
     /**
@@ -122,11 +126,9 @@ public class Member {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
-
     public void updateIntroduce(String introduce) {
         this.introduce = introduce;
     }
-
     public void updatePassword(String encryptedPassword) {
         this.password = encryptedPassword;
     }
