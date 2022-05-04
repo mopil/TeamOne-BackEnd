@@ -1,6 +1,5 @@
 package com.mjuteam2.TeamOne.caution.controller;
 
-import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.caution.dto.CautionResponse;
 import com.mjuteam2.TeamOne.caution.exception.CautionException;
 import com.mjuteam2.TeamOne.caution.service.CautionService;
@@ -46,6 +45,15 @@ public class CautionController {
         return success(new BoolResponse(true));
     }
 
+    /**
+     * 사용자 유의 전체 해제(삭제)
+     */
+    @DeleteMapping("/all")
+    public ResponseEntity<?> deleteAllCaution(@Login Member loginMember) {
+        cautionService.removeAllCaution(loginMember.getId());
+        return success(new BoolResponse(true));
+    }
+
 
     /**
      * 사용자 유의 리스트 전체 조회
@@ -61,7 +69,7 @@ public class CautionController {
      */
     @ExceptionHandler(CautionException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> cautionExHandle(BoardException e) {
+    public ResponseEntity<?> cautionExHandle(CautionException e) {
         log.error("유의 예외 발생 : 핸들러 작동");
         return badRequest(new ErrorResponse(ErrorCode.CAUTION_ERROR, e.getMessage()));
     }

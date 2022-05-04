@@ -10,9 +10,15 @@ import java.util.Optional;
 
 public interface CautionRepository extends JpaRepository<Caution, Long> {
 
-    @Query("SELECT c FROM Caution c WHERE c.targetMember.id =: cautionedMemberId")
+    @Query("SELECT c FROM Caution c WHERE c.targetMember.id = :cautionedMemberId")
     Optional<Caution> findByCautionedMemberId(@Param("cautionedMemberId") Long cautionedMemberId);
 
-    @Query("SELECT c FROM Caution c WHERE c.requestMember.id =: reqeustMemberId")
+    @Query("SELECT c FROM Caution c WHERE c.requestMember.id = :requestMemberId")
     List<Caution> findAllByRequestMemberId(@Param("requestMemberId") Long requestMemberId);
+
+    @Query("SELECT c FROM Caution c WHERE c.requestMember.id = :requestMemberId AND c.targetMember.id = :targetMemberId")
+    Optional<Caution> duplicateCheck(@Param("requestMemberId") Long requestMemberId, @Param("targetMemberId") Long targetMemberId);
+
+
+
 }

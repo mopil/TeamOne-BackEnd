@@ -17,9 +17,11 @@ public class Caution {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_member_id")
     private Member requestMember; // 차단을 요청한 사용자
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_member_id")
     private Member targetMember; // 차단된 사용자
 
     @Builder
