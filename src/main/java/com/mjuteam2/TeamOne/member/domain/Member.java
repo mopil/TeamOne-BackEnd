@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mjuteam2.TeamOne.badge.domain.Badge;
 import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.caution.CautionList;
+import com.mjuteam2.TeamOne.caution.domain.Caution;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity @Getter @ToString
+@Entity @Getter
 public class Member {
 
     @Id @GeneratedValue
@@ -53,9 +53,9 @@ public class Member {
     @JsonIgnore
     private List<BookMark> bookMarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "targetMember", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<CautionList> cautionLists = new ArrayList<>();
+    private List<Caution> cautions = new ArrayList<>();
 
 
 
@@ -81,6 +81,20 @@ public class Member {
     //profile 사진 해야함
     @Column(name = "profile")
     private String profileUrl;
+
+    public MemberResponse toResponse() {
+        return MemberResponse.builder()
+                .memberId(id)
+                .userId(userId)
+                .password(password)
+                .email(email)
+                .userName(userName)
+                .department(department)
+                .schoolId(schoolId)
+                .phoneNumber(phoneNumber)
+                .nickname(nickname)
+                .build();
+    }
 
     /**
      * 게시글 비즈니스 로직

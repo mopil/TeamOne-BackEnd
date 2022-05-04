@@ -3,7 +3,7 @@ package com.mjuteam2.TeamOne.member.controller;
 import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
-import com.mjuteam2.TeamOne.member.dto.MemberResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberListResponse;
 import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
 import com.mjuteam2.TeamOne.member.service.SignInService;
@@ -44,9 +44,9 @@ public class SignInController {
             log.error("SignIn Errors = {}", bindingResult.getFieldErrors());
             return badRequest(ErrorResponse.convertJson(bindingResult.getFieldErrors()));
         }
-        MemberResponse memberResponse = signInService.login(loginForm, request);
-        log.info("member login = {}", memberResponse);
-        return success(memberResponse);
+        MemberListResponse memberListResponse = signInService.login(loginForm, request);
+        log.info("member login = {}", memberListResponse);
+        return success(memberListResponse);
     }
 
     /**

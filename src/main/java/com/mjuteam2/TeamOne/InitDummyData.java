@@ -38,7 +38,20 @@ public class InitDummyData {
                 .authToken("ASDFASDF")
                 .schoolId("60171442")
                 .build();
+        SignUpForm form2 = SignUpForm.builder()
+                .nickname("밤토리")
+                .department("컴퓨터공학과")
+                .email("mopil1102@mju.ac.kr")
+                .userId("mopil1102")
+                .userName("이범준")
+                .password("123456")
+                .passwordCheck("123456")
+                .phoneNumber("010-1234-1234")
+                .authToken("ASDFASDF")
+                .schoolId("60162284")
+                .build();
         signUpService.signUp(form);
+        signUpService.signUp(form2);
     }
 
 //    @PostConstruct

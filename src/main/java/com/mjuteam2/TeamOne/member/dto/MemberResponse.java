@@ -1,15 +1,21 @@
 package com.mjuteam2.TeamOne.member.dto;
 
-import com.mjuteam2.TeamOne.member.domain.Member;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class MemberResponse {
-
-    private List<Member> member;
-    private String sessionId;
-
+    private Long memberId;
+    private String userId;
+    private String password;
+    private String email;
+    private String userName;
+    private String department;
+    private String schoolId;
+    private String phoneNumber;
+    private String nickname;
+    private String introduce;
 }
