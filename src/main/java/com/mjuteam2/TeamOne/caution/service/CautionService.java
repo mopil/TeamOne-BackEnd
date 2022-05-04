@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,6 +32,10 @@ public class CautionService {
 
     // 차단하기
     public CautionResponse setCaution(Long requestMemberId, Long targetMemberId) {
+        // 유의 설정 중복 체크 (이미 설정된 유의가 있는지)
+        Optional<Caution> duple = cautionRepository.duplicateCheck(requestMemberId, targetMemberId);
+        if (duple.isPresent()) throw new CautionException("이미 유의 설정한 대상입니다.");
+
         Member requestMember = findMemberById(requestMemberId);
         Member targetMember = findMemberById(targetMemberId);
         Caution caution = Caution.builder()
@@ -60,6 +65,7 @@ public class CautionService {
 
     // 사용자가 가지고 있는 차단목록 전체 삭제
     public void removeAllCaution(Long memberId) {
-
+        List<Caution> findCautions = cautionRepository.findAllByRequestMemberId(memberId);
+        cautionRepository.deleteAll(findCautions);
     }
 }
