@@ -4,7 +4,7 @@ import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
-import com.mjuteam2.TeamOne.member.dto.MemberResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberListResponse;
 import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
 import com.mjuteam2.TeamOne.member.exception.FindFormException;
@@ -35,7 +35,7 @@ public class SignInService {
     private final MemberRepository memberRepository;
     private final EmailService emailService;
 
-    public MemberResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
+    public MemberListResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
         Optional<Member> loginMember = memberRepository.findByUserId(form.getUserId());
 
         if (loginMember.isEmpty()) {
@@ -58,7 +58,7 @@ public class SignInService {
         List<Member> loginMemberList = new ArrayList<>();
         loginMemberList.add(loginMember.get());
 
-        return new MemberResponse(loginMemberList, session.getId());
+        return new MemberListResponse(loginMemberList, session.getId());
     }
 
     public void logout(HttpServletRequest request) {

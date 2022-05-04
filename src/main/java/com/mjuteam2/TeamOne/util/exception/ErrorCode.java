@@ -27,7 +27,12 @@ public class ErrorCode {
 
 
     /**
-     * 회원 CRUD 오류
+     * 회원 오류
      */
     public static final String MEMBER_CRUD_ERROR = "memberCrud";
+
+    /**
+     * 유의 오류
+     */
+    public static final String CAUTION_ERROR = "caution";
 }
