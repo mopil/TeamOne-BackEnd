@@ -49,8 +49,7 @@ public class SignInService {
         // 로그인 성공시
         // 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
         HttpSession session = request.getSession();
-        System.out.println("session = " + session);
-        System.out.println("session = " + session.getId());
+        log.info("방금 로그인된 회원의 세션값 = {}", session.getId());
 
         // 세선에 로그인 회원정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.get());

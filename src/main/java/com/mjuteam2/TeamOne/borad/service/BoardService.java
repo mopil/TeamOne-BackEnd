@@ -39,8 +39,9 @@ public class BoardService {
         } else {
             board = form.toBoard(loginMember, BoardType.FREE);
         }
+//        loginMember.addBoard(board);
+        // 지연로딩 관련해서 영속성 컨텍스트가 없어서 발생하는 오류가 현재 식별됨 나중에 수정할 예정 (proxy No session 오류)
         boardRepository.save(board);
-        loginMember.addBoard(board);
         return board;
     }
 
