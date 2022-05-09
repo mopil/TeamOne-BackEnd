@@ -9,6 +9,7 @@ import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
@@ -34,6 +35,7 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 public class BoardController {
 
     private final BoardService boardService;
+    private final MemberRepository memberRepository;
 
     private void logError(List<FieldError> errors) {
         log.error("Board Errors = {}", errors);
@@ -78,6 +80,17 @@ public class BoardController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Board savedBoard = boardService.save(loginMember, form);
+        return success(savedBoard);
+    }
+
+    // 자유게시글 - no login
+    @PostMapping("/new/free/no-login")
+    public ResponseEntity<?> createFreeBoardNoLogin(@Valid @RequestBody FreeBoardForm form, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            logError(bindingResult.getFieldErrors());
+            return badRequest(convertJson(bindingResult.getFieldErrors()));
+        }
+        Board savedBoard = boardService.save(memberRepository.findByEmail("mopil1102@naver.com").get(), form);
         return success(savedBoard);
     }
 

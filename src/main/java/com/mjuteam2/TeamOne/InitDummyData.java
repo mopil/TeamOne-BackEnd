@@ -29,7 +29,7 @@ public class InitDummyData {
         SignUpForm form = SignUpForm.builder()
                 .nickname("슈퍼테스터")
                 .department("컴퓨터공학과")
-                .email("test1234@mju.ac.kr")
+                .email("mopil1102@naver.com")
                 .userId("test1234")
                 .userName("테스터1")
                 .password("123456")
