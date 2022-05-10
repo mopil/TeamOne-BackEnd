@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -42,7 +43,8 @@ public class MemberController {
      */
     // 닉네임 변경
     @PutMapping("/nickname/{newNickname}")
-    public ResponseEntity<?> updateNickname(@Login Member loginMember, @PathVariable String newNickname) {
+    public ResponseEntity<?> updateNickname(@PathVariable String newNickname, HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         memberService.updateNickname(loginMember, newNickname);
         return success(loginMember);
     }

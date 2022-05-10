@@ -6,7 +6,7 @@ import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
 import com.mjuteam2.TeamOne.member.dto.MemberListResponse;
 import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
-import com.mjuteam2.TeamOne.member.service.SignInService;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 @Slf4j
 public class SignInController {
 
-    private final SignInService signInService;
+    private final MemberService memberService;
 
     /**
      * 로그인
@@ -44,7 +44,7 @@ public class SignInController {
             log.error("SignIn Errors = {}", bindingResult.getFieldErrors());
             return badRequest(ErrorResponse.convertJson(bindingResult.getFieldErrors()));
         }
-        MemberListResponse memberListResponse = signInService.login(loginForm, request);
+        MemberListResponse memberListResponse = memberService.login(loginForm, request);
         log.info("member login = {}", memberListResponse);
         return success(memberListResponse);
     }
@@ -56,7 +56,7 @@ public class SignInController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         log.info("member logout = {}", request.getAttribute(SessionConst.LOGIN_MEMBER));
-        signInService.logout(request);
+        memberService.logout(request);
         return success(new BoolResponse(true));
     }
 
@@ -65,7 +65,7 @@ public class SignInController {
      */
     @PostMapping("/id")
     public ResponseEntity<?> findUserId(@Valid @RequestBody FindMemberForm form) {
-        Member findMember = signInService.findByUserId(form);
+        Member findMember = memberService.findByUserId(form);
         return success(findMember);
     }
 
@@ -74,7 +74,7 @@ public class SignInController {
      */
     @PostMapping("/password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordForm form) {
-        signInService.resetPassword(form);
+        memberService.resetPassword(form);
         return success(new BoolResponse(true));
     }
 
