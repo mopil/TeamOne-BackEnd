@@ -1,10 +1,7 @@
 package com.mjuteam2.TeamOne.borad.controller;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.borad.dto.AppealBoardForm;
-import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
-import com.mjuteam2.TeamOne.borad.dto.FreeBoardForm;
-import com.mjuteam2.TeamOne.borad.dto.WantedBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.*;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.config.Login;
@@ -116,14 +113,23 @@ public class BoardController {
         return success(boardService.findAllByType(boardType));
     }
 
+    // 게시글 검색어 키워드로 조회 (검색 기능)
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestBody BoardSearch boardSearch) {
+        List<BoardResponse> search = boardService.search(boardSearch);
+        log.info("타입 = {}", boardSearch.getBoardSearchType());
+        return success(search);
+    }
+
+
     /**
      * 게시글 수정
      */
     @PutMapping("/{boardId}/wanted")
     public ResponseEntity<?> updateWantedBoard(@Login Member loginMember,
-                                               @PathVariable Long boardId,
-                                               @Valid @RequestBody WantedBoardForm form,
-                                               BindingResult bindingResult) {
+                                             @PathVariable Long boardId,
+                                             @Valid @RequestBody WantedBoardForm form,
+                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
