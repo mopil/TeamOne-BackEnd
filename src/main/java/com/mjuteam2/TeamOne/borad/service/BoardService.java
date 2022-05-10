@@ -56,10 +56,10 @@ public class BoardService {
     /**
      * 게시글 전체 조회
      */
-    public List<BoardResponse> findAll() {
+    public BoardListResponse findAll() {
         List<BoardResponse> result = new ArrayList<>();
         boardRepository.findAll().forEach(board -> result.add(board.toResponse()));
-        return result;
+        return new BoardListResponse(result);
     }
 
     // 게시글 타입으로 전체 조회
