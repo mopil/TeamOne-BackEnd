@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class SessionManager {
+    public static final String SESSION_ID = "cookie";
+    public static final String PREFIX = "JSESSIONID=";
 
     // concurrentHashMap 으로 해야 동시 접속 처리 가능(멀티쓰레드)
     private final Map<String, Member> sessionStore = new ConcurrentHashMap<>();

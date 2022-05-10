@@ -45,6 +45,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         // 세션 정보가 있으면 로그인된 회원을 날린다
-        return session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return session.getAttribute("SessionConst.LOGIN_MEMBER");
     }
 }

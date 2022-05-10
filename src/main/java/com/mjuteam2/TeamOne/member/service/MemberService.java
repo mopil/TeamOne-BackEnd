@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.mjuteam2.TeamOne.member.config.EncryptManager.check;
 
@@ -42,34 +41,32 @@ public class MemberService {
     // 로그인 확인
     public Member getLoginMember(HttpServletRequest request) throws LoginException {
         request.getHeaderNames().asIterator().forEachRemaining(name -> log.info("헤더 값 # {} = {}", name, request.getHeader(name)));
-        String sessionId = request.getHeader("cookie");
+        String sessionId = request.getHeader(SessionManager.SESSION_ID);
         log.info("클라이언트로 부터 요청받은 쿠키(세션값) = {}", sessionId);
         return sessionManager.getLoginMember(sessionId);
     }
 
     public MemberListResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
-        Optional<Member> loginMember = memberRepository.findByUserId(form.getUserId());
+        Member loginMember = memberRepository.findByUserId(form.getUserId())
+                .orElseThrow(() -> new MemberException("회원을 찾을 수 없음."));
 
-        if (loginMember.isEmpty()) {
-            throw new LoginException("계정이 존재하지 않습니다.");
-        }
-
-        else if (!check(form.getPassword(), loginMember.get().getPassword())) {
+        if (!check(form.getPassword(), loginMember.getPassword())) {
             throw new LoginException("비밀번호가 맞지 않습니다.");
         }
 
         // 로그인 성공시
         // 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성 (여기서는 그냥 랜덤값을 생성하는 용도로만 사용함)
         HttpSession session = request.getSession();
-        log.info("방금 로그인된 회원의 세션값 = {}", session.getId());
+        log.info("방금 로그인 처리할 새로생성된 회원의 세션값 = {}", session.getId());
 
         // 세션매니저에 로그인 회원정보 보관
-        sessionManager.save(session.getId(), loginMember.get());
+        // 주의 : 포스트맨 연동을 위해서 무조건 Prefix(JESSIONID=)를 붙혀줘야함
+        sessionManager.save(SessionManager.PREFIX + session.getId(), loginMember);
 
         List<Member> loginMemberList = new ArrayList<>();
-        loginMemberList.add(loginMember.get());
+        loginMemberList.add(loginMember);
 
-        return new MemberListResponse(loginMemberList, session.getId());
+        return new MemberListResponse(loginMemberList, SessionManager.PREFIX + session.getId());
     }
 
     /**
@@ -77,24 +74,21 @@ public class MemberService {
      */
     public void logout(HttpServletRequest request) {
         // 세션을 삭제한다.
-        sessionManager.expire(request.getHeader("cookie"));
+        sessionManager.expire(request.getHeader(SessionManager.SESSION_ID));
     }
 
     /**
      * 아이디 찾기
      */
     public Member findByUserId(FindMemberForm form) {
-        Optional<Member> FindMember = memberRepository.findByEmail(form.getEmail());
+        Member findMember = memberRepository.findByEmail(form.getEmail())
+                .orElseThrow(() -> new MemberException("회원을 찾을 수 없음."));
 
-        if (FindMember.isEmpty()) {
-            throw new FindFormException("계정이 존재하지 않습니다.");
-        }
-
-        else if (!Objects.equals(FindMember.get().getSchoolId(), form.getSchoolId())) {
+        if (!Objects.equals(findMember.getSchoolId(), form.getSchoolId())) {
             throw new FindFormException("학번이 올바르지 않습니다.");
         }
 
-        return FindMember.get();
+        return findMember;
     }
 
     /**

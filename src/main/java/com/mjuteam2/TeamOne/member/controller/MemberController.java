@@ -1,6 +1,5 @@
 package com.mjuteam2.TeamOne.member.controller;
 
-import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.PasswordUpdateForm;
 import com.mjuteam2.TeamOne.member.service.MemberService;
@@ -43,7 +42,7 @@ public class MemberController {
      */
     // 닉네임 변경
     @PutMapping("/nickname/{newNickname}")
-    public ResponseEntity<?> updateNickname(@PathVariable String newNickname, HttpServletRequest request) throws LoginException {
+    public ResponseEntity<?> updateNickname(HttpServletRequest request, @PathVariable String newNickname) throws LoginException {
         Member loginMember = memberService.getLoginMember(request);
         memberService.updateNickname(loginMember, newNickname);
         return success(loginMember);
@@ -51,27 +50,30 @@ public class MemberController {
 
     // 비밀번호 변경
     @PutMapping("/password")
-    public ResponseEntity<?> updatePassword(@Login Member loginMember,
+    public ResponseEntity<?> updatePassword(HttpServletRequest request,
                                             @Valid @RequestBody PasswordUpdateForm form,
-                                            BindingResult bindingResult) {
+                                            BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             log.error("Password Update Error = {}", bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         memberService.updatePassword(loginMember, form.getNewPassword());
         return success(loginMember);
     }
 
     // 포인트 변경 (랭킹 포인트)
     @PutMapping("/point/{amount}")
-    public ResponseEntity<?> updatePoint(@Login Member loginMember, @PathVariable Integer amount){
+    public ResponseEntity<?> updatePoint(HttpServletRequest request, @PathVariable Integer amount) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         memberService.addPoint(loginMember, amount);
         return success(loginMember);
     }
 
     // 자기소개 변경
     @PutMapping("/introduce/{newIntroduce}")
-    public ResponseEntity<?> updateIntroduce(@Login Member loginMember, @PathVariable String newIntroduce){
+    public ResponseEntity<?> updateIntroduce(HttpServletRequest request, @PathVariable String newIntroduce) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         memberService.updateIntroduce(loginMember, newIntroduce);
         return success(loginMember);
     }
@@ -80,7 +82,8 @@ public class MemberController {
      * 회원 탈퇴
      */
     @DeleteMapping("")
-    public ResponseEntity<?> deleteUser(@Login Member loginMember, HttpServletRequest request){
+    public ResponseEntity<?> deleteUser(HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         memberService.deleteMember(loginMember.getId(), request);
         return success(new BoolResponse(true));
     }

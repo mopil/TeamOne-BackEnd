@@ -1,6 +1,5 @@
 package com.mjuteam2.TeamOne.member.controller;
 
-import com.mjuteam2.TeamOne.member.config.SessionConst;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
 import com.mjuteam2.TeamOne.member.dto.MemberListResponse;
@@ -55,7 +54,6 @@ public class SignInController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
-        log.info("member logout = {}", request.getAttribute(SessionConst.LOGIN_MEMBER));
         memberService.logout(request);
         return success(new BoolResponse(true));
     }
