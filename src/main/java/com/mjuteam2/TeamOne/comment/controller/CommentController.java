@@ -4,8 +4,8 @@ import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.comment.dto.CommentForm;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.comment.service.CommentService;
-import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 public class CommentController {
 
     private final CommentService commentService;
+    private final MemberService memberService;
 
     private void logError(List<FieldError> errors) {
         log.error("comment Errors = {}", errors);
@@ -40,14 +43,15 @@ public class CommentController {
      * 댓글 생성
      */
     @PostMapping("/new/{boardId}")
-    public ResponseEntity<?> createComment(@Login Member loginMember,
+    public ResponseEntity<?> createComment(HttpServletRequest request,
                                            @PathVariable Long boardId,
                                            @Valid @RequestBody CommentForm form,
-                                           BindingResult bindingResult) {
+                                           BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         CommentResponse comment = commentService.createComment(loginMember, boardId, form);
         return success(comment);
     }
@@ -56,14 +60,15 @@ public class CommentController {
      * 댓글 수정
      */
     @PutMapping("/{commentId}")
-    public ResponseEntity<?> updateComment(@Login Member loginMember,
+    public ResponseEntity<?> updateComment(HttpServletRequest request,
                                            @PathVariable Long commentId,
                                            @Valid @RequestBody CommentForm form,
-                                           BindingResult bindingResult) {
+                                           BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         CommentResponse commentResponse = commentService.updateComment(loginMember, commentId, form);
         return success(commentResponse);
     }

@@ -3,8 +3,8 @@ package com.mjuteam2.TeamOne.bookmark.controller;
 import com.mjuteam2.TeamOne.bookmark.dto.BookMarkResponse;
 import com.mjuteam2.TeamOne.bookmark.service.BookMarkService;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
-import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 
 import static com.mjuteam2.TeamOne.util.dto.RestResponse.badRequest;
 import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
@@ -24,14 +27,15 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 public class BookMarkController {
 
     private final BookMarkService bookMarkService;
+    private final MemberService memberService;
 
     /**
      * 북마크 생성
      */
     @PostMapping("/new/{boardId}")
-    public ResponseEntity<?> createBookMark(@Login Member loginMember,
-                                            @PathVariable Long boardId) {
-
+    public ResponseEntity<?> createBookMark(HttpServletRequest request,
+                                            @PathVariable Long boardId) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         BookMarkResponse bookMark = bookMarkService.createBookMark(loginMember, boardId);
         return success(bookMark);
     }
