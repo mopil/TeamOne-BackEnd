@@ -83,6 +83,29 @@ public class BoardService {
     }
 
     /**
+     * 게시글 검색 조회 (검색 기능)
+     */
+    public List<BoardResponse> search(BoardSearch boardSearch) {
+        List<BoardResponse> result = new ArrayList<>();
+        switch (boardSearch.getBoardSearchType()) {
+            case TITLE:
+                boardRepository.searchByTitle(boardSearch.getKeyword())
+                    .forEach(board -> result.add(board.toResponse()));
+            case CONTENT:
+                boardRepository.searchByContent(boardSearch.getKeyword())
+                        .forEach(board -> result.add(board.toResponse()));
+            case TITLE_CONTENT:
+                boardRepository.searchByTitleAndContent(boardSearch.getKeyword())
+                        .forEach(board -> result.add(board.toResponse()));
+            case CLASS:
+                boardRepository.searchByClassTitle(boardSearch.getKeyword())
+                        .forEach(board -> result.add(board.toResponse()));
+
+        }
+        return result;
+    }
+
+    /**
      * 게시글 수정
      */
     @Transactional

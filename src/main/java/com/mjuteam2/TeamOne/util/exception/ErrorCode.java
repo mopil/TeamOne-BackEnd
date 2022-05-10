@@ -35,4 +35,9 @@ public class ErrorCode {
      * 유의 오류
      */
     public static final String CAUTION_ERROR = "caution";
+
+    /**
+     * 쪽지 오류
+     */
+    public static final String MESSAGE_ERROR = "message";
 }
