@@ -31,9 +31,11 @@ public class Message {
 
     public MessageResponse toResponse() {
         return MessageResponse.builder()
+                .messageId(id)
                 .senderUserId(sender.getUserId())
                 .receiverUserId(receiver.getUserId())
                 .content(content)
+                .createdAt(createdAt)
                 .build();
     }
 
@@ -43,4 +45,6 @@ public class Message {
         this.receiver = receiver;
         this.content = content;
     }
+
+    protected Message() {}
 }
