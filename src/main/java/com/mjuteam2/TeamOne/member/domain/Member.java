@@ -147,4 +147,5 @@ public class Member {
         this.password = encryptedPassword;
     }
 
+
 }
