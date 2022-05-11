@@ -4,9 +4,9 @@ import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.dto.*;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
-import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
@@ -18,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     private void logError(List<FieldError> errors) {
         log.error("Board Errors = {}", errors);
@@ -43,39 +46,42 @@ public class BoardController {
      */
     // 팀원구해요
     @PostMapping("/new/wanted")
-    public ResponseEntity<?> createWantedBoard(@Login Member loginMember,
+    public ResponseEntity<?> createWantedBoard(HttpServletRequest request,
                                          @Valid @RequestBody WantedBoardForm form,
-                                         BindingResult bindingResult) {
+                                         BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
         return success(savedBoard);
     }
 
     // 어필해요
     @PostMapping("/new/appeal")
-    public ResponseEntity<?> createAppealBoard(@Login Member loginMember,
+    public ResponseEntity<?> createAppealBoard(HttpServletRequest request,
                                          @Valid @RequestBody AppealBoardForm form,
-                                         BindingResult bindingResult){
+                                         BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
         return success(savedBoard);
     }
 
     // 자유게시글
     @PostMapping("/new/free")
-    public ResponseEntity<?> createFreeBoard(@Login Member loginMember,
-                                         @Valid @RequestBody FreeBoardForm form,
-                                         BindingResult bindingResult){
+    public ResponseEntity<?> createFreeBoard(HttpServletRequest request,
+                                             @Valid @RequestBody FreeBoardForm form,
+                                             BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
         return success(savedBoard);
     }
@@ -126,14 +132,15 @@ public class BoardController {
      * 게시글 수정
      */
     @PutMapping("/{boardId}/wanted")
-    public ResponseEntity<?> updateWantedBoard(@Login Member loginMember,
+    public ResponseEntity<?> updateWantedBoard(HttpServletRequest request,
                                              @PathVariable Long boardId,
                                              @Valid @RequestBody WantedBoardForm form,
-                                             BindingResult bindingResult) {
+                                             BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
+        Member loginMember = memberService.getLoginMember(request);
         BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
         return success(updatedBoard);
 

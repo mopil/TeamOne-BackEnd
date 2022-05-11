@@ -34,9 +34,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
         // 리퀘스트에 있는 헤더값을 전체 출력 (테스트용)
         request.getHeaderNames().asIterator().forEachRemaining(name -> log.info("헤더 값 # {} = {}", name, request.getHeader(name)));
-
-        // 일단, HttpSession이 어디에 저장되는지 모르겠습니다... 헤더 cookie : JESSIONID=asdfsf이런식으로 저장되는 줄 알고 그렇게 진행했는데 인식을 못 해요 ㅠ
-        // 포스트맨으로 로그인하고 하면 잘 됩니다.
         HttpSession session = request.getSession(false);
 
         if (session == null) {
@@ -45,6 +42,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         // 세션 정보가 있으면 로그인된 회원을 날린다
-        return session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return session.getAttribute("SessionConst.LOGIN_MEMBER");
     }
 }

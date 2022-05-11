@@ -3,8 +3,8 @@ package com.mjuteam2.TeamOne.caution.controller;
 import com.mjuteam2.TeamOne.caution.dto.CautionResponse;
 import com.mjuteam2.TeamOne.caution.exception.CautionException;
 import com.mjuteam2.TeamOne.caution.service.CautionService;
-import com.mjuteam2.TeamOne.member.config.Login;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.mjuteam2.TeamOne.util.dto.RestResponse.badRequest;
@@ -26,12 +28,14 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 public class CautionController {
 
     private final CautionService cautionService;
+    private final MemberService memberService;
 
     /**
      * 사용자 유의 생성
      */
     @PostMapping("/{targetMemberId}")
-    public ResponseEntity<?> createCaution(@Login Member loginMember, @PathVariable Long targetMemberId) {
+    public ResponseEntity<?> createCaution(HttpServletRequest request, @PathVariable Long targetMemberId) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         CautionResponse caution = cautionService.setCaution(loginMember.getId(), targetMemberId);
         return success(caution);
     }
@@ -49,7 +53,8 @@ public class CautionController {
      * 사용자 유의 전체 해제(삭제)
      */
     @DeleteMapping("/all")
-    public ResponseEntity<?> deleteAllCaution(@Login Member loginMember) {
+    public ResponseEntity<?> deleteAllCaution(HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         cautionService.removeAllCaution(loginMember.getId());
         return success(new BoolResponse(true));
     }
@@ -59,7 +64,8 @@ public class CautionController {
      * 사용자 유의 리스트 전체 조회
      */
     @GetMapping("/all")
-    public ResponseEntity<?> findAll(@Login Member loginMember) {
+    public ResponseEntity<?> findAll(HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
         List<CautionResponse> result = cautionService.findAll(loginMember.getId());
         return success(result);
     }
