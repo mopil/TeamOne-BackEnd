@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne;
 
-import com.mjuteam2.TeamOne.badge.service.BadgeService;
+import com.mjuteam2.TeamOne.bookmark.service.BookMarkService;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
@@ -22,16 +22,17 @@ public class InitDummyData {
     private final SignUpService signUpService;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final BadgeService badgeService;
+    private final BookMarkService bookMarkService;
 
     @PostConstruct
-    public void userDummyData() {
+    public void dummyData() {
+        // 사용자 더미데이터 세팅
         SignUpForm form = SignUpForm.builder()
                 .nickname("슈퍼테스터")
                 .department("컴퓨터공학과")
                 .email("mopil1102@naver.com")
                 .userId("test1234")
-                .userName("테스터1")
+                .userName("배성흥")
                 .password("123456")
                 .passwordCheck("123456")
                 .phoneNumber("010-1234-1234")
@@ -52,23 +53,8 @@ public class InitDummyData {
                 .build();
         signUpService.signUp(form);
         signUpService.signUp(form2);
-    }
 
-//    @PostConstruct
-//    public void userBadgeDummyData() {
-//        if (memberRepository.findByUserId("test1234").isEmpty()) {
-//            return;
-//        }
-//        Member member = memberRepository.findByUserId("test1234").get();
-//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.HARD_CARRY));
-//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.GOOD_AT_PRESENTATION));
-//        badgeService.addBadge(member.getId(), new Badge(member, BadgeList.FAST_RESPONSE));
-//
-//    }
-
-
-    @PostConstruct
-    public void boardDummyData() {
+        // 게시판 더미데이터 세팅
         Member tester = memberRepository.findByUserId("test1234").orElse(null);
         ArrayList<Board> boardList = new ArrayList<>();
         for (int i = 0 ; i<5; i++) {
@@ -111,6 +97,12 @@ public class InitDummyData {
             boardList.add(board);
         }
         boardRepository.saveAll(boardList);
+
+
+        // 북마크 더미데이터 세팅
+        boardRepository.findByWriterName("배성흥").forEach(board -> {
+            bookMarkService.createBookMark(tester, board.getId());
+        });
 
     }
 }
