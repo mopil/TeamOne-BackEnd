@@ -131,11 +131,44 @@ public class BoardController {
     /**
      * 게시글 수정
      */
-    @PutMapping("/{boardId}/wanted")
+    // 팀원구해요
+    @PutMapping("/wanted/{boardId}")
     public ResponseEntity<?> updateWantedBoard(HttpServletRequest request,
                                              @PathVariable Long boardId,
                                              @Valid @RequestBody WantedBoardForm form,
                                              BindingResult bindingResult) throws LoginException {
+        if (bindingResult.hasErrors()) {
+            logError(bindingResult.getFieldErrors());
+            return badRequest(convertJson(bindingResult.getFieldErrors()));
+        }
+        Member loginMember = memberService.getLoginMember(request);
+        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard);
+
+    }
+
+    // 어필해요
+    @PutMapping("/appeal/{boardId}")
+    public ResponseEntity<?> updateAppealBoard(HttpServletRequest request,
+                                               @PathVariable Long boardId,
+                                               @Valid @RequestBody AppealBoardForm form,
+                                               BindingResult bindingResult) throws LoginException {
+        if (bindingResult.hasErrors()) {
+            logError(bindingResult.getFieldErrors());
+            return badRequest(convertJson(bindingResult.getFieldErrors()));
+        }
+        Member loginMember = memberService.getLoginMember(request);
+        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard);
+
+    }
+
+    // 자유
+    @PutMapping("/free/{boardId}")
+    public ResponseEntity<?> updateFreeBoard(HttpServletRequest request,
+                                               @PathVariable Long boardId,
+                                               @Valid @RequestBody FreeBoardForm form,
+                                               BindingResult bindingResult) throws LoginException {
         if (bindingResult.hasErrors()) {
             logError(bindingResult.getFieldErrors());
             return badRequest(convertJson(bindingResult.getFieldErrors()));

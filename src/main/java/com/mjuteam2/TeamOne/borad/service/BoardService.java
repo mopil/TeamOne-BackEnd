@@ -109,11 +109,21 @@ public class BoardService {
      * 게시글 수정
      */
     @Transactional
-    public BoardResponse update(Member loginMember, Long boardId, WantedBoardForm form) {
+    public BoardResponse update(Member loginMember, Long boardId, BoardForm form) {
         Long findFromMemberId = loginMember.findBoard(boardId);
         Board findFromRepo = findByBoardId(boardId);
         if (!findFromMemberId.equals(findFromRepo.getMember().getId())) throw new BoardException("글쓴이와 로그인 한 사용자가 다릅니다.");
-        findFromRepo.updateWanted(form.getTitle(), form.getMemberCount(), form.getClassTitle(), form.getClassDate(), form.getContent());
+
+        if (form instanceof WantedBoardForm) {
+            WantedBoardForm wantedForm = (WantedBoardForm) form;
+            findFromRepo.updateWanted(wantedForm.getTitle(), wantedForm.getMemberCount(), wantedForm.getClassTitle(), wantedForm.getClassDate(), wantedForm.getContent());
+        } else if (form instanceof AppealBoardForm) {
+            AppealBoardForm appealForm = (AppealBoardForm) form;
+            findFromRepo.updateAppeal(appealForm.getTitle(), appealForm.getClassTitle(), appealForm.getClassDate(), appealForm.getContent());
+        } else {
+            FreeBoardForm freeForm = (FreeBoardForm) form;
+            findFromRepo.updateFree(freeForm.getTitle(), freeForm.getContent());
+        }
         return findFromRepo.toResponse();
     }
 
