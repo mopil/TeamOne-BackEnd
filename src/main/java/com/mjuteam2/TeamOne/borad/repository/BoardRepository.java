@@ -30,4 +30,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // 수업이름으로 검색
     @Query("SELECT b FROM Board b WHERE b.classTitle LIKE %:classTitle%")
     List<Board> searchByClassTitle(@Param("classTitle") String classTitle);
+
+    // 게시글 작성자 이름으로 검색
+    @Query("SELECT b FROM Board b WHERE b.member.userName = :userName")
+    List<Board> findByWriterName(String userName);
 }
