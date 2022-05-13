@@ -4,7 +4,7 @@ import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import com.mjuteam2.TeamOne.member.config.SessionManager;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
-import com.mjuteam2.TeamOne.member.dto.MemberListResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberSessionResponse;
 import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
 import com.mjuteam2.TeamOne.member.dto.SignInForm;
 import com.mjuteam2.TeamOne.member.exception.FindFormException;
@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static com.mjuteam2.TeamOne.member.config.EncryptManager.check;
@@ -46,7 +44,7 @@ public class MemberService {
         return sessionManager.getLoginMember(sessionId);
     }
 
-    public MemberListResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
+    public MemberSessionResponse login(SignInForm form, HttpServletRequest request) throws LoginException {
         Member loginMember = memberRepository.findByUserId(form.getUserId())
                 .orElseThrow(() -> new MemberException("회원을 찾을 수 없음."));
 
@@ -63,10 +61,7 @@ public class MemberService {
         // 주의 : 포스트맨 연동을 위해서 무조건 Prefix(JESSIONID=)를 붙혀줘야함
         sessionManager.save(SessionManager.PREFIX + session.getId(), loginMember);
 
-        List<Member> loginMemberList = new ArrayList<>();
-        loginMemberList.add(loginMember);
-
-        return new MemberListResponse(loginMemberList, SessionManager.PREFIX + session.getId());
+        return new MemberSessionResponse(loginMember.toResponse(), SessionManager.PREFIX + session.getId());
     }
 
     /**
