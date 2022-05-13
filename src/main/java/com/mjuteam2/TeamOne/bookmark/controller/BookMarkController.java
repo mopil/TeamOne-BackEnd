@@ -1,5 +1,6 @@
 package com.mjuteam2.TeamOne.bookmark.controller;
 
+import com.mjuteam2.TeamOne.bookmark.dto.BookMarkListResponse;
 import com.mjuteam2.TeamOne.bookmark.dto.BookMarkResponse;
 import com.mjuteam2.TeamOne.bookmark.service.BookMarkService;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
@@ -23,7 +24,7 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/bookmark")
+@RequestMapping("/bookmarks")
 public class BookMarkController {
 
     private final BookMarkService bookMarkService;
@@ -43,9 +44,17 @@ public class BookMarkController {
     /**
      * 북마크 삭제
      */
+    // 북마크 아이디로 하나 삭제
     @DeleteMapping("/{bookmarkId}")
     public ResponseEntity<?> deleteBookMark(@PathVariable Long bookmarkId) {
         return success(new BoolResponse(bookMarkService.deleteBookMark(bookmarkId)));
+    }
+
+    // 로그인한 사용자의 북마크 전체 삭제
+    @DeleteMapping("/all")
+    public ResponseEntity<?> deleteAllBookMarks(HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
+        return success(new BoolResponse(bookMarkService.deleteAllBookMarks(loginMember)));
     }
 
     /**
@@ -56,20 +65,22 @@ public class BookMarkController {
         return success(bookMarkService.findByBookMarkId(bookMarkId));
     }
 
-    /**
-     * 북마크 전체 조회
-     */
-    @GetMapping("/all")
-    public ResponseEntity<?> findAll() {
-        return success(bookMarkService.findAll());
-    }
+//    /**
+//     * 북마크 전체 조회
+//     */
+//    @GetMapping("/all")
+//    public ResponseEntity<?> findAll(HttpServletRequest request) {
+//        return success(bookMarkService.findAll());
+//    }
 
     /**
      * 해당 유저 북마크 전체 조회
      */
-    @GetMapping("/all/{memberId}")
-    public ResponseEntity<?> findAllByMemberId(@PathVariable Long memberId) {
-        return success(bookMarkService.findByMemberId(memberId));
+    @GetMapping("/all")
+    public ResponseEntity<?> findAllByMemberId(HttpServletRequest request) throws LoginException {
+        Member loginMember = memberService.getLoginMember(request);
+        BookMarkListResponse bookMarkList = bookMarkService.findByMemberId(loginMember);
+        return success(bookMarkList);
     }
 
     /**

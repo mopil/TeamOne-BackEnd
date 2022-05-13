@@ -14,9 +14,9 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("SELECT b FROM BookMark b where b.member.id = :id")
-    List<BookMark> findByMemberId(@Param("id") Long id);
+    List<BookMark> findAllByMemberId(@Param("id") Long id);
 
     @Modifying(clearAutomatically = true)
     @Query("SELECT b FROM BookMark b where b.board.id = :id")
-    List<BookMark> findByBoardId(@Param("id") Long id);
+    List<BookMark> findAllByBoardId(@Param("id") Long id);
 }

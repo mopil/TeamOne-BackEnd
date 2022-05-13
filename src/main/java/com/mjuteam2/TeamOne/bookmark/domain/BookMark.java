@@ -42,10 +42,10 @@ public class BookMark {
 
     public BookMarkResponse toResponse() {
         return BookMarkResponse.builder()
-                .boardId(board.getId())
-                .memberId(member.getId())
                 .bookMarkId(id)
-                .createdAt(LocalDateTime.now())
+                .writer(member.toResponse())
+                .board(board.toResponse())
+                .createdAt(createdAt)
                 .build();
     }
 }

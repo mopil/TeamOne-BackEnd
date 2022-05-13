@@ -1,5 +1,7 @@
 package com.mjuteam2.TeamOne.bookmark.dto;
 
+import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class BookMarkResponse {
-
     private Long bookMarkId;
-    private Long boardId;
-    private Long memberId;
+    private MemberResponse writer;
+    private BoardResponse board;
     private LocalDateTime createdAt;
 
 }
