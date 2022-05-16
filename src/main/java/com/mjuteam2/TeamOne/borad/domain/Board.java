@@ -3,10 +3,7 @@ package com.mjuteam2.TeamOne.borad.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
-import com.mjuteam2.TeamOne.borad.dto.response.AppealBoardResponse;
 import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
-import com.mjuteam2.TeamOne.borad.dto.response.FreeBoardResponse;
-import com.mjuteam2.TeamOne.borad.dto.response.WantedBoardResponse;
 import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -16,10 +13,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,33 +69,10 @@ public class Board extends BaseTimeEntity {
         this.boardStatus = boardStatus;
     }
 
-    public BoardResponse toResponse(BoardType type) {
-        if (type == BoardType.WANTED) return toWantedResponse();
-        else if (type == BoardType.APPEAL) return toAppealResponse();
-        else return toFreeResponse();
-    }
-
-    public AppealBoardResponse toAppealResponse() {
+    public BoardResponse toResponse() {
         List<CommentResponse> result = new ArrayList<>();
         comments.forEach(c -> result.add(c.toResponse()));
-        return AppealBoardResponse.builder()
-                .boardId(id)
-                .title(title)
-                .content(content)
-                .viewCount(viewCount)
-                .createdDate(getCreatedDate())
-                .updatedDate(getUpdatedDate())
-                .comments(result)
-                .writer(member.toResponse())
-                .classTitle(classTitle)
-                .classDate(classDate)
-                .build();
-    }
-
-    public WantedBoardResponse toWantedResponse() {
-        List<CommentResponse> result = new ArrayList<>();
-        comments.forEach(c -> result.add(c.toResponse()));
-        return WantedBoardResponse.builder()
+        return BoardResponse.builder()
                 .boardId(id)
                 .title(title)
                 .content(content)
@@ -110,26 +82,74 @@ public class Board extends BaseTimeEntity {
                 .comments(result)
                 .writer(member.toResponse())
                 .boardStatus(boardStatus)
-                .deadline(deadline)
+                .boardType(boardType)
                 .classTitle(classTitle)
                 .classDate(classDate)
+                .memberCount(memberCount)
+                .deadline(deadline)
                 .build();
     }
 
-    public FreeBoardResponse toFreeResponse() {
-        List<CommentResponse> result = new ArrayList<>();
-        comments.forEach(c -> result.add(c.toResponse()));
-        return FreeBoardResponse.builder()
-                .boardId(id)
-                .title(title)
-                .content(content)
-                .viewCount(viewCount)
-                .createdDate(getCreatedDate())
-                .updatedDate(getUpdatedDate())
-                .comments(result)
-                .writer(member.toResponse())
-                .build();
-    }
+//    @Deprecated
+//    public BoardResponse toResponse(BoardType type) {
+//        if (type == BoardType.WANTED) return toWantedResponse();
+//        else if (type == BoardType.APPEAL) return toAppealResponse();
+//        else return toFreeResponse();
+//    }
+//
+//    @Deprecated
+//    public AppealBoardResponse toAppealResponse() {
+//        List<CommentResponse> result = new ArrayList<>();
+//        comments.forEach(c -> result.add(c.toResponse()));
+//        return AppealBoardResponse.builder()
+//                .boardId(id)
+//                .title(title)
+//                .content(content)
+//                .viewCount(viewCount)
+//                .createdDate(getCreatedDate())
+//                .updatedDate(getUpdatedDate())
+//                .comments(result)
+//                .writer(member.toResponse())
+//                .classTitle(classTitle)
+//                .classDate(classDate)
+//                .build();
+//    }
+//
+//    @Deprecated
+//    public WantedBoardResponse toWantedResponse() {
+//        List<CommentResponse> result = new ArrayList<>();
+//        comments.forEach(c -> result.add(c.toResponse()));
+//        return WantedBoardResponse.builder()
+//                .boardId(id)
+//                .title(title)
+//                .content(content)
+//                .viewCount(viewCount)
+//                .createdDate(getCreatedDate())
+//                .updatedDate(getUpdatedDate())
+//                .comments(result)
+//                .writer(member.toResponse())
+//                .boardStatus(boardStatus)
+//                .deadline(deadline)
+//                .classTitle(classTitle)
+//                .classDate(classDate)
+//                .build();
+//    }
+//
+//    @Deprecated
+//    public FreeBoardResponse toFreeResponse() {
+//        List<CommentResponse> result = new ArrayList<>();
+//        comments.forEach(c -> result.add(c.toResponse()));
+//        return FreeBoardResponse.builder()
+//                .boardId(id)
+//                .title(title)
+//                .content(content)
+//                .viewCount(viewCount)
+//                .createdDate(getCreatedDate())
+//                .updatedDate(getUpdatedDate())
+//                .comments(result)
+//                .writer(member.toResponse())
+//                .build();
+//    }
 
     /**
      * 게시글 수정 메소드

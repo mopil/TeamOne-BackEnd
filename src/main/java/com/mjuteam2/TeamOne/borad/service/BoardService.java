@@ -2,7 +2,7 @@ package com.mjuteam2.TeamOne.borad.service;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
-import com.mjuteam2.TeamOne.borad.dto.*;
+import com.mjuteam2.TeamOne.borad.dto.BoardSearch;
 import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.BoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
@@ -16,6 +16,7 @@ import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +50,8 @@ public class BoardService {
             board = form.toBoard(loginMember, BoardType.FREE);
         }
         Board saved = boardRepository.save(board);
-        Member loginMember2 = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패"));
-        loginMember2.addBoard(saved);
+        Member findFromRepoMember = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패."));
+        findFromRepoMember.addBoard(saved);
         return board;
     }
 
@@ -69,8 +70,13 @@ public class BoardService {
      */
     public BoardListResponse findAll() {
         List<BoardResponse> result = new ArrayList<>();
-        boardRepository.findAll().forEach(board -> result.add(board.toResponse(board.getBoardType())));
+        boardRepository.findAll().forEach(board -> result.add(board.toResponse()));
         return new BoardListResponse(result);
+    }
+
+    public BoardListResponse findAll(Pageable pageable) {
+        List<BoardResponse> content = boardRepository.findAll(pageable).map(Board::toResponse).getContent();
+        return new BoardListResponse(content);
     }
 
     // 게시글 타입으로 전체 조회
@@ -89,7 +95,7 @@ public class BoardService {
         }
         List<BoardResponse> result = new ArrayList<>();
         // 순회를 돌면서 Board -> BoardResponse 변환
-        boardRepository.findAllByType(type).forEach(board -> result.add(board.toResponse(board.getBoardType())));
+        boardRepository.findAllByType(type).forEach(board -> result.add(board.toResponse()));
         log.info("결과 = {}", result);
         return new BoardListResponse(result);
     }
@@ -102,16 +108,16 @@ public class BoardService {
         switch (boardSearch.getBoardSearchType()) {
             case TITLE:
                 boardRepository.searchByTitle(boardSearch.getKeyword())
-                    .forEach(board -> result.add(board.toResponse(board.getBoardType())));
+                    .forEach(board -> result.add(board.toResponse()));
             case CONTENT:
                 boardRepository.searchByContent(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
+                        .forEach(board -> result.add(board.toResponse()));
             case TITLE_CONTENT:
                 boardRepository.searchByTitleAndContent(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
+                        .forEach(board -> result.add(board.toResponse()));
             case CLASS:
                 boardRepository.searchByClassTitle(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
+                        .forEach(board -> result.add(board.toResponse()));
 
         }
         return result;
@@ -121,8 +127,7 @@ public class BoardService {
      * 게시글 수정
      */
     @Transactional
-    public BoardResponse update(Member loginMember, Long boardId, BoardForm form) {
-        //Long findFromMemberId = loginMember.findBoard(boardId);
+    public Board update(Member loginMember, Long boardId, BoardForm form) {
         Member findFromMember = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패"));
         Long findFromMemberId = findFromMember.findBoard(boardId);
         Board findFromRepo = findByBoardId(boardId);
@@ -138,7 +143,7 @@ public class BoardService {
             FreeBoardForm freeForm = (FreeBoardForm) form;
             findFromRepo.updateFree(freeForm.getTitle(), freeForm.getContent());
         }
-        return findFromRepo.toResponse(findFromRepo.getBoardType());
+        return findFromRepo;
     }
 
     /**

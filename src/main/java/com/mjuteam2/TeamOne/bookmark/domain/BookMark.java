@@ -8,10 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -42,7 +40,7 @@ public class BookMark extends BaseTimeEntity {
         return BookMarkResponse.builder()
                 .bookMarkId(id)
                 .writer(member.toResponse())
-                .board(board.toResponse(board.getBoardType()))
+                .board(board.toResponse())
                 .createdDate(getCreatedDate())
                 .build();
     }
