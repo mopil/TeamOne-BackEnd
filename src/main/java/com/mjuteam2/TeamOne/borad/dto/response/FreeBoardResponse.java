@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.borad.dto.response;
 
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class FreeBoardResponse extends BoardResponse{
     private int viewCount;
     private LocalDateTime createdAt;
     private List<CommentResponse> comments;
+    private MemberResponse writer;
 }

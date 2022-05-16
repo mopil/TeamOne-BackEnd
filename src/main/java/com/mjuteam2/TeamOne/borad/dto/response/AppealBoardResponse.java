@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.borad.dto.response;
 
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class AppealBoardResponse extends BoardResponse {
     private int viewCount;
     private LocalDateTime createdAt;
     private List<CommentResponse> comments;
+    private MemberResponse writer;
     
     // 어필해요 전용
     private String classTitle;
