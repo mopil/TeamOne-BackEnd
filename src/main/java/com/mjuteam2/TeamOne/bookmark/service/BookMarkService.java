@@ -42,7 +42,6 @@ public class BookMarkService {
         }
 
         BookMark saveBookMark = BookMark.builder()
-                .createdAt(LocalDateTime.now())
                 .member(loginMember)
                 .board(board)
                 .build();

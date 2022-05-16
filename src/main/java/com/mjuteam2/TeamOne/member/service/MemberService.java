@@ -3,10 +3,7 @@ package com.mjuteam2.TeamOne.member.service;
 import com.mjuteam2.TeamOne.member.config.EncryptManager;
 import com.mjuteam2.TeamOne.member.config.SessionManager;
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
-import com.mjuteam2.TeamOne.member.dto.MemberSessionResponse;
-import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
-import com.mjuteam2.TeamOne.member.dto.SignInForm;
+import com.mjuteam2.TeamOne.member.dto.*;
 import com.mjuteam2.TeamOne.member.exception.FindFormException;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
@@ -75,7 +72,7 @@ public class MemberService {
     /**
      * 아이디 찾기
      */
-    public Member findByUserId(FindMemberForm form) {
+    public MemberResponse findByUserId(FindMemberForm form) {
         Member findMember = memberRepository.findByEmail(form.getEmail())
                 .orElseThrow(() -> new MemberException("회원을 찾을 수 없음."));
 
@@ -83,13 +80,13 @@ public class MemberService {
             throw new FindFormException("학번이 올바르지 않습니다.");
         }
 
-        return findMember;
+        return findMember.toResponse();
     }
 
     /**
      * 비밀번호 재설정
      */
-    public Member resetPassword(ResetPasswordForm form) {
+    public MemberResponse resetPassword(ResetPasswordForm form) {
 
         // 폼에 적힌 이메일로 디비에서 멤버 조회
         Member findMember = memberRepository.findByEmail(form.getEmail())
@@ -107,16 +104,17 @@ public class MemberService {
         }
 
         // 비밀번호 재설정된 맴버 객체 반환
-        return findMember;
+        return findMember.toResponse();
     }
 
     /**
      * 회원 하나 조회
      */
     @Transactional(readOnly = true)
-    public Member findByUserId(Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() ->  new MemberException("해당 회원이 없습니다."));
+    public MemberResponse findByUserId(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new MemberException("해당 회원이 없습니다."));
+        return member.toResponse();
     }
 
     /**

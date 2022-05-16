@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne.member.domain;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.rating.domain.Rating;
+import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,14 +11,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity @Getter
-public class MemberBoard {
+public class MemberBoard extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_board_id")
     private Long id;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "memberBoard")
     private List<Rating> ratings;
