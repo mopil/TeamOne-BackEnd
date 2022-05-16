@@ -92,6 +92,7 @@ public class Board {
                 .viewCount(viewCount)
                 .createdAt(createdAt)
                 .comments(result)
+                .writer(member.toResponse())
                 .classTitle(classTitle)
                 .classDate(classDate)
                 .build();
@@ -107,6 +108,7 @@ public class Board {
                 .viewCount(viewCount)
                 .createdAt(createdAt)
                 .comments(result)
+                .writer(member.toResponse())
                 .boardStatus(boardStatus)
                 .deadline(deadline)
                 .classTitle(classTitle)
@@ -124,6 +126,7 @@ public class Board {
                 .viewCount(viewCount)
                 .createdAt(createdAt)
                 .comments(result)
+                .writer(member.toResponse())
                 .build();
     }
 
