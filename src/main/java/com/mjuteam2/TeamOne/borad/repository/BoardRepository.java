@@ -12,8 +12,13 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
+    // 타입으로 게시글 전체 조회
     @Query("SELECT b FROM Board b WHERE b.boardType = :boardType")
-    List<Board> findAllByType(BoardType boardType);
+    List<Board> findAllByType(@Param("boardType") BoardType boardType);
+
+    // 사용자가 쓴 글 게시글 타입별로 조회
+    @Query("SELECT b FROM Board b WHERE b.boardType = :boardType AND b.member.id = :memberId")
+    List<Board> findWrittenAllByType(@Param("memberId") Long memberId, @Param("boardType") BoardType boardType);
 
     // 제목으로 검색
     @Query("SELECT b FROM Board b WHERE b.title LIKE %:title%")
