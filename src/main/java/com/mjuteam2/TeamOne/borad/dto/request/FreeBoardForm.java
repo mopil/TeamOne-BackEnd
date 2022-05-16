@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.borad.dto;
+package com.mjuteam2.TeamOne.borad.dto.request;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;

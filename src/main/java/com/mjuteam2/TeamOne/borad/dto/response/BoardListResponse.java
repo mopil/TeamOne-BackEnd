@@ -1,4 +1,4 @@
-package com.mjuteam2.TeamOne.borad.dto;
+package com.mjuteam2.TeamOne.borad.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

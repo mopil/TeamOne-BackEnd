@@ -3,6 +3,12 @@ package com.mjuteam2.TeamOne.borad.service;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.*;
+import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.BoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -39,9 +45,8 @@ public class BoardService {
         } else {
             board = form.toBoard(loginMember, BoardType.FREE);
         }
-//        loginMember.addBoard(board);
-        // 지연로딩 관련해서 영속성 컨텍스트가 없어서 발생하는 오류가 현재 식별됨 나중에 수정할 예정 (proxy No session 오류)
-        boardRepository.save(board);
+        Board saved = boardRepository.save(board);
+        loginMember.addBoard(saved);
         return board;
     }
 
@@ -50,7 +55,9 @@ public class BoardService {
      * 게시글 하나 조회
      */
     public Board findByBoardId(Long boardId) {
-       return boardRepository.findById(boardId).orElseThrow(() -> new BoardException("게시글 조회 오류."));
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardException("게시글 조회 오류."));
+        findBoard.addViewCount();
+        return findBoard;
     }
 
     /**
@@ -58,7 +65,7 @@ public class BoardService {
      */
     public BoardListResponse findAll() {
         List<BoardResponse> result = new ArrayList<>();
-        boardRepository.findAll().forEach(board -> result.add(board.toResponse()));
+        boardRepository.findAll().forEach(board -> result.add(board.toResponse(board.getBoardType())));
         return new BoardListResponse(result);
     }
 
@@ -78,7 +85,8 @@ public class BoardService {
         }
         List<BoardResponse> result = new ArrayList<>();
         // 순회를 돌면서 Board -> BoardResponse 변환
-        boardRepository.findAllByType(type).forEach(board -> result.add(board.toResponse()));
+        boardRepository.findAllByType(type).forEach(board -> result.add(board.toResponse(board.getBoardType())));
+        log.info("결과 = {}", result);
         return new BoardListResponse(result);
     }
 
@@ -90,16 +98,16 @@ public class BoardService {
         switch (boardSearch.getBoardSearchType()) {
             case TITLE:
                 boardRepository.searchByTitle(boardSearch.getKeyword())
-                    .forEach(board -> result.add(board.toResponse()));
+                    .forEach(board -> result.add(board.toResponse(board.getBoardType())));
             case CONTENT:
                 boardRepository.searchByContent(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse()));
+                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
             case TITLE_CONTENT:
                 boardRepository.searchByTitleAndContent(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse()));
+                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
             case CLASS:
                 boardRepository.searchByClassTitle(boardSearch.getKeyword())
-                        .forEach(board -> result.add(board.toResponse()));
+                        .forEach(board -> result.add(board.toResponse(board.getBoardType())));
 
         }
         return result;
@@ -124,7 +132,7 @@ public class BoardService {
             FreeBoardForm freeForm = (FreeBoardForm) form;
             findFromRepo.updateFree(freeForm.getTitle(), freeForm.getContent());
         }
-        return findFromRepo.toResponse();
+        return findFromRepo.toResponse(findFromRepo.getBoardType());
     }
 
     /**
