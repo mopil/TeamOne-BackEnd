@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne.borad.dto.response;
 
 import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class WantedBoardResponse extends BoardResponse{
     private String createdDate;
     private String updatedDate;
     private List<CommentResponse> comments;
+    private MemberResponse writer;
 
     // 팀원구해요 전용
     private int memberCount;

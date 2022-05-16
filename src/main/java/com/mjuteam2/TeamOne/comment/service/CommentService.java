@@ -14,51 +14,77 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
+    private Board getBoard(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardException("게시글을 찾을 수 없습니다."));
+    }
+
     /**
      * 댓글 작성
      */
-    @Transactional
-    public CommentResponse createComment(Member loginMember, Long boardId, CommentForm form) {
-        Board writeBoard = boardRepository.findById(boardId)
-                .orElseThrow(() -> new BoardException("게시글을 찾을 수 없습니다."));
+    public Comment createComment(Member loginMember, Long boardId, CommentForm form) {
+        Board writeBoard = getBoard(boardId);
 
-        Comment comment = form.toComment(loginMember, writeBoard);
-
+        Comment comment = form.toEntity(loginMember, writeBoard);
         commentRepository.save(comment);
-        return comment.toResponse();
+        return comment;
+    }
+
+    /**
+     * 댓글 조회
+     */
+    // 댓글 한 개 조회
+    @Transactional(readOnly = true)
+    public Comment findByCommentId(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException("댓글이 없습니다"));
+    }
+
+    // 해당 게시글에 있는 모든 댓글 조회
+    @Transactional(readOnly = true)
+    public List<CommentResponse> findAllByBoardId(Long boardId) {
+        getBoard(boardId);
+        List<CommentResponse> result = new ArrayList<>();
+        commentRepository.findAllByBoardId(boardId).forEach(comment -> result.add(comment.toResponse()));
+        return result;
+    }
+
+    // 모든 댓글 조회 (관리자용)
+    public List<CommentResponse> findAll() {
+        List<CommentResponse> result = new ArrayList<>();
+        commentRepository.findAll().forEach(comment -> result.add(comment.toResponse()));
+        return result;
     }
 
     /**
      * 댓글 수정
      */
-    @Transactional
-    public CommentResponse updateComment(Member loginMember, Long commentId, CommentForm form) {
+    public Comment updateComment(Member loginMember, Long commentId, CommentForm form) {
         Comment writeComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException("댓글을 찾을 수 없습니다."));
 
         Long userId1 = loginMember.getId();
         Long userId2 = writeComment.getMember().getId();
-        if (userId1 != userId2) {
+        if (!Objects.equals(userId1, userId2)) {
             throw new CommentException("글쓴이와 로그인 한 사용자가 다릅니다.");
         }
-        writeComment.update(form.getComment());
-        return writeComment.toResponse();
-
+        writeComment.update(form.getContent());
+        return writeComment;
     }
-
-
+    
     /**
      * 댓글 삭제
      */
@@ -66,38 +92,4 @@ public class CommentService {
         commentRepository.deleteById(commentId);
         return true;
     }
-
-    /**
-     * 댓글 한 개 보기
-     */
-    public Comment findByCommentId(Long commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentException("댓글이 없습니다"));
-    }
-
-    /**
-     * 해당 게시글에 모든 댓글 조회
-     */
-    public List<CommentResponse> findAllByBoardId(Long boardId) {
-        boardRepository.findById(boardId)
-                .orElseThrow(() -> new BoardException("게시글을 찾을 수 없습니다."));
-        List<CommentResponse> result = new ArrayList<>();
-        commentRepository.selectComment(boardId).forEach(comment -> result.add(comment.toResponse()));
-        return result;
-    }
-
-    /**
-     * 모든 댓글 조회
-     */
-    public List<CommentResponse> findAll() {
-        List<CommentResponse> result = new ArrayList<>();
-        commentRepository.findAll().forEach(comment -> result.add(comment.toResponse()));
-        return result;
-    }
-
-
-    // 댓글 수정
-
-    // 댓글 삭제
-
 }
