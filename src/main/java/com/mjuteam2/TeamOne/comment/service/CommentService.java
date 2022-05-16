@@ -37,8 +37,7 @@ public class CommentService {
         Comment comment = form.toComment(loginMember, writeBoard);
 
         commentRepository.save(comment);
-
-        return new CommentResponse(comment.getId(), loginMember.getId(), writeBoard.getId(), comment.getContent(), LocalDateTime.now());
+        return comment.toResponse();
     }
 
     /**

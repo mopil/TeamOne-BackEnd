@@ -11,6 +11,7 @@ import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
+import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "board_id")
@@ -42,9 +43,6 @@ public class Board {
     private String classTitle;
     private String classDate;
     private String deadline;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
@@ -90,7 +88,8 @@ public class Board {
                 .title(title)
                 .content(content)
                 .viewCount(viewCount)
-                .createdAt(createdAt)
+                .createdDate(getCreatedDate())
+                .updatedDate(getUpdatedDate())
                 .comments(result)
                 .classTitle(classTitle)
                 .classDate(classDate)
@@ -105,7 +104,8 @@ public class Board {
                 .title(title)
                 .content(content)
                 .viewCount(viewCount)
-                .createdAt(createdAt)
+                .createdDate(getCreatedDate())
+                .updatedDate(getUpdatedDate())
                 .comments(result)
                 .boardStatus(boardStatus)
                 .deadline(deadline)
@@ -122,7 +122,8 @@ public class Board {
                 .title(title)
                 .content(content)
                 .viewCount(viewCount)
-                .createdAt(createdAt)
+                .createdDate(getCreatedDate())
+                .updatedDate(getUpdatedDate())
                 .comments(result)
                 .build();
     }

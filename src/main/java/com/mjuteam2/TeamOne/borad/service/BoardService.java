@@ -12,6 +12,8 @@ import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.exception.MemberException;
+import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class BoardService {
     public static final String FREE = "free";
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 게시글 생성
@@ -46,7 +49,8 @@ public class BoardService {
             board = form.toBoard(loginMember, BoardType.FREE);
         }
         Board saved = boardRepository.save(board);
-        loginMember.addBoard(saved);
+        Member loginMember2 = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패"));
+        loginMember2.addBoard(saved);
         return board;
     }
 
@@ -118,7 +122,9 @@ public class BoardService {
      */
     @Transactional
     public BoardResponse update(Member loginMember, Long boardId, BoardForm form) {
-        Long findFromMemberId = loginMember.findBoard(boardId);
+        //Long findFromMemberId = loginMember.findBoard(boardId);
+        Member findFromMember = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패"));
+        Long findFromMemberId = findFromMember.findBoard(boardId);
         Board findFromRepo = findByBoardId(boardId);
         if (!findFromMemberId.equals(findFromRepo.getMember().getId())) throw new BoardException("글쓴이와 로그인 한 사용자가 다릅니다.");
 

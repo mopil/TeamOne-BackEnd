@@ -15,6 +15,6 @@ public class BookMarkResponse {
     private Long bookMarkId;
     private MemberResponse writer;
     private BoardResponse board;
-    private LocalDateTime createdAt;
+    private String createdDate;
 
 }

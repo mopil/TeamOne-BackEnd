@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne.message.domain;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.message.dto.MessageResponse;
+import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity @Getter
-public class Message {
+public class Message extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "message_id")
@@ -26,8 +27,6 @@ public class Message {
 
     private String content;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     public MessageResponse toResponse() {
         return MessageResponse.builder()
@@ -35,7 +34,7 @@ public class Message {
                 .senderUserId(sender.getUserId())
                 .receiverUserId(receiver.getUserId())
                 .content(content)
-                .createdAt(createdAt)
+                .createdDate(getCreatedDate())
                 .build();
     }
 

@@ -19,7 +19,8 @@ public class AppealBoardResponse extends BoardResponse {
     private String title;
     private String content;
     private int viewCount;
-    private LocalDateTime createdAt;
+    private String createdDate;
+    private String updatedDate;
     private List<CommentResponse> comments;
     
     // 어필해요 전용

@@ -18,7 +18,8 @@ public class WantedBoardResponse extends BoardResponse{
     private String title;
     private String content;
     private int viewCount;
-    private LocalDateTime createdAt;
+    private String createdDate;
+    private String updatedDate;
     private List<CommentResponse> comments;
 
     // 팀원구해요 전용

@@ -3,6 +3,7 @@ package com.mjuteam2.TeamOne.bookmark.domain;
 import com.mjuteam2.TeamOne.bookmark.dto.BookMarkResponse;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +16,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookMark {
+public class BookMark extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "bookmark_id")
     private Long id;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -34,10 +33,9 @@ public class BookMark {
 
 
     @Builder
-    public BookMark(Member member, Board board, LocalDateTime createdAt) {
+    public BookMark(Member member, Board board) {
         this.member = member;
         this.board = board;
-        this.createdAt = createdAt;
     }
 
     public BookMarkResponse toResponse() {
@@ -45,7 +43,7 @@ public class BookMark {
                 .bookMarkId(id)
                 .writer(member.toResponse())
                 .board(board.toResponse(board.getBoardType()))
-                .createdAt(createdAt)
+                .createdDate(getCreatedDate())
                 .build();
     }
 }
