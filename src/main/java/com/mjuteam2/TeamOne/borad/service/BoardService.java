@@ -74,29 +74,39 @@ public class BoardService {
         return new BoardListResponse(result);
     }
 
+    // 페이징 처리 해서 전체 조회
     public BoardListResponse findAll(Pageable pageable) {
         List<BoardResponse> content = boardRepository.findAll(pageable).map(Board::toResponse).getContent();
         return new BoardListResponse(content);
     }
-
-    // 게시글 타입으로 전체 조회
-    public BoardListResponse findAllByType(String boardType) {
-        BoardType type;
+    
+    // 문자열 게시글 타입을 BoardType 객체로 변환
+    private BoardType getBoardType(String boardType) {
         switch (boardType) {
             case WANTED:
-                type = BoardType.WANTED;
-                break;
+                return BoardType.WANTED;
             case APPEAL:
-                type = BoardType.APPEAL;
-                break;
+                return BoardType.APPEAL;
             default:
-                type = BoardType.FREE;
-                break;
+                return BoardType.FREE;
         }
+    }
+    
+    // 게시글 타입으로 전체 조회
+    public BoardListResponse findAllByType(String boardType) {
+        BoardType type = getBoardType(boardType);
         List<BoardResponse> result = new ArrayList<>();
         // 순회를 돌면서 Board -> BoardResponse 변환
         boardRepository.findAllByType(type).forEach(board -> result.add(board.toResponse()));
         log.info("결과 = {}", result);
+        return new BoardListResponse(result);
+    }
+
+    // 내가 쓴 글 타입별로 전체 조회
+    public BoardListResponse findWrittenAllByType(Member loginMember, String boardType) {
+        BoardType type = getBoardType(boardType);
+        List<BoardResponse> result = new ArrayList<>();
+        boardRepository.findWrittenAllByType(loginMember.getId(), type).forEach(board -> result.add(board.toResponse()));
         return new BoardListResponse(result);
     }
 
