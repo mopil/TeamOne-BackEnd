@@ -1,8 +1,8 @@
 package com.mjuteam2.TeamOne.comment.controller;
 
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
+import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentForm;
-import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.comment.service.CommentService;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.service.MemberService;
@@ -29,7 +29,6 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/boards/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -42,7 +41,7 @@ public class CommentController {
     /**
      * 댓글 생성
      */
-    @PostMapping("/new/{boardId}")
+    @PostMapping("/boards/{boardId}/comments")
     public ResponseEntity<?> createComment(HttpServletRequest request,
                                            @PathVariable Long boardId,
                                            @Valid @RequestBody CommentForm form,
@@ -52,14 +51,35 @@ public class CommentController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = memberService.getLoginMember(request);
-        CommentResponse comment = commentService.createComment(loginMember, boardId, form);
-        return success(comment);
+        Comment comment = commentService.createComment(loginMember, boardId, form);
+        return success(comment.toResponse());
+    }
+
+    /**
+     * 댓글 조회
+     */
+    // 댓글 하나 조회
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<?> findByCommentId(@PathVariable Long commentId) {
+        return success(commentService.findByCommentId(commentId));
+    }
+
+    // 게시글에 있는 댓글 모두 조회
+    @GetMapping("/boards/{boardId}/comments")
+    public ResponseEntity<?> findByCommentAll(@PathVariable Long boardId) {
+        return success(commentService.findAllByBoardId(boardId));
+    }
+
+    // 모든 댓글 조회 (관리자용)
+    @GetMapping("/comments/all")
+    public ResponseEntity<?> findAll() {
+        return success(commentService.findAll());
     }
 
     /**
      * 댓글 수정
      */
-    @PutMapping("/{commentId}")
+    @PutMapping("/comments/{commentId}")
     public ResponseEntity<?> updateComment(HttpServletRequest request,
                                            @PathVariable Long commentId,
                                            @Valid @RequestBody CommentForm form,
@@ -69,40 +89,16 @@ public class CommentController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = memberService.getLoginMember(request);
-        CommentResponse commentResponse = commentService.updateComment(loginMember, commentId, form);
-        return success(commentResponse);
+        Comment comment = commentService.updateComment(loginMember, commentId, form);
+        return success(comment.toResponse());
     }
 
     /**
      * 댓글 삭제
      */
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         return success(new BoolResponse(commentService.deleteComment(commentId)));
-    }
-
-    /**
-     * 댓글 조회 (한 개)
-     */
-    @GetMapping("/{commentId}")
-    public ResponseEntity<?> findByCommentId(@PathVariable Long commentId) {
-        return success(commentService.findByCommentId(commentId));
-    }
-
-    /**
-     * 댓글 조회 (게시글에 있는거 전부)
-     */
-    @GetMapping("/all/{boardId}")
-    public ResponseEntity<?> findByCommentAll(@PathVariable Long boardId) {
-        return success(commentService.findAllByBoardId(boardId));
-    }
-
-    /**
-     * 댓글 조회 (모든 댓글 조회)
-     */
-    @GetMapping("/all")
-    public ResponseEntity<?> findAll() {
-       return success(commentService.findAll());
     }
 
     /**

@@ -16,11 +16,11 @@ import javax.validation.constraints.NotEmpty;
 public class CommentForm {
 
     @NotEmpty
-    private String comment;
+    private String content;
 
-    public Comment toComment(Member writer, Board board) {
+    public Comment toEntity(Member writer, Board board) {
         return Comment.builder()
-                .content(comment)
+                .content(content)
                 .board(board)
                 .writer(writer)
                 .build();
