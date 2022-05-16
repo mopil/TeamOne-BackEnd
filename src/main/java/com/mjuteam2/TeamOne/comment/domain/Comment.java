@@ -9,11 +9,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -51,8 +49,8 @@ public class Comment extends BaseTimeEntity {
     public CommentResponse toResponse() {
         return CommentResponse.builder()
                 .content(content)
-                .memberId(member.getId())
-                .BoardId(board.getId())
+                .writer(member.toResponse())
+                .boardId(board.getId())
                 .commentId(id)
                 .createdDate(getCreatedDate())
                 .updatedDate(getUpdatedDate())
