@@ -17,6 +17,9 @@ import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
 import com.mjuteam2.TeamOne.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,7 +53,7 @@ public class BoardController {
      * 게시글 생성 왜 PathVariable로 받지 않고 나누었는가? form을 다르게 받아야 하기 때문에
      */
     // 팀원구해요
-    @PostMapping("/new/wanted")
+    @PostMapping("/wanted")
     public ResponseEntity<?> createWantedBoard(HttpServletRequest request,
                                          @Valid @RequestBody WantedBoardForm form,
                                          BindingResult bindingResult) throws LoginException {
@@ -60,11 +63,11 @@ public class BoardController {
         }
         Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
-        return success(savedBoard);
+        return success(savedBoard.toResponse());
     }
 
     // 어필해요
-    @PostMapping("/new/appeal")
+    @PostMapping("/appeal")
     public ResponseEntity<?> createAppealBoard(HttpServletRequest request,
                                          @Valid @RequestBody AppealBoardForm form,
                                          BindingResult bindingResult) throws LoginException {
@@ -74,11 +77,11 @@ public class BoardController {
         }
         Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
-        return success(savedBoard);
+        return success(savedBoard.toResponse());
     }
 
     // 자유게시글
-    @PostMapping("/new/free")
+    @PostMapping("/free")
     public ResponseEntity<?> createFreeBoard(HttpServletRequest request,
                                              @Valid @RequestBody FreeBoardForm form,
                                              BindingResult bindingResult) throws LoginException {
@@ -88,7 +91,7 @@ public class BoardController {
         }
         Member loginMember = memberService.getLoginMember(request);
         Board savedBoard = boardService.save(loginMember, form);
-        return success(savedBoard);
+        return success(savedBoard.toResponse());
     }
 
     // 자유게시글 - no login
@@ -99,7 +102,7 @@ public class BoardController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Board savedBoard = boardService.save(memberRepository.findByEmail("mopil1102@naver.com").get(), form);
-        return success(savedBoard);
+        return success(savedBoard.toResponse());
     }
 
 
@@ -110,13 +113,20 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findByBoardId(@PathVariable Long boardId) {
         Board findBoard = boardService.findByBoardId(boardId);
-        return success(findBoard.toResponse(findBoard.getBoardType()));
+        return success(findBoard.toResponse());
     }
 
     // 타입 상관없이 전체 게시글 조회
     @GetMapping("/all")
     public ResponseEntity<?> findAllBoards() {
         BoardListResponse boards = boardService.findAll();
+        return success(boards);
+    }
+
+    // 타입 상관없이 전체 게시글 조회 (페이징)
+    @GetMapping("/all/paging")
+    public ResponseEntity<?> findAllBoards(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        BoardListResponse boards = boardService.findAll(pageable);
         return success(boards);
     }
     
@@ -150,8 +160,8 @@ public class BoardController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = memberService.getLoginMember(request);
-        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
-        return success(updatedBoard);
+        Board updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard.toResponse());
 
     }
 
@@ -166,8 +176,8 @@ public class BoardController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = memberService.getLoginMember(request);
-        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
-        return success(updatedBoard);
+        Board updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard.toResponse());
 
     }
 
@@ -182,8 +192,8 @@ public class BoardController {
             return badRequest(convertJson(bindingResult.getFieldErrors()));
         }
         Member loginMember = memberService.getLoginMember(request);
-        BoardResponse updatedBoard = boardService.update(loginMember, boardId, form);
-        return success(updatedBoard);
+        Board updatedBoard = boardService.update(loginMember, boardId, form);
+        return success(updatedBoard.toResponse());
 
     }
 
