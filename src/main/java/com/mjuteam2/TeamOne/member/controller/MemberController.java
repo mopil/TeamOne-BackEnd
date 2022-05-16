@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import com.mjuteam2.TeamOne.member.dto.PasswordUpdateForm;
 import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
@@ -31,7 +32,7 @@ public class MemberController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> findByUserId(@PathVariable Long id) {
-        Member findMember = memberService.findByUserId(id);
+        MemberResponse findMember = memberService.findByUserId(id);
         log.info("select member = {}", findMember);
         return success(findMember);
     }

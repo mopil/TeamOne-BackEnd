@@ -1,10 +1,7 @@
 package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
-import com.mjuteam2.TeamOne.member.dto.FindMemberForm;
-import com.mjuteam2.TeamOne.member.dto.MemberSessionResponse;
-import com.mjuteam2.TeamOne.member.dto.ResetPasswordForm;
-import com.mjuteam2.TeamOne.member.dto.SignInForm;
+import com.mjuteam2.TeamOne.member.dto.*;
 import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import com.mjuteam2.TeamOne.util.dto.ErrorResponse;
@@ -63,7 +60,7 @@ public class SignInController {
      */
     @PostMapping("/id")
     public ResponseEntity<?> findUserId(@Valid @RequestBody FindMemberForm form) {
-        Member findMember = memberService.findByUserId(form);
+        MemberResponse findMember = memberService.findByUserId(form);
         return success(findMember);
     }
 
