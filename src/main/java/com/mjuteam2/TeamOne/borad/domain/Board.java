@@ -3,8 +3,12 @@ package com.mjuteam2.TeamOne.borad.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
-import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.AppealBoardResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.FreeBoardResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.WantedBoardResponse;
 import com.mjuteam2.TeamOne.comment.domain.Comment;
+import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
 import lombok.AccessLevel;
@@ -31,13 +35,13 @@ public class Board {
     private String content;
     private int viewCount;
 
-
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
     private int memberCount;
     private String classTitle;
     private String classDate;
+    private String deadline;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -72,19 +76,54 @@ public class Board {
         this.boardStatus = boardStatus;
     }
 
-    public BoardResponse toResponse() {
-        return BoardResponse.builder()
+    public BoardResponse toResponse(BoardType type) {
+        if (type == BoardType.WANTED) return toWantedResponse();
+        else if (type == BoardType.APPEAL) return toAppealResponse();
+        else return toFreeResponse();
+    }
+
+    public AppealBoardResponse toAppealResponse() {
+        List<CommentResponse> result = new ArrayList<>();
+        comments.forEach(c -> result.add(c.toResponse()));
+        return AppealBoardResponse.builder()
                 .boardId(id)
                 .title(title)
                 .content(content)
                 .viewCount(viewCount)
-                .boardType(boardType)
-                .memberCount(memberCount)
+                .createdAt(createdAt)
+                .comments(result)
                 .classTitle(classTitle)
                 .classDate(classDate)
+                .build();
+    }
+
+    public WantedBoardResponse toWantedResponse() {
+        List<CommentResponse> result = new ArrayList<>();
+        comments.forEach(c -> result.add(c.toResponse()));
+        return WantedBoardResponse.builder()
+                .boardId(id)
+                .title(title)
+                .content(content)
+                .viewCount(viewCount)
                 .createdAt(createdAt)
+                .comments(result)
                 .boardStatus(boardStatus)
-                .comments(comments)
+                .deadline(deadline)
+                .classTitle(classTitle)
+                .classDate(classDate)
+                .build();
+    }
+
+    public FreeBoardResponse toFreeResponse() {
+        List<CommentResponse> result = new ArrayList<>();
+        comments.forEach(c -> result.add(c.toResponse()));
+        return FreeBoardResponse.builder()
+                .boardId(id)
+                .title(title)
+                .content(content)
+                .viewCount(viewCount)
+                .createdAt(createdAt)
+                .comments(result)
                 .build();
     }
 

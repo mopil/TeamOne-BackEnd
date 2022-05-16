@@ -1,6 +1,6 @@
 package com.mjuteam2.TeamOne.bookmark.dto;
 
-import com.mjuteam2.TeamOne.borad.dto.BoardResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

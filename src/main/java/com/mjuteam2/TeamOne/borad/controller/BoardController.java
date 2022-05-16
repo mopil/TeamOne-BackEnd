@@ -1,7 +1,12 @@
 package com.mjuteam2.TeamOne.borad.controller;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.borad.dto.*;
+import com.mjuteam2.TeamOne.borad.dto.BoardSearch;
+import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -104,19 +109,22 @@ public class BoardController {
     // 게시글 id로 하나만 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findByBoardId(@PathVariable Long boardId) {
-        return success(boardService.findByBoardId(boardId).toResponse());
+        Board findBoard = boardService.findByBoardId(boardId);
+        return success(findBoard.toResponse(findBoard.getBoardType()));
     }
 
     // 타입 상관없이 전체 게시글 조회
     @GetMapping("/all")
     public ResponseEntity<?> findAllBoards() {
-        return success(boardService.findAll());
+        BoardListResponse boards = boardService.findAll();
+        return success(boards);
     }
     
     // 게시글 타입별로 전체 조회
     @GetMapping("/all/{boardType}")
     public ResponseEntity<?> findAllByType(@PathVariable String boardType) {
-        return success(boardService.findAllByType(boardType));
+        BoardListResponse allByType = boardService.findAllByType(boardType);
+        return success(allByType);
     }
 
     // 게시글 검색어 키워드로 조회 (검색 기능)

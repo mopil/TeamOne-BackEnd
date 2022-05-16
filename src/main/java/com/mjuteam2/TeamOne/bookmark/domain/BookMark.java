@@ -44,7 +44,7 @@ public class BookMark {
         return BookMarkResponse.builder()
                 .bookMarkId(id)
                 .writer(member.toResponse())
-                .board(board.toResponse())
+                .board(board.toResponse(board.getBoardType()))
                 .createdAt(createdAt)
                 .build();
     }
