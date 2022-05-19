@@ -12,4 +12,5 @@ public class CautionResponse {
     private Long cautionId;
     private MemberResponse requestMember;
     private MemberResponse cautionedMember;
+    private String createdDate;
 }
