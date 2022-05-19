@@ -1,5 +1,6 @@
 package com.mjuteam2.TeamOne.caution.controller;
 
+import com.mjuteam2.TeamOne.caution.dto.CautionListResponse;
 import com.mjuteam2.TeamOne.caution.dto.CautionResponse;
 import com.mjuteam2.TeamOne.caution.exception.CautionException;
 import com.mjuteam2.TeamOne.caution.service.CautionService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 import static com.mjuteam2.TeamOne.util.dto.RestResponse.badRequest;
 import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
@@ -24,7 +24,7 @@ import static com.mjuteam2.TeamOne.util.dto.RestResponse.success;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/caution")
+@RequestMapping("/cautions")
 public class CautionController {
 
     private final CautionService cautionService;
@@ -66,7 +66,7 @@ public class CautionController {
     @GetMapping("/all")
     public ResponseEntity<?> findAll(HttpServletRequest request) throws LoginException {
         Member loginMember = memberService.getLoginMember(request);
-        List<CautionResponse> result = cautionService.findAll(loginMember.getId());
+        CautionListResponse result = cautionService.findAll(loginMember.getId());
         return success(result);
     }
 

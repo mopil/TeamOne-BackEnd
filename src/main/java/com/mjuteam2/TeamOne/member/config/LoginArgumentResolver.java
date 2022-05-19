@@ -33,7 +33,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         // 리퀘스트에 있는 헤더값을 전체 출력 (테스트용)
-        request.getHeaderNames().asIterator().forEachRemaining(name -> log.info("헤더 값 # {} = {}", name, request.getHeader(name)));
         HttpSession session = request.getSession(false);
 
         if (session == null) {
