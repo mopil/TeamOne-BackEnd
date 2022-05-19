@@ -35,7 +35,6 @@ public class MemberService {
      */
     // 로그인 확인
     public Member getLoginMember(HttpServletRequest request) throws LoginException {
-        request.getHeaderNames().asIterator().forEachRemaining(name -> log.info("헤더 값 # {} = {}", name, request.getHeader(name)));
         String sessionId = request.getHeader(SessionManager.SESSION_ID);
         log.info("클라이언트로 부터 요청받은 쿠키(세션값) = {}", sessionId);
         return sessionManager.getLoginMember(sessionId);

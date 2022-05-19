@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.caution.service;
 
 import com.mjuteam2.TeamOne.caution.domain.Caution;
+import com.mjuteam2.TeamOne.caution.dto.CautionListResponse;
 import com.mjuteam2.TeamOne.caution.dto.CautionResponse;
 import com.mjuteam2.TeamOne.caution.exception.CautionException;
 import com.mjuteam2.TeamOne.caution.repository.CautionRepository;
@@ -49,11 +50,11 @@ public class CautionService {
 
     // 차단목록 조회 (사용자 기준)
     @Transactional(readOnly = true)
-    public List<CautionResponse> findAll(Long requestMemberId) {
+    public CautionListResponse findAll(Long requestMemberId) {
         List<Caution> findCautions = cautionRepository.findAllByRequestMemberId(requestMemberId);
         List<CautionResponse> result = new ArrayList<>();
         findCautions.forEach(caution -> result.add(caution.toResponse()));
-        return result;
+        return new CautionListResponse(result);
     }
 
     // 차단해제(차단삭제)
