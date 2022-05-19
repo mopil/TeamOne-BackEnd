@@ -1,15 +1,10 @@
 package com.mjuteam2.TeamOne.chat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mjuteam2.TeamOne.chat.domain.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -17,7 +12,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final ObjectMapper objectMapper;
     private Map<String, ChatRoom> chatRooms;
 
     @PostConstruct
@@ -25,31 +19,24 @@ public class ChatService {
         chatRooms = new LinkedHashMap<>();
     }
 
+    //채팅방 불러오기
     public List<ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
+        //채팅방 최근 생성 순으로 반환
+        List<ChatRoom> result = new ArrayList<>(chatRooms.values());
+        Collections.reverse(result);
+
+        return result;
     }
 
-    public ChatRoom findRoomById(String roomId) {
+    //채팅방 하나 불러오기
+    public ChatRoom findById(String roomId) {
         return chatRooms.get(roomId);
     }
 
-    // 방 생성
+    //채팅방 생성
     public ChatRoom createRoom(String name) {
-        String randomId = UUID.randomUUID().toString();
-        ChatRoom chatRoom = ChatRoom.builder()
-                .roomId(randomId)
-                .name(name)
-                .build();
-        chatRooms.put(randomId, chatRoom);
+        ChatRoom chatRoom = ChatRoom.create(name);
+        chatRooms.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
-    }
-
-
-    public <T> void sendMessage(WebSocketSession session, T message) {
-        try {
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 }
