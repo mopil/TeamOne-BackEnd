@@ -53,6 +53,12 @@ public class MessageController {
         return success(messageService.findAllReceived(receiverId));
     }
 
+    // 채팅방 기준 메시지 전체 조회
+    @GetMapping("/message-room/{messageRoomId}")
+    public ResponseEntity<?> getMessageByMessageRoom(@PathVariable Long messageRoomId) {
+        return success(messageService.findByMessageRoomId(messageRoomId));
+    }
+
     /**
      * 메시지 삭제
      */

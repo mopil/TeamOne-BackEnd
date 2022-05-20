@@ -4,10 +4,13 @@ import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.message.domain.Message;
+import com.mjuteam2.TeamOne.message.domain.MessageRoom;
 import com.mjuteam2.TeamOne.message.dto.MessageRequestForm;
 import com.mjuteam2.TeamOne.message.dto.MessageResponse;
 import com.mjuteam2.TeamOne.message.exception.MessageException;
+import com.mjuteam2.TeamOne.message.exception.MessageRoomException;
 import com.mjuteam2.TeamOne.message.repository.MessageRepository;
+import com.mjuteam2.TeamOne.message.repository.MessageRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
+    private final MessageRoomRepository messageRoomRepository;
 
     private Member getMember(Long id) {
         return memberRepository.findById(id)
@@ -46,11 +50,16 @@ public class MessageService {
         // 받는 사람 디비에서 조회
         Member receiver = getMember(form.getReceiverId());
 
+        // 채팅 방 조회
+        Long messageRoomId = form.getMessageRoomId();
+        MessageRoom messageRoom = messageRoomRepository.findById(messageRoomId).orElseThrow(() -> new MessageRoomException("채팅방이 존재하지 않습니다."));
+
         // 메시지 생성
         Message message = Message.builder()
                 .sender(sender)
                 .receiver(receiver)
                 .content(form.getContent())
+                .messageRoom(messageRoom)
                 .build();
 
         // 메시지 디비에 저장
@@ -79,6 +88,12 @@ public class MessageService {
     // 받은 사람 기준으로 받은 메시지 전체 조회
     public List<MessageResponse> findAllReceived(Long receiverId) {
         List<Message> messages = messageRepository.findAllByReceiverId(receiverId);
+        return convert(messages);
+    }
+
+    // 채팅방 기준 메시지 조회
+    public List<MessageResponse> findByMessageRoomId(Long messageRoomId) {
+        List<Message> messages = messageRepository.findByMessageRoomId(messageRoomId);
         return convert(messages);
     }
 
