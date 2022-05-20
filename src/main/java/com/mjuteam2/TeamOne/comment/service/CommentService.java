@@ -5,6 +5,7 @@ import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentForm;
+import com.mjuteam2.TeamOne.comment.dto.CommentListResponse;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.comment.exception.CommentException;
 import com.mjuteam2.TeamOne.comment.repository.CommentRepository;
@@ -55,18 +56,18 @@ public class CommentService {
 
     // 해당 게시글에 있는 모든 댓글 조회
     @Transactional(readOnly = true)
-    public List<CommentResponse> findAllByBoardId(Long boardId) {
+    public CommentListResponse findAllByBoardId(Long boardId) {
         getBoard(boardId);
         List<CommentResponse> result = new ArrayList<>();
         commentRepository.findAllByBoardId(boardId).forEach(comment -> result.add(comment.toResponse()));
-        return result;
+        return new CommentListResponse(result);
     }
 
     // 모든 댓글 조회 (관리자용)
-    public List<CommentResponse> findAll() {
+    public CommentListResponse findAll() {
         List<CommentResponse> result = new ArrayList<>();
         commentRepository.findAll().forEach(comment -> result.add(comment.toResponse()));
-        return result;
+        return new CommentListResponse(result);
     }
 
     /**

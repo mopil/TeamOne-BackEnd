@@ -3,6 +3,7 @@ package com.mjuteam2.TeamOne.comment.controller;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentForm;
+import com.mjuteam2.TeamOne.comment.dto.CommentListResponse;
 import com.mjuteam2.TeamOne.comment.service.CommentService;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.service.MemberService;
@@ -67,13 +68,15 @@ public class CommentController {
     // 게시글에 있는 댓글 모두 조회
     @GetMapping("/boards/{boardId}/comments")
     public ResponseEntity<?> findByCommentAll(@PathVariable Long boardId) {
-        return success(commentService.findAllByBoardId(boardId));
+        CommentListResponse allByBoardId = commentService.findAllByBoardId(boardId);
+        return success(allByBoardId);
     }
 
     // 모든 댓글 조회 (관리자용)
     @GetMapping("/comments/all")
     public ResponseEntity<?> findAll() {
-        return success(commentService.findAll());
+        CommentListResponse all = commentService.findAll();
+        return success(all);
     }
 
     /**
