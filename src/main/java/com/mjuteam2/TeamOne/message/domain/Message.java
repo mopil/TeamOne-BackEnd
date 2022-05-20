@@ -27,6 +27,9 @@ public class Message extends BaseTimeEntity {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_room_id")
+    private MessageRoom messageRoom;
 
     public MessageResponse toResponse() {
         return MessageResponse.builder()
@@ -39,10 +42,11 @@ public class Message extends BaseTimeEntity {
     }
 
     @Builder
-    public Message(Member sender, Member receiver, String content) {
+    public Message(Member sender, Member receiver, String content, MessageRoom messageRoom) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
+        this.messageRoom = messageRoom;
     }
 
     protected Message() {}
