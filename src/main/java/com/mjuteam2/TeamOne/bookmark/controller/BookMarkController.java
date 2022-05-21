@@ -60,6 +60,7 @@ public class BookMarkController {
     /**
      * 북마크 한 개 조회
      */
+    // 북마크 id로 하나 조회
     @GetMapping("/{bookMarkId}")
     public ResponseEntity<?> findByBookMarkId(@PathVariable Long bookMarkId) {
         return success(bookMarkService.findByBookMarkId(bookMarkId));
