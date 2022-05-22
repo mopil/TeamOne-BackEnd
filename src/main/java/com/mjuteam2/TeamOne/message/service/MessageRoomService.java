@@ -1,10 +1,15 @@
 package com.mjuteam2.TeamOne.message.service;
 
+import com.mjuteam2.TeamOne.caution.domain.Caution;
+import com.mjuteam2.TeamOne.caution.dto.CautionListResponse;
+import com.mjuteam2.TeamOne.caution.dto.CautionResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.message.domain.MessageRoom;
-import com.mjuteam2.TeamOne.message.dto.MessageRoomForm;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomListResponse;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomRequestForm;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomResponse;
 import com.mjuteam2.TeamOne.message.exception.MessageRoomException;
 import com.mjuteam2.TeamOne.message.repository.MessageRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,11 +32,13 @@ public class MessageRoomService {
     /**
      * 채팅방 생성
      */
-    public MessageRoom createMessageRoom(MessageRoomForm form) {
-        Long senderUserId = form.getSenderUserId();
+    public MessageRoomResponse createMessageRoom(MessageRoomRequestForm form) {
+        Long senderUserId = form.getSenderId();
+        System.out.println("senderUserId = " + senderUserId);
         Member sender = memberRepository.findById(senderUserId).orElseThrow(() -> new MemberException("멤버가 존재하지 않습니다."));
 
-        Long receiverUserId = form.getSenderUserId();
+        Long receiverUserId = form.getReceiverId();
+        System.out.println("receiverUserId = " + receiverUserId);
         Member receiver = memberRepository.findById(receiverUserId).orElseThrow(() -> new MemberException("멤버가 존재하지 않습니다."));
 
         MessageRoom messageRoom = MessageRoom.builder()
@@ -39,22 +47,25 @@ public class MessageRoomService {
                 .build();
 
         MessageRoom saveMessageRoom = messageRoomRepository.save(messageRoom);
-        return saveMessageRoom;
+        return saveMessageRoom.toResponse();
     }
 
     /**
      * 채팅방 조회
      */
-    public MessageRoom findMessageRoom(Long messageRoomId) {
+    public MessageRoomResponse findMessageRoom(Long messageRoomId) {
         MessageRoom messageRoom = messageRoomRepository.findById(messageRoomId).orElseThrow(() -> new MessageRoomException("채팅방을 찾을 수 없습니다."));
-        return messageRoom;
+        return messageRoom.toResponse();
     }
 
     /**
      * 채팅방 조회 (유저 기준)
      */
-    public List<MessageRoom> findMessageRoomByReceiver(Long receiverId) {
-        return messageRoomRepository.findAllByReceiverId(receiverId);
+    public MessageRoomListResponse findMessageRoomByReceiver(Long receiverId) {
+        List<MessageRoom> messageRoomList = messageRoomRepository.findAllByReceiverId(receiverId);
+        List<MessageRoomResponse> result = new ArrayList<>();
+        messageRoomList.forEach(messageRoom -> result.add(messageRoom.toResponse()));
+        return new MessageRoomListResponse(result);
     }
 
 

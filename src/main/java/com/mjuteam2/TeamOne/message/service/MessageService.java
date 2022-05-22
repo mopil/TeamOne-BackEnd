@@ -5,8 +5,7 @@ import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.message.domain.Message;
 import com.mjuteam2.TeamOne.message.domain.MessageRoom;
-import com.mjuteam2.TeamOne.message.dto.MessageRequestForm;
-import com.mjuteam2.TeamOne.message.dto.MessageResponse;
+import com.mjuteam2.TeamOne.message.dto.*;
 import com.mjuteam2.TeamOne.message.exception.MessageException;
 import com.mjuteam2.TeamOne.message.exception.MessageRoomException;
 import com.mjuteam2.TeamOne.message.repository.MessageRepository;
@@ -92,9 +91,11 @@ public class MessageService {
     }
 
     // 채팅방 기준 메시지 조회
-    public List<MessageResponse> findByMessageRoomId(Long messageRoomId) {
+    public MessageListResponse findByMessageRoomId(Long messageRoomId) {
         List<Message> messages = messageRepository.findByMessageRoomId(messageRoomId);
-        return convert(messages);
+        List<MessageResponse> result = new ArrayList<>();
+        messages.forEach(message -> result.add(message.toResponse()));
+        return new MessageListResponse(result);
     }
 
     /**

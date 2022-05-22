@@ -11,6 +11,6 @@ import java.util.Optional;
 
 public interface MessageRoomRepository extends JpaRepository<MessageRoom, Long> {
 
-    @Query("SELECT m FROM MessageRoom m WHERE m.receiver.id = :receiverId")
+    @Query("SELECT m FROM MessageRoom m WHERE m.receiver.id = :receiverId OR m.sender.id = :receiverId")
     List<MessageRoom> findAllByReceiverId(@Param("receiverId") Long receiverId);
 }

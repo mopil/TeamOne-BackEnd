@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.message.domain;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomResponse;
 import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,6 +36,17 @@ public class MessageRoom extends BaseTimeEntity {
     public MessageRoom(Member sender, Member receiver) {
         this.sender = sender;
         this.receiver = receiver;
+    }
+
+    public MessageRoomResponse toResponse() {
+        return MessageRoomResponse.builder()
+                .messageRoomId(id)
+                .createdDate(getCreatedDate())
+                .senderId(sender.getId())
+                .senderUserId(sender.getUserId())
+                .receiverId(receiver.getId())
+                .receiverUserId(receiver.getUserId())
+                .build();
     }
 
 }

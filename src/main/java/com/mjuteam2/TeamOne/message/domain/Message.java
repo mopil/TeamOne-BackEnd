@@ -35,8 +35,11 @@ public class Message extends BaseTimeEntity {
         return MessageResponse.builder()
                 .messageId(id)
                 .senderUserId(sender.getUserId())
+                .senderId(sender.getId())
                 .receiverUserId(receiver.getUserId())
+                .receiverId(receiver.getId())
                 .content(content)
+                .messageRoomId(messageRoom.getId())
                 .createdDate(getCreatedDate())
                 .build();
     }
