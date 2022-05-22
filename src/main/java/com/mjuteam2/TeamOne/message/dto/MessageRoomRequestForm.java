@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class MessageRoomForm {
-    private Long senderUserId;
-    private Long receiverUserId;
+public class MessageRoomRequestForm {
+    private Long senderId;
+    private Long receiverId;
 }

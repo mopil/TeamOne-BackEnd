@@ -1,7 +1,8 @@
 package com.mjuteam2.TeamOne.message.controller;
 
 import com.mjuteam2.TeamOne.message.domain.MessageRoom;
-import com.mjuteam2.TeamOne.message.dto.MessageRoomForm;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomRequestForm;
+import com.mjuteam2.TeamOne.message.dto.MessageRoomResponse;
 import com.mjuteam2.TeamOne.message.exception.MessageException;
 import com.mjuteam2.TeamOne.message.service.MessageRoomService;
 import com.mjuteam2.TeamOne.util.dto.BoolResponse;
@@ -28,8 +29,8 @@ public class MessageRoomController {
      * 채팅방 생성
      */
     @PostMapping("")
-    public ResponseEntity<?> createMessageRoom(@RequestBody MessageRoomForm form) {
-        MessageRoom messageRoom = messageRoomService.createMessageRoom(form);
+    public ResponseEntity<?> createMessageRoom(@RequestBody MessageRoomRequestForm form) {
+        MessageRoomResponse messageRoom = messageRoomService.createMessageRoom(form);
         return success(messageRoom);
     }
 
@@ -44,7 +45,7 @@ public class MessageRoomController {
     }
 
     // 채팅방 전체 조회(받은 사람 기준)
-    @GetMapping("/all/receiverId")
+    @GetMapping("/all/{receiverId}")
     public ResponseEntity<?> getMessageRoomByReceiver(@PathVariable Long receiverId) {
         return success(messageRoomService.findMessageRoomByReceiver(receiverId));
     }
