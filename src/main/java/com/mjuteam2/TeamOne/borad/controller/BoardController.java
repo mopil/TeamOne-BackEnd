@@ -210,7 +210,8 @@ public class BoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
+    public ResponseEntity<?> deleteBoard(HttpServletRequest request, @PathVariable Long boardId) throws LoginException {
+        memberService.getLoginMember(request);
         return success(new BoolResponse(boardService.deleteBoard(boardId)));
     }
 
