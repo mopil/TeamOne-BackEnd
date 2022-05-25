@@ -1,12 +1,10 @@
 package com.mjuteam2.TeamOne.borad.controller;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.borad.dto.BoardSearch;
 import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
-import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -146,10 +144,10 @@ public class BoardController {
     }
 
     // 게시글 검색어 키워드로 조회 (검색 기능)
-    @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestBody BoardSearch boardSearch) {
-        List<BoardResponse> search = boardService.search(boardSearch);
-        log.info("타입 = {}", boardSearch.getBoardSearchType());
+    @GetMapping("/search/{searchWay}/{keyword}")
+    public ResponseEntity<?> search(@PathVariable("searchWay") String searchWay, @PathVariable("keyword") String keyword) {
+        BoardListResponse search = boardService.search(searchWay, keyword);
+        log.info("타입 = {}", searchWay);
         return success(search);
     }
 
