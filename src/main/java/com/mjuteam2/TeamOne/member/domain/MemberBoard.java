@@ -4,10 +4,8 @@ import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.rating.domain.Rating;
 import com.mjuteam2.TeamOne.util.domain.BaseTimeEntity;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity @Getter

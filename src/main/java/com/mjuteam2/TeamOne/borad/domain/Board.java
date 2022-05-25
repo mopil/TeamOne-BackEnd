@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
+import com.mjuteam2.TeamOne.caution.domain.Caution;
 import com.mjuteam2.TeamOne.comment.domain.Comment;
 import com.mjuteam2.TeamOne.comment.dto.CommentResponse;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -50,12 +51,16 @@ public class Board extends BaseTimeEntity {
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MemberBoard> memberBoardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<BookMark> bookMarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "requestMember", cascade = CascadeType.ALL)
+    private List<Caution> cautionList = new ArrayList<>();
 
     @Builder
     public Board(Member writer, String title, String content, BoardType boardType, int memberCount, String classTitle, String classDate, BoardStatus boardStatus) {

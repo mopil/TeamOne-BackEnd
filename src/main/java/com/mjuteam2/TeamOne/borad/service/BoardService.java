@@ -1,14 +1,14 @@
 package com.mjuteam2.TeamOne.borad.service;
 
-import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
+import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
+import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.dto.BoardSearch;
 import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.BoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
-import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
-import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
-import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.member.domain.Member;
