@@ -1,14 +1,13 @@
 package com.mjuteam2.TeamOne.borad.service;
 
-import com.mjuteam2.TeamOne.borad.domain.BoardType;
-import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
-import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
-import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.domain.Board;
-import com.mjuteam2.TeamOne.borad.dto.BoardSearch;
+import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.BoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -113,24 +112,24 @@ public class BoardService {
     /**
      * 게시글 검색 조회 (검색 기능)
      */
-    public List<BoardResponse> search(BoardSearch boardSearch) {
+    public BoardListResponse search(String searchWay, String keyword) {
         List<BoardResponse> result = new ArrayList<>();
-        switch (boardSearch.getBoardSearchType()) {
-            case TITLE:
-                boardRepository.searchByTitle(boardSearch.getKeyword())
+        switch (searchWay) {
+            case "TITLE" :
+                boardRepository.searchByTitle(keyword)
                     .forEach(board -> result.add(board.toResponse()));
-            case CONTENT:
-                boardRepository.searchByContent(boardSearch.getKeyword())
+            case "CONTENT":
+                boardRepository.searchByContent(keyword)
                         .forEach(board -> result.add(board.toResponse()));
-            case TITLE_CONTENT:
-                boardRepository.searchByTitleAndContent(boardSearch.getKeyword())
+            case "TITLE_CONTENT":
+                boardRepository.searchByTitleAndContent(keyword)
                         .forEach(board -> result.add(board.toResponse()));
-            case CLASS:
-                boardRepository.searchByClassTitle(boardSearch.getKeyword())
+            case "CLASS":
+                boardRepository.searchByClassTitle(keyword)
                         .forEach(board -> result.add(board.toResponse()));
 
         }
-        return result;
+        return new BoardListResponse(result);
     }
 
     /**
