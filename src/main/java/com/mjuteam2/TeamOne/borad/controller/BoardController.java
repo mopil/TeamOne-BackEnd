@@ -5,6 +5,7 @@ import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.FreeBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.WantedBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.response.BoardListResponse;
+import com.mjuteam2.TeamOne.borad.dto.response.BoardResponse;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.service.BoardService;
 import com.mjuteam2.TeamOne.member.domain.Member;
@@ -211,6 +212,16 @@ public class BoardController {
     public ResponseEntity<?> deleteBoard(HttpServletRequest request, @PathVariable Long boardId) throws LoginException {
         memberService.getLoginMember(request);
         return success(new BoolResponse(boardService.deleteBoard(boardId)));
+    }
+
+    /**
+     * 게시글 모집 완료
+     */
+    @GetMapping("/finish/{boardId}")
+    public ResponseEntity<?> finishBoard(@PathVariable Long boardId) {
+        Board board = boardService.finishBoard(boardId);
+        BoardResponse boardResponse = board.toResponse();
+        return success(boardResponse);
     }
 
     /**
