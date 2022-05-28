@@ -1,6 +1,7 @@
 package com.mjuteam2.TeamOne.borad.service;
 
 import com.mjuteam2.TeamOne.borad.domain.Board;
+import com.mjuteam2.TeamOne.borad.domain.BoardStatus;
 import com.mjuteam2.TeamOne.borad.domain.BoardType;
 import com.mjuteam2.TeamOne.borad.dto.request.AppealBoardForm;
 import com.mjuteam2.TeamOne.borad.dto.request.BoardForm;
@@ -49,6 +50,8 @@ public class BoardService {
             board = form.toBoard(loginMember, BoardType.FREE);
         }
         Board saved = boardRepository.save(board);
+        saved.addCurrentMemberCount();
+
         Member findFromRepoMember = memberRepository.findById(loginMember.getId()).orElseThrow(() -> new MemberException("해당 유저 조회 실패."));
         findFromRepoMember.addBoard(saved);
         return board;
@@ -162,5 +165,15 @@ public class BoardService {
     public boolean deleteBoard(Long boardId) {
         boardRepository.deleteById(boardId);
         return true;
+    }
+
+    /**
+     * 모집 완료
+     */
+    @Transactional
+    public Board finishBoard(Long boardId) {
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardException("게시글이 존재하지 않습니다."));
+        findBoard.changeBoardStatus(BoardStatus.OK);
+        return findBoard;
     }
 }
