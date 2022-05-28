@@ -39,11 +39,26 @@ public class MemberBoardService {
         Member joinMember = memberRepository.findById(joinMemberId).orElseThrow(() -> new MemberException("맴버가 존재하지 않습니다."));
         Board joinBoard = boardRepository.findById(joinBoardId).orElseThrow(() -> new BoardException("글이 존재하지 않습니다."));
 
+        int memberCount = joinBoard.getMemberCount();
+        int currentMemberCount = joinBoard.getCurrentMemberCount();
+
+        if(currentMemberCount >= memberCount){
+            throw new BoardException("모집 인원이 다 찼습니다.");
+        }
+
         MemberBoard memberBoard = new MemberBoard(joinMember, joinBoard, Admission.WAIT);
         Optional<MemberBoard> exist = memberBoardRepository.findByMemberIdAndBoardId(joinMemberId, joinBoardId);
+
         if (exist.isEmpty()) {
-            MemberBoard saveMemberBoard = memberBoardRepository.save(memberBoard);
-            return saveMemberBoard.toResponse();
+
+            if (joinBoard.getBoardStatus() != BoardStatus.OK) {
+
+                MemberBoard saveMemberBoard = memberBoardRepository.save(memberBoard);
+                return saveMemberBoard.toResponse();
+
+            } else {
+                throw new BoardException("모집 종료된 게시글 입니다.");
+            }
         } else {
             throw new MemberBoardException("이미 가입 신청을 했습니다.");
         }
@@ -53,10 +68,14 @@ public class MemberBoardService {
      * Approval MemberBoard
      */
     public MemberBoardResponse approvalMemberBoard(Long memberBoardId) {
-        MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberBoardException("dasd"));
+        MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberBoardException("신청된 맴버를 조회할 수 없습니다."));
         BoardStatus boardStatus = findMemberBoard.getBoard().getBoardStatus();
         if (boardStatus.equals(BoardStatus.DEFAULT)) {
             findMemberBoard.changeAdmission(Admission.APPROVAL);
+
+            // 참여 중인 맴버 증가
+            findMemberBoard.getBoard().addCurrentMemberCount();
+
             return findMemberBoard.toResponse();
         } else {
             throw new MemberBoardException("보드 상태 오류. 모집 중이어야 함");
@@ -67,7 +86,7 @@ public class MemberBoardService {
      * No_Approval MemberBoard
      */
     public MemberBoardResponse noApprovalMemberBoard(Long memberBoardId) {
-        MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberException("dasd"));
+        MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberException("신청된 맴버를 조회할 수 없습니다."));
         BoardStatus boardStatus = findMemberBoard.getBoard().getBoardStatus();
         if (boardStatus.equals(BoardStatus.DEFAULT)) {
             findMemberBoard.changeAdmission(Admission.NO_APPROVAL);
