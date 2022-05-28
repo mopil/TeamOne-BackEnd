@@ -47,7 +47,7 @@ public class MemberBoardService {
     public MemberBoardResponse approvalMemberBoard(Long memberBoardId) {
         MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberBoardException("dasd"));
         BoardStatus boardStatus = findMemberBoard.getBoard().getBoardStatus();
-        if (boardStatus.equals("DEFAULT")) {
+        if (boardStatus.equals(BoardStatus.DEFAULT)) {
             findMemberBoard.changeAdmission(Admission.APPROVAL);
             return findMemberBoard.toResponse();
         } else {
@@ -61,7 +61,7 @@ public class MemberBoardService {
     public MemberBoardResponse noApprovalMemberBoard(Long memberBoardId) {
         MemberBoard findMemberBoard = memberBoardRepository.findById(memberBoardId).orElseThrow(() -> new MemberException("dasd"));
         BoardStatus boardStatus = findMemberBoard.getBoard().getBoardStatus();
-        if (boardStatus.equals("DEFAULT")) {
+        if (boardStatus.equals(BoardStatus.DEFAULT)) {
             findMemberBoard.changeAdmission(Admission.NO_APPROVAL);
             return findMemberBoard.toResponse();
         } else {
