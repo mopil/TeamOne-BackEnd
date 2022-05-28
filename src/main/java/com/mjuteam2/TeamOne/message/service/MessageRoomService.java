@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class MessageRoomService {
      * 채팅방 생성
      */
     public MessageRoomResponse createMessageRoom(MessageRoomRequestForm form) {
+
         Long senderUserId = form.getSenderId();
         System.out.println("senderUserId = " + senderUserId);
         Member sender = memberRepository.findById(senderUserId).orElseThrow(() -> new MemberException("멤버가 존재하지 않습니다."));
@@ -41,13 +43,23 @@ public class MessageRoomService {
         System.out.println("receiverUserId = " + receiverUserId);
         Member receiver = memberRepository.findById(receiverUserId).orElseThrow(() -> new MemberException("멤버가 존재하지 않습니다."));
 
-        MessageRoom messageRoom = MessageRoom.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .build();
+        Optional<MessageRoom> messageRoom1 = messageRoomRepository.existsMessageRoomByReceiverAndSender(senderUserId, receiverUserId);
+        Optional<MessageRoom> messageRoom2 = messageRoomRepository.existsMessageRoomByReceiverAndSender(receiverUserId, senderUserId);
 
-        MessageRoom saveMessageRoom = messageRoomRepository.save(messageRoom);
-        return saveMessageRoom.toResponse();
+        // 중복 체크
+        if (messageRoom1.isEmpty() && messageRoom2.isEmpty()) {
+            MessageRoom messageRoom = MessageRoom.builder()
+                    .sender(sender)
+                    .receiver(receiver)
+                    .build();
+
+            MessageRoom saveMessageRoom = messageRoomRepository.save(messageRoom);
+            return saveMessageRoom.toResponse();
+        } else {
+            throw new MessageRoomException("이미 채팅방이 있습니다.");
+        }
+
+
     }
 
     /**
