@@ -57,6 +57,10 @@ public class Member {
     @JsonIgnore
     private List<Caution> cautions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<MemberBoard> memberBoardList = new ArrayList<>();
+
 
 
     @Builder

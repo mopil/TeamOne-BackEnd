@@ -4,6 +4,7 @@ import com.mjuteam2.TeamOne.badge.repository.BadgeRepository;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.borad.exception.BoardException;
 import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
+import com.mjuteam2.TeamOne.member.domain.Admission;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
@@ -41,7 +42,7 @@ public class RatingService {
         findMember.addRating(form.getStar(), form.getBadge());
 
         // 멤버-보드 객체 생성
-        MemberBoard memberBoard = new MemberBoard(findMember, findBoard);
+        MemberBoard memberBoard = new MemberBoard(findMember, findBoard, Admission.WAIT);
 
         // 디비에 뱃지 저장
         badgeRepository.save(form.getBadge());
