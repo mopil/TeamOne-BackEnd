@@ -14,4 +14,5 @@ public class MessageRoomResponse {
     private String senderUserId;
     private String receiverUserId;
     private String createdDate;
+    private String receiverNickname;
 }
