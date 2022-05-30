@@ -46,6 +46,7 @@ public class MessageRoom extends BaseTimeEntity {
                 .senderUserId(sender.getUserId())
                 .receiverId(receiver.getId())
                 .receiverUserId(receiver.getUserId())
+                .receiverNickname(receiver.getNickname())
                 .build();
     }
 

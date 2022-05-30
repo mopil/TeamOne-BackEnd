@@ -61,6 +61,7 @@ public class BoardService {
     /**
      * 게시글 하나 조회
      */
+    @Transactional
     public Board findByBoardId(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardException("게시글 조회 오류."));
         findBoard.addViewCount();
