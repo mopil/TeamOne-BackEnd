@@ -35,6 +35,7 @@ public class Board extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
+    private int currentMemberCount;
     private int memberCount;
     private String classTitle;
     private String classDate;
@@ -63,12 +64,13 @@ public class Board extends BaseTimeEntity {
     private List<Caution> cautionList = new ArrayList<>();
 
     @Builder
-    public Board(Member writer, String title, String content, BoardType boardType, int memberCount, String classTitle, String classDate, BoardStatus boardStatus) {
+    public Board(Member writer, String title, String content, BoardType boardType, int memberCount, int currentMemberCount, String classTitle, String classDate, BoardStatus boardStatus) {
         this.member = writer;
         this.title = title;
         this.content = content;
         this.boardType = boardType;
         this.memberCount = memberCount;
+        this.currentMemberCount = currentMemberCount;
         this.classTitle = classTitle;
         this.classDate = classDate;
         this.boardStatus = boardStatus;
@@ -91,6 +93,7 @@ public class Board extends BaseTimeEntity {
                 .classTitle(classTitle)
                 .classDate(classDate)
                 .memberCount(memberCount)
+                .currentMemberCount(currentMemberCount)
                 .deadline(deadline)
                 .build();
     }
@@ -185,5 +188,15 @@ public class Board extends BaseTimeEntity {
     // 조회수 증가
     public void addViewCount() {
         this.viewCount += 1;
+    }
+
+    // 게시글 상태 변경
+    public void changeBoardStatus(BoardStatus boardStatus) {
+        this.boardStatus = boardStatus;
+    }
+
+    // 현재 참여 중인 맴버 증가
+    public void addCurrentMemberCount() {
+        this.currentMemberCount += 1;
     }
 }

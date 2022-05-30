@@ -17,6 +17,7 @@ public class WantedBoardForm implements BoardForm {
     private String content;
 
     private int memberCount;
+    private int currentMemberCount;
 
     @NotEmpty
     private String classTitle;
@@ -36,6 +37,7 @@ public class WantedBoardForm implements BoardForm {
                 .classTitle(this.classTitle)
                 .classDate(this.classDate)
                 .memberCount(this.memberCount)
+                .currentMemberCount(this.currentMemberCount)
                 .build();
     }
 

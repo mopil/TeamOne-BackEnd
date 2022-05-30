@@ -32,5 +32,6 @@ public class BoardResponse {
 
     // +팀원구해요 추가 속성
     private int memberCount;
+    private int currentMemberCount;
     private String deadline;
 }
