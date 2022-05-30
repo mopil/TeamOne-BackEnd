@@ -65,43 +65,41 @@ public class InitDummyData {
         ArrayList<Board> boardList = new ArrayList<>();
         for (int i = 0 ; i<5; i++) {
             Board board = Board.builder()
-                    .title("title : 게시물 테스트" + i)
-                    .content("content : 테스트입니다")
-                    .boardType(BoardType.WANTED)
+                    .title("어필해요!!" + i)
+                    .content("제 자신을 어필해요")
+                    .boardType(BoardType.APPEAL)
                     .writer(tester)
                     .memberCount(i)
                     .currentMemberCount(1)
                     .boardStatus(BoardStatus.DEFAULT)
-                    .classTitle("classTitle : 자료구조")
-                    .classDate("classDate : 월요일")
+                    .classTitle("자료구조")
+                    .classDate("월요일")
                     .build();
             boardList.add(board);
         }
         for (int i = 5 ; i<10; i++) {
             Board board = Board.builder()
-                    .title("title : 게시물 테스트"+i)
-                    .content("content : 이것또한테스트")
-                    .boardType(BoardType.FREE)
+                    .title("팀원 구합니다~"+i)
+                    .content("참여 잘하는 팀원 구합니다~~")
+                    .boardType(BoardType.WANTED)
                     .writer(tester)
                     .memberCount(i)
                     .currentMemberCount(1)
                     .boardStatus(BoardStatus.DEFAULT)
-                    .classTitle("classTitle : 팀프")
-                    .classDate("classDate : 화요일")
+                    .classTitle("팀프2")
+                    .classDate("화요일")
                     .build();
             boardList.add(board);
         }
         for (int i = 10 ; i<13; i++) {
             Board board = Board.builder()
-                    .title("title : 게시물 테스트"+i)
-                    .content("content : 배고프다")
-                    .boardType(BoardType.APPEAL)
+                    .title("자유게시물 입니다"+i)
+                    .content("제 뱃지를 자랑해요")
+                    .boardType(BoardType.FREE)
                     .writer(tester)
                     .memberCount(i+100)
                     .currentMemberCount(1)
                     .boardStatus(BoardStatus.DEFAULT)
-                    .classTitle("classTitle : 상커의 요리교실")
-                    .classDate("classDate : 일요일")
                     .build();
             boardList.add(board);
         }
@@ -115,8 +113,8 @@ public class InitDummyData {
 
         // 댓글 더미데이터 세팅
         Board board = boardRepository.findById(3L).get();
-        commentService.createComment(tester, board.getId(), new CommentForm("야 니팀 쩔더라 ㅋ"));
-        commentService.createComment(tester, board.getId(), new CommentForm("이범준을 고소합니다"));
+        commentService.createComment(tester, board.getId(), new CommentForm("발표 수고하셨어요!"));
+        commentService.createComment(tester, board.getId(), new CommentForm("팀장님 사랑합니다~"));
 
         // 유의 더미데이터 세팅
         cautionService.setCaution(tester.getId(), tester2.getId());
