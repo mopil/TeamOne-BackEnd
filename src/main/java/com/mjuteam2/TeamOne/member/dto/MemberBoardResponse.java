@@ -12,4 +12,6 @@ public class MemberBoardResponse {
     private Long memberBoardId;
     private String Admission;
     private String createdDate;
+    private Long memberId;
+    private String nickname;
 }
