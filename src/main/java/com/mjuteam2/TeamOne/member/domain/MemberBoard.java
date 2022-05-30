@@ -47,6 +47,8 @@ public class MemberBoard extends BaseTimeEntity {
         return MemberBoardResponse.builder()
                 .memberBoardId(id)
                 .Admission(admission.toString())
+                .memberId(member.getId())
+                .nickname(member.getNickname())
                 .createdDate(getCreatedDate())
                 .build();
     }

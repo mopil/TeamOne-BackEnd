@@ -2,6 +2,7 @@ package com.mjuteam2.TeamOne.member.controller;
 
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.dto.EmailResponse;
+import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.exception.SignUpException;
 import com.mjuteam2.TeamOne.member.service.EmailService;
@@ -48,7 +49,7 @@ public class SignUpController {
             return badRequest(ErrorResponse.convertJson(bindingResult.getFieldErrors()));
         }
 
-        Member newMember = signUpService.signUp(signUpForm);
+        MemberResponse newMember = signUpService.signUp(signUpForm);
         log.info("New member is signed up = {}", newMember.getUserId());
         return success(newMember);
     }
