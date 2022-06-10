@@ -7,9 +7,6 @@ import com.mjuteam2.TeamOne.member.exception.MemberBoardException;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberBoardRepository;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
-import com.mjuteam2.TeamOne.message.dto.MessageRoomListResponse;
-import com.mjuteam2.TeamOne.message.dto.MessageRoomResponse;
-import com.mjuteam2.TeamOne.rating.RatingException;
 import com.mjuteam2.TeamOne.rating.domain.Rating;
 import com.mjuteam2.TeamOne.rating.dto.RatingForm;
 import com.mjuteam2.TeamOne.rating.dto.RatingListResponse;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +60,7 @@ public class RatingService {
                 .ratedMember(ratedMember)
                 .memberBoard(memberBoard)
                 .star(form.getStar())
+                .badge(form.getBadge())
                 .build();
 
         // 평가 받는 멤버의 레이팅 추가 작업 (평점과 뱃지) -> 맴버에 업데이트
