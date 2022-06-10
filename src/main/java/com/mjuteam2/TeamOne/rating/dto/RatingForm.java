@@ -19,6 +19,7 @@ public class RatingForm {
     // 평점 소수점도 평가가능 ex) 4.5
     private double star;
 
+    private int badge;
 //    // 뱃지(키워드)
 //    private List<Badge> badgeList;
 

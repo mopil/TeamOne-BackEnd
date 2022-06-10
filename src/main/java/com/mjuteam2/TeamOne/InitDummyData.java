@@ -16,6 +16,7 @@ import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.service.MemberBoardService;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
+import com.mjuteam2.TeamOne.rating.domain.BadgeConst;
 import com.mjuteam2.TeamOne.rating.dto.RatingForm;
 import com.mjuteam2.TeamOne.rating.service.RatingService;
 import lombok.RequiredArgsConstructor;
@@ -139,13 +140,13 @@ public class InitDummyData {
         Long mbId = memberBoard.getMemberBoardId();
 
 
-        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 5.0));
-        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.5));
-        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.3));
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 3.2, BadgeConst.FAST_RESPONSE));
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.5, BadgeConst.TIME_PROMISE));
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.3, BadgeConst.GOOD_AT_PRESENTATION));
 
-        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 3.0));
-        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 1.5));
-        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 2.3));
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 3.0, BadgeConst.LEADERSHIP));
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 1.5, BadgeConst.LEADERSHIP));
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 5.0, BadgeConst.HARD_CARRY));
 
         memberBoardService.approvalMemberBoard(mbId);
 
