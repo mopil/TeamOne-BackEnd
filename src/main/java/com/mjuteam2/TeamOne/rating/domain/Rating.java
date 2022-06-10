@@ -2,7 +2,6 @@ package com.mjuteam2.TeamOne.rating.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mjuteam2.TeamOne.badge.domain.Badge;
-import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.member.domain.Member;
 import com.mjuteam2.TeamOne.member.domain.MemberBoard;
 import com.mjuteam2.TeamOne.rating.dto.RatingResponse;
@@ -22,6 +21,8 @@ public class Rating {
 
     // 소수점도 평가 가능 ex) 4.5
     private double star;
+
+    private int badge;
 
     // 뱃지
     @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL)
@@ -44,11 +45,12 @@ public class Rating {
 
     @Builder
     //public Rating(Member ratedMember, Member ratingMember, MemberBoard memberBoard, double star,  List<Badge> badge) {
-    public Rating(Member ratedMember, Member ratingMember, MemberBoard memberBoard, double star) {
+    public Rating(Member ratedMember, Member ratingMember, MemberBoard memberBoard, double star, int badge) {
         this.ratingMember = ratingMember;
         this.ratedMember = ratedMember;
         this.memberBoard = memberBoard;
         this.star = star;
+        this.badge = badge;
         //this.badges = badge;
     }
 
@@ -64,6 +66,7 @@ public class Rating {
                 .memberBoardId(memberBoard.getId())
                 .star(star)
                 //.badgeList(badges)
+                .badge(badge)
                 .build();
     }
 }
