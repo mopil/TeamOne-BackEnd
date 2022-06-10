@@ -146,4 +146,16 @@ public class MemberBoardService {
         return new MemberBoardListResponse(result);
     }
 
+    /**
+     * MemberBoard 조회 (Approval) memberId로 !
+     */
+    public MemberBoardListResponse findMemberBoardByApprovalWithoutMe(Long memberId) {
+        List<MemberBoard> allByAdmission_approval = memberBoardRepository.findAllByAdmission_Approval_WithoutMe(memberId, Admission.APPROVAL);
+        List<MemberBoardResponse> result = new ArrayList<>();
+        allByAdmission_approval.forEach(memberBoard -> {
+            result.add(memberBoard.toResponse());
+        });
+        return new MemberBoardListResponse(result);
+    }
+
 }

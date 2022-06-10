@@ -22,4 +22,7 @@ public interface MemberBoardRepository extends JpaRepository<MemberBoard, Long> 
 
     @Query("SELECT m FROM MemberBoard m WHERE m.board.id = :boardId and m.member.id = :memberId")
     Optional<MemberBoard> findByMemberIdAndBoardId(@Param("memberId") Long memberId, @Param("boardId") Long boardId);
+
+    @Query("SELECT m FROM MemberBoard m WHERE m.member.id = :memberId and m.admission = :approval and m.board.boardStatus = 'OK'")
+    List<MemberBoard> findAllByAdmission_Approval_WithoutMe(@Param("memberId") Long memberId, @Param("approval") Admission approval);
 }

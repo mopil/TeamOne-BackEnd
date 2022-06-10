@@ -219,9 +219,8 @@ public class BoardController {
      */
     @GetMapping("/finish/{boardId}")
     public ResponseEntity<?> finishBoard(@PathVariable Long boardId) {
-        Board board = boardService.finishBoard(boardId);
-        BoardResponse boardResponse = board.toResponse();
-        return success(boardResponse);
+        BoardResponse board = boardService.finishBoard(boardId);
+        return success(board);
     }
 
     /**

@@ -172,9 +172,9 @@ public class BoardService {
      * 모집 완료
      */
     @Transactional
-    public Board finishBoard(Long boardId) {
+    public BoardResponse finishBoard(Long boardId) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardException("게시글이 존재하지 않습니다."));
         findBoard.changeBoardStatus(BoardStatus.OK);
-        return findBoard;
+        return findBoard.toResponse();
     }
 }

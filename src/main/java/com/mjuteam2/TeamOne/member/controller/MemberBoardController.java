@@ -102,6 +102,13 @@ public class MemberBoardController {
         return success(memberBoardByApproval);
     }
 
-
+    /**
+     * 맴버 기준 승인된 그룹 조회
+     */
+    @GetMapping("/approval/member/{memberId}")
+    public ResponseEntity<?> findAllApprovalMember(@PathVariable Long memberId) {
+        MemberBoardListResponse memberBoardByApproval = memberBoardService.findMemberBoardByApprovalWithoutMe(memberId);
+        return success(memberBoardByApproval);
+    }
 }
 
