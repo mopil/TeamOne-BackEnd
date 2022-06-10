@@ -6,6 +6,7 @@ import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.domain.Caution;
 import com.mjuteam2.TeamOne.member.dto.MemberResponse;
+import com.mjuteam2.TeamOne.rating.domain.Rating;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -60,6 +61,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<MemberBoard> memberBoardList = new ArrayList<>();
+
+
 
 
 
@@ -130,8 +133,15 @@ public class Member {
 
     // 레이팅 : 평점과 뱃지 추가
     // 평점, 뱃지 추가
-    public void addRating(double star, Badge badge) {
-        this.badges.add(badge);
+    public void addRating(double star, List<Badge> badgeList) {
+        // 뱃지 추가시 자동으로 포인트 증가
+        badgeList.forEach(this::addBadge);
+        this.memberValue.addRating(star);
+    }
+
+    public void addRating(double star) {
+        // 뱃지 추가시 자동으로 포인트 증가
+        //badgeList.forEach(this::addBadge);
         this.memberValue.addRating(star);
     }
 
