@@ -150,11 +150,25 @@ public class MemberBoardService {
      * MemberBoard 조회 (Approval) memberId로 !
      */
     public MemberBoardListResponse findMemberBoardByApprovalWithoutMe(Long memberId) {
-        List<MemberBoard> allByAdmission_approval = memberBoardRepository.findAllByAdmission_Approval_WithoutMe(memberId, Admission.APPROVAL);
+        List<MemberBoard> allByAdmission_approval = memberBoardRepository.findAllByMemberBoardByMemberId(memberId, Admission.APPROVAL);
         List<MemberBoardResponse> result = new ArrayList<>();
         allByAdmission_approval.forEach(memberBoard -> {
             result.add(memberBoard.toResponse());
         });
+        return new MemberBoardListResponse(result);
+    }
+
+    /**
+     * 게시판 기준 승인된 맴버 전부 조회 (본인 제외)
+     */
+    public MemberBoardListResponse finishMemberList(Long memberId, Long boardId) {
+
+        memberRepository.findById(memberId).orElseThrow(() -> new MemberException("맴버가 존재하지 않음"));
+        boardRepository.findById(boardId).orElseThrow(() -> new BoardException("보드가 존재하지 않음"));
+
+        List<MemberBoard> memberBoardList = memberBoardRepository.findAllByMemberBoardByBoardId(memberId, boardId, Admission.APPROVAL);
+        List<MemberBoardResponse> result = new ArrayList<>();
+        memberBoardList.forEach(memberBoard -> result.add(memberBoard.toResponse()));
         return new MemberBoardListResponse(result);
     }
 
