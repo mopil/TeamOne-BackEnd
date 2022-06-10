@@ -110,5 +110,14 @@ public class MemberBoardController {
         MemberBoardListResponse memberBoardByApproval = memberBoardService.findMemberBoardByApprovalWithoutMe(memberId);
         return success(memberBoardByApproval);
     }
+
+    /**
+     * 게시판 기준 승인된 맴버 전부 조회 (본인 제외)
+     */
+    @PostMapping("/finish")
+    public ResponseEntity<?> finishMemberList(@RequestBody MemberBoardForm form) {
+        MemberBoardListResponse memberList = memberBoardService.finishMemberList(form.getMemberId(), form.getBoardId());
+        return success(memberList);
+    }
 }
 
