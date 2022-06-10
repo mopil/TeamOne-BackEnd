@@ -8,10 +8,16 @@ import com.mjuteam2.TeamOne.borad.repository.BoardRepository;
 import com.mjuteam2.TeamOne.caution.service.CautionService;
 import com.mjuteam2.TeamOne.comment.dto.CommentForm;
 import com.mjuteam2.TeamOne.comment.service.CommentService;
+import com.mjuteam2.TeamOne.member.domain.Admission;
 import com.mjuteam2.TeamOne.member.domain.Member;
+import com.mjuteam2.TeamOne.member.domain.MemberBoard;
+import com.mjuteam2.TeamOne.member.dto.MemberBoardResponse;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
+import com.mjuteam2.TeamOne.member.service.MemberBoardService;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
+import com.mjuteam2.TeamOne.rating.dto.RatingForm;
+import com.mjuteam2.TeamOne.rating.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +34,8 @@ public class InitDummyData {
     private final BookMarkService bookMarkService;
     private final CommentService commentService;
     private final CautionService cautionService;
+    private final RatingService ratingService;
+    private final MemberBoardService memberBoardService;
 
     @PostConstruct
     public void dummyData() {
@@ -118,6 +126,28 @@ public class InitDummyData {
 
         // 유의 더미데이터 세팅
         cautionService.setCaution(tester.getId(), tester2.getId());
+
+        // 평가 더미데이터 세팅
+        Board mbBoard = boardRepository.findById(12L).get();
+        MemberBoard mb1 = MemberBoard.builder()
+                .board(mbBoard)
+                .member(tester)
+                .admission(Admission.APPROVAL)
+                .build();
+
+        MemberBoardResponse memberBoard = memberBoardService.createMemberBoard(mbBoard.getId(), tester.getId());
+        Long mbId = memberBoard.getMemberBoardId();
+
+
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 5.0));
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.5));
+        ratingService.ratingCreate(new RatingForm(mbId, tester.getId(), tester2.getId(), 4.3));
+
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 3.0));
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 1.5));
+        ratingService.ratingCreate(new RatingForm(mbId, tester2.getId(), tester.getId(), 2.3));
+
+        memberBoardService.approvalMemberBoard(mbId);
 
     }
 }
