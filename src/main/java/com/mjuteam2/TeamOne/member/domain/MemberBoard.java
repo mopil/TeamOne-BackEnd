@@ -35,6 +35,8 @@ public class MemberBoard extends BaseTimeEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+
+
     @Builder
     public MemberBoard(Member member, Board board, Admission admission) {
         this.member = member;
