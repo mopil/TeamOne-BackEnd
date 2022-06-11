@@ -15,6 +15,7 @@ import com.mjuteam2.TeamOne.member.dto.MemberBoardResponse;
 import com.mjuteam2.TeamOne.member.dto.SignUpForm;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
 import com.mjuteam2.TeamOne.member.service.MemberBoardService;
+import com.mjuteam2.TeamOne.member.service.MemberService;
 import com.mjuteam2.TeamOne.member.service.SignUpService;
 import com.mjuteam2.TeamOne.rating.domain.BadgeConst;
 import com.mjuteam2.TeamOne.rating.dto.RatingForm;
@@ -37,6 +38,7 @@ public class InitDummyData {
     private final CautionService cautionService;
     private final RatingService ratingService;
     private final MemberBoardService memberBoardService;
+    private final MemberService memberService;
 
     @PostConstruct
     public void dummyData() {
@@ -71,6 +73,10 @@ public class InitDummyData {
         // 게시판 더미데이터 세팅
         Member tester = memberRepository.findByUserId("test1234").orElse(null);
         Member tester2 = memberRepository.findByUserId("mopil1102").orElse(null);
+
+        memberService.addPoint(tester, 1300);
+        memberService.addPoint(tester2, 320);
+
         ArrayList<Board> boardList = new ArrayList<>();
         for (int i = 0 ; i<5; i++) {
             Board board = Board.builder()
