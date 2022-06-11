@@ -217,7 +217,7 @@ public class BoardController {
     /**
      * 게시글 모집 완료
      */
-    @GetMapping("/finish/{boardId}")
+    @PutMapping("/finish/{boardId}")
     public ResponseEntity<?> finishBoard(@PathVariable Long boardId) {
         BoardResponse board = boardService.finishBoard(boardId);
         return success(board);
