@@ -113,6 +113,16 @@ public class BoardService {
         return new BoardListResponse(result);
     }
 
+    // 내가 쓴 글 타입별로 전체 조회
+    public BoardListResponse findWrittenAllByType11(Long memberId, String boardType) {
+        BoardType type = getBoardType(boardType);
+        List<BoardResponse> result = new ArrayList<>();
+        boardRepository.findWrittenAllByType11(memberId, type).forEach(board -> result.add(board.toResponse()));
+        return new BoardListResponse(result);
+    }
+
+
+
     /**
      * 게시글 검색 조회 (검색 기능)
      */

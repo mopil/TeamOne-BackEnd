@@ -17,5 +17,7 @@ public class MemberResponse {
     private String schoolId;
     private String phoneNumber;
     private String nickname;
+    private double stars;
+    private double points;
     private String introduce;
 }

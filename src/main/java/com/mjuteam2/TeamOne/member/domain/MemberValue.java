@@ -11,7 +11,7 @@ public class MemberValue {
     private int ratingCount; // 평가를 받은 횟수
     private double viewStar; // 사람들에게 보여지는 평점 (소수점)
 
-    private int point; // RPG 점수 (계속 쌓는것)
+    private double point; // RPG 점수 (계속 쌓는것)
 
 
     /**
@@ -21,10 +21,11 @@ public class MemberValue {
         this.totalStar += star;
         this.ratingCount += 1;
         this.viewStar = (double)this.totalStar / this.ratingCount;
+        addPoint(star * 5);
     }
 
     // 포인트 추가
-    public void addPoint(int amount) {
+    public void addPoint(double amount) {
         this.point += amount;
     }
 
