@@ -1,9 +1,20 @@
 # 9조 TeamOne [BackEnd]
+<br/>
 
 
-### **💻 Skill Stack**
 
----
+### Back-End Team Mate
+> 
+> 조기천([@sectionr0](https://github.com/sectionr0))
+>
+> 배성흥([@mopil](https://github.com/mopil))
+> 
+
+<br/>
+
+## **💻 Tech Stack**
+
+<br/>
 
 **IDE**
 
@@ -30,16 +41,19 @@
 - AWS RDS
 - AWS S3
 
+<br/>
 
-###  **⚙️ ERD**
+##  **⚙️ ERD**
 
----
+<br/>
+
 ![TeamOne DB Design](https://user-images.githubusercontent.com/55054505/175647819-c7d3c3e0-21e4-4361-ba74-e32ae318c343.png)
 
+<br/>
 
-### **📕 API**
+## **📕 API**
 
----
+<br/>
 
 ![image](https://user-images.githubusercontent.com/55054505/175647306-b2be924f-65d4-44a7-bb62-40e423db9c93.png)
 
