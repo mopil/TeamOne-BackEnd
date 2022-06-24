@@ -7,6 +7,7 @@ import com.mjuteam2.TeamOne.member.exception.MemberBoardException;
 import com.mjuteam2.TeamOne.member.exception.MemberException;
 import com.mjuteam2.TeamOne.member.repository.MemberBoardRepository;
 import com.mjuteam2.TeamOne.member.repository.MemberRepository;
+import com.mjuteam2.TeamOne.rating.RatingException;
 import com.mjuteam2.TeamOne.rating.domain.Rating;
 import com.mjuteam2.TeamOne.rating.dto.RatingForm;
 import com.mjuteam2.TeamOne.rating.dto.RatingListResponse;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class RatingService {
     public void ratingCreate(RatingForm form) {
 
 //        // 기존에 평가가 되어있는지 확인
-//        Optional<Rating> ratingCheck = ratingRepository.findRating(form.getMemberBoardId(), form.getMemberId(), form.getRatingMemberId());
+//        Optional<Rating> ratingCheck = ratingRepository.findRating(form.getMemberBoardId(), form.getRatingMemberId(), form.getRatedMemberId());
 //        if (ratingCheck.isPresent()) {
 //            throw new RatingException("이미 평가가 존재합니다.");
 //        }
