@@ -6,7 +6,6 @@ import com.mjuteam2.TeamOne.bookmark.domain.BookMark;
 import com.mjuteam2.TeamOne.borad.domain.Board;
 import com.mjuteam2.TeamOne.caution.domain.Caution;
 import com.mjuteam2.TeamOne.member.dto.MemberResponse;
-import com.mjuteam2.TeamOne.rating.domain.Rating;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +100,7 @@ public class Member {
                 .schoolId(schoolId)
                 .phoneNumber(phoneNumber)
                 .nickname(nickname)
+                .introduce(introduce)
                 .stars(memberValue.getTotalStar())
                 .points(memberValue.getPoint())
                 .build();
