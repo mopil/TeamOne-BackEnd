@@ -8,6 +8,7 @@ import com.mjuteam2.TeamOne.caution.domain.Caution;
 import com.mjuteam2.TeamOne.member.dto.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -150,7 +151,8 @@ public class Member {
     /**
      *  회원 수정
      */
-    public void addPoint(int amount) {
+    @Transactional
+    public void addPoint(double amount) {
         this.memberValue.addPoint(amount);
     }
     public void updateNickname(String nickname) {

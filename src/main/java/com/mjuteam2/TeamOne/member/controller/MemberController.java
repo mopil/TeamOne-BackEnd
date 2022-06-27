@@ -8,6 +8,7 @@ import com.mjuteam2.TeamOne.util.dto.BoolResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,6 +64,7 @@ public class MemberController {
         return success(loginMember);
     }
 
+    @Transactional
     // 포인트 변경 (랭킹 포인트)
     @PutMapping("/point/{amount}")
     public ResponseEntity<?> updatePoint(HttpServletRequest request, @PathVariable Integer amount) throws LoginException {

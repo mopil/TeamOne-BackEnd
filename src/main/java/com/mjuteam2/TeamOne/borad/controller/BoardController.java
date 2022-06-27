@@ -144,6 +144,13 @@ public class BoardController {
         return success(writtenAllByType);
     }
 
+    // 로그인한 사용자가 쓴 게시물 전체 조회 (타입 별로)
+    @GetMapping("/written-all/{boardType}/member/{memberId}")
+    public ResponseEntity<?> findWrittenAllByType(@PathVariable String boardType, @PathVariable Long memberId) {
+        BoardListResponse writtenAllByType = boardService.findWrittenAllByType11(memberId, boardType);
+        return success(writtenAllByType);
+    }
+
     // 게시글 검색어 키워드로 조회 (검색 기능)
     @GetMapping("/search/{searchWay}/{keyword}")
     public ResponseEntity<?> search(@PathVariable("searchWay") String searchWay, @PathVariable("keyword") String keyword) {

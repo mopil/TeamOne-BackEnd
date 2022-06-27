@@ -18,6 +18,6 @@ public class MemberResponse {
     private String phoneNumber;
     private String nickname;
     private double stars;
-    private int points;
+    private double points;
     private String introduce;
 }

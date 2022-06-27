@@ -20,6 +20,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.boardType = :boardType AND b.member.id = :memberId")
     List<Board> findWrittenAllByType(@Param("memberId") Long memberId, @Param("boardType") BoardType boardType);
 
+    @Query("SELECT b FROM Board b WHERE b.boardType = :boardType AND b.member.id = :memberId")
+    List<Board> findWrittenAllByType11(@Param("memberId") Long memberId, @Param("boardType") BoardType boardType);
+
     // 제목으로 검색
     @Query("SELECT b FROM Board b WHERE b.title LIKE %:title%")
     List<Board> searchByTitle(@Param("title") String title);
